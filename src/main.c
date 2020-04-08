@@ -42,7 +42,10 @@ int		main(int argc, char **argv)
 	if (file_parser(w, fd))
 		create_map(w);
 	init_sdl(w);
-	predraw(w);
-	display(w);
+	while(!close_the_game)
+	{
+		predraw(w);
+		display(w);
+	}
 	return (0);
 }
