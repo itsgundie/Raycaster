@@ -3,7 +3,13 @@ NAME = wolf3d
 
 SRC_SUP = my_sdl
 SRC_PATH = src
-SRC_NAME =  main.c
+SRC_NAME =  main.c \
+			parse.c \
+			init.c \
+			background.c \
+			events.c \
+			ray.c \
+			render.c
 		   
 OBJ_PATH = .objects
 OBJ_NAME = $(SRC_NAME:.c=.o)

@@ -15,25 +15,12 @@ void	delete_data(t_wolfec *w)
 	free(w);
 }
 
-
-
-int				key_event(const Uint8 *keyboard_state, t_wolfec *w)
-{
-	if (keyboard_state[SDL_SCANCODE_LSHIFT])
-		w->pos.mov_speed = fabs(MOVESPEED) * 2;
-	else
-		w->pos.mov_speed = fabs(MOVESPEED);
-	if (keyboard_state[SDL_SCANCODE_ESCAPE])
-		return (1);
-	return (0);
-}
-
-
-
 int		main(int argc, char **argv)
 {
     int fd;
 	t_wolfec *w;
+	SDL_Event	event;
+	const Uint8	*keyboard_state;
 
     fd = 0;
     if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
@@ -42,10 +29,13 @@ int		main(int argc, char **argv)
 	if (file_parser(w, fd))
 		create_map(w);
 	init_sdl(w);
-	while(!close_the_game)
+	predraw(w);
+	while (event.type != SDL_QUIT)
 	{
-		predraw(w);
-		display(w);
+		set_mouse(w);
+		events(w, &event, keyboard_state);
+		//movement_rotation(w);
+		render_it(w);
 	}
 	return (0);
 }

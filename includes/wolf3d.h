@@ -81,5 +81,13 @@ void		delete_data(t_wolfec *w);
 int			check_line_width(t_wolfec *w);
 void		create_map(t_wolfec *w);
 void		put_values_in_map(t_wolfec *w);
+void		niz(t_wolfec *w);
+void		verh(t_wolfec *w);
+void	 	events(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state);
+void		key_eater(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state);
+void		set_mouse(t_wolfec *w);
+void		init_sdl(t_wolfec *w);
+void		predraw(t_wolfec *w);
+void		render_it(t_wolfec *w);
 
 #endif
