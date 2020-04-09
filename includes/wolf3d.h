@@ -7,6 +7,21 @@
 # define ROTATIONSPEED 0.2
 # define MOVESPEED 0.1
 
+
+
+/*		TEXTURES BLOCK		*/
+
+# define TEXTURE_PACK_SIZE 6
+# define TEXTURE_FOR_1		"../assets/first.png"
+# define TEXTURE_FOR_2		"../assets/second.png"
+# define TEXTURE_FOR_3		"../assets/third.png"
+# define TEXTURE_FOR_4		"../assets/fourth.png"
+# define TEXTURE_FOR_5		"../assets/ceiling.png"
+# define TEXTURE_FOR_6		"../assets/floor.png"
+# define TEXTURE_FOR_0		"../assets/void.png"
+
+
+
 # include "../libft/libft.h"
 # include <stdlib.h>
 # include <fcntl.h>
@@ -71,6 +86,7 @@ typedef struct					s_wolfec
 	SDL_Window			*win;
 	SDL_Renderer		*rend;
 	SDL_Texture			*back;
+	SDL_Texture			texes[TEXTURE_PACK_SIZE];
 }								t_wolfec;
 
 t_wolfec	*preparation(void);
