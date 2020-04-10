@@ -87,6 +87,7 @@ typedef struct					s_wolfec
 	SDL_Renderer		*rend;
 	SDL_Texture			*back;
 	SDL_Texture			texes[TEXTURE_PACK_SIZE];
+	SDL_Surface			*surf[1][4];
 }								t_wolfec;
 
 t_wolfec	*preparation(void);

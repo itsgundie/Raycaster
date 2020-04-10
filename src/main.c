@@ -30,6 +30,7 @@ int		main(int argc, char **argv)
 		create_map(w);
 	init_sdl(w);
 	predraw(w);
+	texturembo(w);
 	while (event.type != SDL_QUIT)
 	{
 		set_mouse(w);
