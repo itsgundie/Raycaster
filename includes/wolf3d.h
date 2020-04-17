@@ -8,6 +8,8 @@
 # define MOVESPEED 0.1
 
 
+# define SOMETHING
+
 
 /*		TEXTURES BLOCK		*/
 
@@ -81,6 +83,9 @@ typedef	struct		s_v2d
 	float			x;
 	float			y;
 }					t_v2d;
+
+
+
 
 
 typedef	struct		s_player
