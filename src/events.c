@@ -23,5 +23,6 @@ void	events(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state)
 		 	key_eater(w, event, keyboard_state);
 	}
 }
+
 B
 
