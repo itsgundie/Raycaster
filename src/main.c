@@ -36,6 +36,7 @@ int		main(int argc, char **argv)
 		set_mouse(w);
 		events(w, &event, keyboard_state);
 		//movement_rotation(w);
+		update(w);
 		render_it(w);
 	}
 	return (0);
