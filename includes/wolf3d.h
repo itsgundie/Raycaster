@@ -180,7 +180,7 @@ void    	calculate_rays_angles(t_wolfec *w, float angle_step);
 void   		update(t_wolfec *w);
 void		find_wall(t_ray *this_ray, t_v2_int *player_pos, int **map);
 t_v2_int	calc_center(int	width, int height);
-float		calc_distance_projected(t_v2_int *start, t_v2_int *end, float *angle);
+float		calc_distance(t_v2_int *start, t_v2_int *end, float *angle);
 void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **map);
 int			find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray);
 

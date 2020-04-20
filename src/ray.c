@@ -12,10 +12,6 @@
 // 	return();
 // }
 
-
-
-
-
 // float       calc_distance(float x1, float y1, float x2, float y2)
 // {
 // 	return(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
@@ -46,20 +42,20 @@ int     find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray)
 	int x_offset;
 	int y_offset;
 	
+	if ((coords.x < 0 || coords.x > WIN_WIDTH) || (coords.y < 0 || coords.x > WIN_HEIGHT))
+		return(0);
 	x_offset = ((this_ray->look_left) ? -1 : 1);
 	y_offset = ((this_ray->look_up) ? -1 : 1);
 	x = (coords.x + x_offset) / TILE_SIZE ;
 	y = (coords.y + y_offset) / TILE_SIZE;
 
-	if ((x < 0 || x > WIN_WIDTH) || (y < 0 || y > WIN_HEIGHT))
-		return(0);
 	this_ray->hit_index = map[x][y];
 	return(map[x][y]);
 }
 
-float		calc_distance_projected(t_v2_int *start, t_v2_int *end, float *angle)
+int		calc_distance(t_v2_int *start, t_v2_int *end, float *angle)
 {
-	return(abs((start->x - end->x) * cos(*angle) - (start->y - end->y) * sin(*angle)))
+	return((int)(abs((start->x - end->x) * cos(*angle) - (start->y - end->y) * sin(*angle))))
 }
 
 void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **map)
@@ -70,9 +66,9 @@ void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **ma
 
 	intercept.x = ((player_pos->x / TILE_SIZE) * TILE_SIZE);
 	intercept.x += ((this_ray->look_left) ? 0 : TILE_SIZE);
-	intercept.y = (player_pos->y + (player_pos->x - (intercept.x) / tan(this_ray->angle)));
+	intercept.y = (player_pos->y + (player_pos->x - (intercept.x) / (int)tan(this_ray->angle)));
 	step.x = ((this_ray->look_left) ? -TILE_SIZE : TILE_SIZE);
-	step.y = (TILE_SIZE * tan(this_ray->angle));
+	step.y = (TILE_SIZE * (int)tan(this_ray->angle));
 	step.y *= (((this_ray->look_up) && step.y > 0) ? -1 : 1);
 	step.y *= ((!(this_ray->look_up) && step.y < 0) ? -1 : 1);
 	intercept.x += (ray_is_left ? -1 : 0);
@@ -100,9 +96,9 @@ void	find_horizontal_intersection(t_ray *this_ray, t_v2_int *player_pos, int **m
 	
 	intercept.y = ((player_pos->y / TILE_SIZE) * TILE_SIZE);
 	intercept.y += ((this_ray->look_up) ? 0 : TILE_SIZE);
-	intercept.x = (player_pos->x + (player_pos->y - (intercept.y) / tan(this_ray->angle)));
+	intercept.x = (player_pos->x + (player_pos->y - (intercept.y) / (int)tan(this_ray->angle)));
 	step.y = ((this_ray->look_left) ? -TILE_SIZE : TILE_SIZE);
-	step.x = (TILE_SIZE / tan(this_ray->angle));
+	step.x = (TILE_SIZE / (int)tan(this_ray->angle));
 	step.x *= ((this_ray->look_left && step.x > 0) ? -1 : 1);
 	step.x *= ((!(this_ray->look_left) && step.x < 0) ? -1 : 1);
 	intercept.y += ((this_ray->look_up) ? -1 : 0);
