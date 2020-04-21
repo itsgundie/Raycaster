@@ -145,5 +145,7 @@ void		find_wall(t_ray *this_ray, t_v2_int *player_pos, int **map)
                         ? hor_hit.y : 0);
 	this_ray->hit_index = ((horizontal_distance < vertical_distance) 
                         ? hit_index : 0);
+	this_ray->hit_is_hor = ((horizontal_distance < vertical_distance) 
+                        ? 1 : 0);
 	return ;
 }

@@ -108,6 +108,7 @@ typedef	struct		s_ray
 	int				look_up;
 	int				look_left;
 	int				hit_index;
+	int				hit_is_hor;
 
 }					t_ray;
 
