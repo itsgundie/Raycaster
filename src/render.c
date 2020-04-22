@@ -30,7 +30,7 @@ void	get_surface_slice(t_ray	*this_ray, uint32_t *tex_column, SDL_Surface *this_
 	tex_column_index %= TILE_SIZE;
 	while(++q < TILE_SIZE)
 	{
-		tex_column[q] = (Uint32*)this_surf->pixels + q * this_surf->pitch + tex_column_index; 
+		tex_column[q] = (Uint32*)(this_surf->pixels) + q * ((this_surf->pitch) / 4) + tex_column_index; 
 	}
 	return ;
 }
