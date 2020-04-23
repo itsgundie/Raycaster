@@ -131,7 +131,7 @@ void		find_wall(t_ray *this_ray, t_v2_int *player_pos, int **map)
 	t_v2_int	hor_hit = {0};
 
 	hit_index = 0;
-    vertical_distance = horizontal_distance = final_distance = INT_MAX;
+    vertical_distance = horizontal_distance = INT_MAX;
 	this_ray->look_up = is_looking_up(&(this_ray->angle));
 	this_ray->look_left = is_looking_left(&(this_ray->angle));
 	find_horizontal_intersection(this_ray, player_pos, map);

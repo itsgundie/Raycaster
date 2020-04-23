@@ -51,17 +51,17 @@
 // # include "../SDL/SDL_image.h"
 
 
-typedef	struct		s_v2d_float
+typedef	struct					s_v2d_float
 {
-	float			x;
-	float			y;
-}					t_v2_float;
+	float				x;
+	float				y;
+}								t_v2_float;
 
-typedef	struct		s_v2d_int
+typedef	struct					s_v2d_int
 {
-	float			x;
-	float			y;
-}					t_v2_int;
+	int					x;
+	int					y;
+}								t_v2_int;
 
 typedef struct					s_pars_list
 {
@@ -82,11 +82,9 @@ typedef struct					s_pars_vars
 typedef struct					s_position
 {
 	t_v2_int			pos_int;
-	t_v2_float			pos_float;			
-	int					x;
-	int					y;
+	t_v2_float			pos_float;
 	float				angle;
-	float					fov;
+	float				fov;
 	float				rot_speed;
 	float				mov_speed;
 	int					look_up;
@@ -100,16 +98,16 @@ typedef struct					s_counters
 	int					i3;	
 }								t_counters;
 
-typedef	struct		s_ray
+typedef	struct					s_ray
 {
-	float			angle;
+	float				angle;
 	t_v2_float			pos;
-	float			distance;
-	int				look_up;
-	int				look_left;
-	int				hit_index;
+	float				distance; //высота столба
+	int					look_up;
+	int					look_left;
+	int					hit_index; //индекс текстуры
 
-}					t_ray;
+}								t_ray;
 
 typedef struct					s_wolfec
 {
@@ -119,6 +117,7 @@ typedef struct					s_wolfec
 	t_position 			player;
 	t_counters			count;
 	int					**map;
+	int					mouse_in_win_flag;
 	t_ray				ray[WIN_WIDTH];
 	SDL_Window			*win;
 	SDL_Renderer		*rend;
@@ -183,5 +182,6 @@ t_v2_int	calc_center(int	width, int height);
 float		calc_distance_projected(t_v2_int *start, t_v2_int *end, float *angle);
 void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **map);
 int			find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray);
+void		mouse_click(SDL_Event *event, t_wolfec *w);
 
 #endif

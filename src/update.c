@@ -1,4 +1,3 @@
-
 #include "../includes/wolf3d.h"
 
 int		is_looking_up(float	*angle)
@@ -11,13 +10,10 @@ int		is_looking_left(float *angle)
 	return((*angle > 0.5f * (float)M_PI && *angle < 1.5f * (float)M_PI) ? 1 : 0);
 }
 
-
-
 float		angle_between_rays(float fov)
 {
 	return(fov / WIN_WIDTH);
 }
-
 
 void    calculate_rays_angles(t_wolfec *w, float angle_step)
 {
@@ -26,7 +22,7 @@ void    calculate_rays_angles(t_wolfec *w, float angle_step)
     
     q = -1;
     w->player.angle = normalize_angle(w->player.angle);
-    this_angle = normalize_angle(w->player.angle - (w->player.fov / 2))
+    this_angle = normalize_angle(w->player.angle - (w->player.fov / 2));
     while (++q < WIN_WIDTH)
     {
         w->rays[q] = this_angle;

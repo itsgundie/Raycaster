@@ -47,6 +47,7 @@ t_wolfec	*preparation(void)
 	w->count.i2 = 0;
 	w->count.i3 = 0;
 	pthread_mutex_init(&w->mthread, NULL);
+	w->mouse_in_win_flag = 1;
 	return (w);
 }
 

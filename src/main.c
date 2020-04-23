@@ -1,7 +1,5 @@
 #include "../includes/wolf3d.h"
 
-
-
 void	delete_data(t_wolfec *w)
 {
 	t_pars_list *tmp;
@@ -35,7 +33,9 @@ int		main(int argc, char **argv)
 	{
 		set_mouse(w);
 		events(w, &event, keyboard_state);
-		//movement_rotation(w);
+		if (event.type == SDL_QUIT)
+			break ;
+		move(w);
 		update(w);
 		render_it(w);
 	}
