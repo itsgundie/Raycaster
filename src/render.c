@@ -3,7 +3,9 @@
 
 int		get_scaler_for_drawing_column(float tile_dimension, float distance)
 {
-	return((int)((tile_dimension / distance) < 1.0f ? (1.0f / (tile_dimension / distance)) : tile_dimension / distance));
+	if (distance <= 0.0f)
+		return ((int)((float)WIN_HEIGHT / tile_dimension) + 1);
+	return((int)(((tile_dimension / distance) < 1.0f) ? (1.0f / (tile_dimension / distance)) : tile_dimension / distance));
 }
 
 void	get_surface_slice(t_ray	*this_ray, uint32_t *tex_column, SDL_Surface *this_surf)
@@ -17,7 +19,7 @@ void	get_surface_slice(t_ray	*this_ray, uint32_t *tex_column, SDL_Surface *this_
 	tex_column_index %= TILE_SIZE;
 	while(++q < TILE_SIZE)
 	{
-		tex_column[q] = (Uint32*)(this_surf->pixels) + q * ((this_surf->pitch) / 4) + tex_column_index; 
+		*(tex_column + q) = (uint32_t)(this_surf->pixels + q * ((this_surf->pitch) / 4) + tex_column_index); 
 	}
 	return ;
 }
@@ -34,11 +36,11 @@ void	render_it(t_wolfec *w)
 	
 	tex_draw_index = 0;
 	q = 0;
-	while(w->ray[q] < WIDTH)
+	while(q < WIN_WIDTH)
 	{
-	int scaler = get_scaler_for_drawing_column((float)TILE_SIZE / (float)this_ray->distance);
-	get_texture_slice(&(w->ray[q]), tex_column, &(w->surf[0][(w->ray[q].hit_index)]));
-	color_index = (uint8_t)tex_column;
+	int scaler = get_scaler_for_drawing_column((float)TILE_SIZE, (float)w->ray[q].distance);
+	get_surface_slice(&(w->ray[q]), tex_column, (w->surf[0][(w->ray[q].hit_index)]));
+	color_index = ((uint8_t*)&tex_column);
 	start_draw.x = q;
 	start_draw.y = ((WIN_HEIGHT / 2) - (scaler * (TILE_SIZE / 2)));
 	(start_draw.y < 0) ? (start_draw.y = 0) : 0;
@@ -54,8 +56,9 @@ void	render_it(t_wolfec *w)
 			SDL_RenderDrawPoint(w->rend, start_draw.x, (start_draw.y + scaler_loop));
 			scaler_loop++;
 		}
-		start_draw.y += scaler_loop;
+		start_draw.y = start_draw.y + scaler_loop;
 		tex_draw_index++;
+		q++;
 	}	
 	}
 	SDL_RenderPresent(w->rend);

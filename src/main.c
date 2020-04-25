@@ -35,7 +35,7 @@ int		main(int argc, char **argv)
 		events(w, &event, keyboard_state);
 		if (event.type == SDL_QUIT)
 			break ;
-		move(w);
+		move(w, keyboard_state);
 		update(w);
 		render_it(w);
 	}

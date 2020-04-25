@@ -16,7 +16,7 @@ SUR=$ \x1b[7m
 
 NAME = wolf3d
 
-CC = gcc
+CC = gcc -g
 
 CC_FLAGS = 
 
@@ -33,7 +33,10 @@ SRC_FILES =	main.c \
 		events.c \
 		background.c \
 		render.c \
-		ray.c
+		ray.c	\
+		move.c	\
+		update.c
+		
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
 
 OBJ_PATH = ./objects/

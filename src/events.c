@@ -4,6 +4,7 @@ void	set_mouse(t_wolfec *w)
 {
 	SDL_SetRelativeMouseMode(SDL_ENABLE);
 	SDL_WarpMouseInWindow(w->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	return ;
 }
 
 void	key_eater(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state)
@@ -12,11 +13,13 @@ void	key_eater(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state)
 		w->player.mov_speed = fabs(MOVESPEED) * 2;
 	if (keyboard_state[SDL_SCANCODE_ESCAPE])
 		event->type = SDL_QUIT;
+	return ;
 }
 
 void		mouse_click(SDL_Event *event, t_wolfec *w)
 {
 	if (event->button.button == SDL_BUTTON_LEFT)
+	{
 		if (w->mouse_in_win_flag == 1)
 		{
 			SDL_SetRelativeMouseMode(SDL_DISABLE);
@@ -24,6 +27,8 @@ void		mouse_click(SDL_Event *event, t_wolfec *w)
 		}
 		else
 			w->mouse_in_win_flag = 1;
+	}	
+		return ;
 }
 
 void		mouse_crawl(SDL_Event *event, t_wolfec *w)
@@ -33,6 +38,7 @@ void		mouse_crawl(SDL_Event *event, t_wolfec *w)
 		if (event->motion.xrel != 0)
 			w->player.angle -= event->motion.xrel * w->player.rot_speed;
 	}
+	return ;
 }
 
 void	events(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state)
@@ -47,4 +53,5 @@ void	events(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state)
 		if (event->type == SDL_MOUSEMOTION)
 			mouse_crawl(event, w);
 	}
+	return ;
 }

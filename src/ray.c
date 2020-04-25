@@ -2,25 +2,16 @@
 #include "../includes/wolf3d.h"
 
 
+int		is_looking_up(float	*angle)
+{
+	return((*angle > 0.0f && *angle < (float)M_PI) ? 1 : 0);
+}
 
-// float		distance_projected(t_v2d ray, t_player blazco)
-// {
-// 	float	corrected_distance;
+int		is_looking_left(float *angle)
+{
+	return((*angle > 0.5f * (float)M_PI && *angle < 1.5f * (float)M_PI) ? 1 : 0);
+}
 
-// 	corrected_distance = 0.0f;
-// 	corrected_distance = projected_distance.x - projected_distance.y;
-// 	return();
-// }
-
-// float       calc_distance(float x1, float y1, float x2, float y2)
-// {
-// 	return(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
-// }
-
-// float		distance_to_projection_plane()
-// {
-// 	return((WIN_WIDTH / 2) / tan(FOV / 2));
-// }
 
 float		drawing_height(float ray_dist, float proj_dist)
 {
@@ -55,7 +46,7 @@ int     find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray)
 
 int		calc_distance(t_v2_int *start, t_v2_int *end, float *angle)
 {
-	return((int)(abs((start->x - end->x) * cos(*angle) - (start->y - end->y) * sin(*angle))))
+	return((int)(fabs((start->x - end->x) * cos(*angle) - (start->y - end->y) * sin(*angle))));
 }
 
 void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **map)
@@ -71,7 +62,7 @@ void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **ma
 	step.y = (TILE_SIZE * (int)tan(this_ray->angle));
 	step.y *= (((this_ray->look_up) && step.y > 0) ? -1 : 1);
 	step.y *= ((!(this_ray->look_up) && step.y < 0) ? -1 : 1);
-	intercept.x += (ray_is_left ? -1 : 0);
+	intercept.x += (this_ray->look_left ? -1 : 0);
 
 	while((intercept.y + step.y) > 0 && (intercept.y + step.y) < WIN_HEIGHT
 		&& (intercept.x + step.x) > 0 && (intercept.x + step.x) < WIN_WIDTH)
