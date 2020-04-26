@@ -39,6 +39,8 @@ t_wolfec	*preparation(void)
 	w->player.mov_speed = MOVESPEED;
 	w->params_list->line = NULL;
 	w->params_vars.line = NULL;
+	w->player.pos_int.x = 2; // remove
+	w->player.pos_int.y = 2; // remove
 	w->params_vars.line_width = 0;
 	w->params_vars.minus_one_found = 0;
 	w->params_vars.tmp = w->params_list;
