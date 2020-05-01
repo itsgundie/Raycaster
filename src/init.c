@@ -1,18 +1,6 @@
 
 #include "../includes/wolf3d.h"
 
-void		texturembo(t_wolfec *w)
-{
-	if ((w->surf[0][0] = IMG_Load("./textures/tekwall4.xpm")) == NULL)
-		ft_error((char*)SDL_GetError());
-	if ((w->surf[0][1] = IMG_Load("./textures/tekwall4.xpm")) == NULL)
-		ft_error((char*)SDL_GetError());
-	if ((w->surf[0][2] = IMG_Load("./textures/tekwall4.xpm")) == NULL)
-		ft_error((char*)SDL_GetError());
-	if ((w->surf[0][3] = IMG_Load("./textures/tekwall4.xpm")) == NULL)
-		ft_error((char*)SDL_GetError());
-}
-
 float       degrees_to_rads(float degrees)
 {
 	return(degrees * (M_PI / 180));
@@ -22,7 +10,6 @@ float		normalize_angle(float angle)
 {
 	return((float)fabs(fmod(angle, 2 * M_PI)));
 }
-
 
 t_wolfec	*preparation(void)
 {
@@ -39,8 +26,6 @@ t_wolfec	*preparation(void)
 	w->player.mov_speed = MOVESPEED;
 	w->params_list->line = NULL;
 	w->params_vars.line = NULL;
-	w->player.pos_int.x = 2; // remove
-	w->player.pos_int.y = 2; // remove
 	w->params_vars.line_width = 0;
 	w->params_vars.minus_one_found = 0;
 	w->params_vars.tmp = w->params_list;
@@ -50,10 +35,9 @@ t_wolfec	*preparation(void)
 	w->count.i3 = 0;
 	pthread_mutex_init(&w->mthread, NULL);
 	w->mouse_in_win_flag = 1;
+	w->keyboard_state = NULL;
 	return (w);
 }
-
-
 
 void	create_map(t_wolfec *w)
 {

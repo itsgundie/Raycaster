@@ -64,6 +64,16 @@ int		file_parser(t_wolfec *w, int fd)
 	return (1);
 }
 
+void	slayer_position(t_wolfec *w)
+{
+	if (w->params_vars.tmp->line[w->count.i2] == '-' 
+	&& w->params_vars.tmp->line[w->count.i2 + 1] == '1')
+	{
+		w->player.pos_float.x = w->count.i3 + 0.5;
+		w->player.pos_float.y = w->count.i + 0.5;
+	} 	
+}
+
 void	put_values_in_map(t_wolfec *w)
 {
 	while (w->count.i3 <= w->params_vars.line_width + 1)
@@ -77,6 +87,7 @@ void	put_values_in_map(t_wolfec *w)
 			while (w->params_vars.tmp->line[w->count.i2] == ' ')
 				w->count.i2++;
 			w->map[w->count.i][w->count.i3] = atoi(&w->params_vars.tmp->line[w->count.i2]);
+			slayer_position(w);
 			while ((w->params_vars.tmp->line[w->count.i2] >= '0'
 			&& w->params_vars.tmp->line[w->count.i2] <= '9')
 			|| w->params_vars.tmp->line[w->count.i2] == '-')
@@ -90,4 +101,6 @@ void	put_values_in_map(t_wolfec *w)
 	}
 	while (w->count.i3 <= w->params_vars.line_width + 1)
 		w->map[w->count.i][w->count.i3++] = 1;
-}
+	}
+
+	// Position

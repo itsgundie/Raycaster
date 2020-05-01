@@ -35,7 +35,8 @@ SRC_FILES =	main.c \
 		render.c \
 		ray.c	\
 		move.c	\
-		update.c
+		update.c \
+		textures.c
 		
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
 

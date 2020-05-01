@@ -26,6 +26,7 @@
 		"type_traits": "c",
 		"unordered_map": "c",
 		"utility": "c",
-		"vector": "c"
+		"vector": "c",
+		"sdl_surface.h": "c"
 	}
 }

@@ -17,8 +17,6 @@ int		main(int argc, char **argv)
 {
     int fd;
 	t_wolfec *w;
-	SDL_Event	event;
-	const Uint8	*keyboard_state;
 
     fd = 0;
     if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
@@ -29,13 +27,13 @@ int		main(int argc, char **argv)
 	init_sdl(w);
 	predraw(w);
 	texturembo(w);
-	while (event.type != SDL_QUIT)
+	while (w->event.type != SDL_QUIT)
 	{
 		set_mouse(w);
-		events(w, &event, keyboard_state);
-		if (event.type == SDL_QUIT)
+		events(w);
+		if (w->event.type == SDL_QUIT)
 			break ;
-		move(w, keyboard_state);
+		move(w);
 		update(w);
 		render_it(w);
 	}

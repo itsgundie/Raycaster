@@ -113,6 +113,8 @@ typedef	struct					s_ray
 
 typedef struct					s_wolfec
 {
+	SDL_Event			event;
+	const Uint8			*keyboard_state;
 	t_pars_vars			params_vars;
 	t_pars_list 		*params_list;
 	pthread_mutex_t		mthread;
@@ -165,8 +167,8 @@ void		create_map(t_wolfec *w);
 void		put_values_in_map(t_wolfec *w);
 void		niz(t_wolfec *w);
 void		verh(t_wolfec *w);
-void	 	events(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state);
-void		key_eater(t_wolfec *w, SDL_Event *event, const Uint8 *keyboard_state);
+void	 	events(t_wolfec *w);
+void		key_eater(t_wolfec *w);
 void		set_mouse(t_wolfec *w);
 void		init_sdl(t_wolfec *w);
 void		predraw(t_wolfec *w);
@@ -184,16 +186,17 @@ t_v2_int	calc_center(int	width, int height);
 int			calc_distance(t_v2_int *start, t_v2_int *end, float *angle);
 void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **map);
 int			find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray);
-void		mouse_click(SDL_Event *event, t_wolfec *w);
+void		mouse_click(t_wolfec *w);
 int			get_scaler_for_drawing_column(float tile_dimension, float distance);
 void		get_surface_slice(t_ray	*this_ray, uint32_t *tex_column, SDL_Surface *this_surf);
 void		render_it(t_wolfec *w);
-void		left_right(t_wolfec *w, const Uint8 *keyboard_state, float cosine, float sinus);
-void		forward_back(t_wolfec *w, const Uint8 *keyboard_state, float cosine, float sinus);
-void		move(t_wolfec *w, const Uint8 *keyboard_state);
+void		left_right(t_wolfec *w, float cosine, float sinus);
+void		forward_back(t_wolfec *w, float cosine, float sinus);
+void		move(t_wolfec *w);
 void		update(t_wolfec *w);
 int			is_looking_left(float *angle);
 int			is_looking_up(float	*angle);
+void		slayer_position(t_wolfec *w);
 
 
 

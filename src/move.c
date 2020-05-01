@@ -1,6 +1,6 @@
 #include "../includes/wolf3d.h"
 
-void	move(t_wolfec *w, const Uint8 *keyboard_state)
+void	move(t_wolfec *w)
 {
 	float		cosine;
 	float		sinus;
@@ -9,11 +9,11 @@ void	move(t_wolfec *w, const Uint8 *keyboard_state)
 	rads = degrees_to_rads(w->player.angle);
 	cosine = cos(rads);
 	sinus = sin(rads);
-	forward_back(w, keyboard_state, cosine, sinus);
-	left_right(w, keyboard_state, cosine, sinus);
+	forward_back(w, cosine, sinus);
+	left_right(w, cosine, sinus);
 }
 
-void			forward_back(t_wolfec *w, const Uint8 *keyboard_state, float cosine, float sinus)
+void			forward_back(t_wolfec *w, float cosine, float sinus)
 {	float	x;
 	float 	y;
 	float 	speed;
@@ -21,14 +21,14 @@ void			forward_back(t_wolfec *w, const Uint8 *keyboard_state, float cosine, floa
 	x = w->player.pos_float.x;
 	y = w->player.pos_float.y;
 	speed = w->player.mov_speed;
-	if (keyboard_state[SDL_SCANCODE_S] || keyboard_state[SDL_SCANCODE_DOWN])
+	if (w->keyboard_state[SDL_SCANCODE_S] || w->keyboard_state[SDL_SCANCODE_DOWN])
 	{
 		if (!w->map[(int)y][(int)(x - cosine * speed)])  
 			w->player.pos_float.x -= cosine * speed;
 		if (!w->map[(int)(y - sinus * speed)][(int)x])
 			w->player.pos_float.y -= sinus * speed;
 	}
-	if (keyboard_state[SDL_SCANCODE_W] || keyboard_state[SDL_SCANCODE_UP])
+	if (w->keyboard_state[SDL_SCANCODE_W] || w->keyboard_state[SDL_SCANCODE_UP])
 	{
 		if (!w->map[(int)y][(int)(x + cosine * speed)])
 			w->player.pos_float.x += cosine * speed;
@@ -37,7 +37,7 @@ void			forward_back(t_wolfec *w, const Uint8 *keyboard_state, float cosine, floa
 	}
 }
 
-void			left_right(t_wolfec *w, const Uint8 *keyboard_state, float cosine, float sinus)
+void			left_right(t_wolfec *w, float cosine, float sinus)
 {
 	float	x;
 	float 	y;
@@ -46,14 +46,14 @@ void			left_right(t_wolfec *w, const Uint8 *keyboard_state, float cosine, float 
 	x = w->player.pos_float.x;
 	y = w->player.pos_float.y;
 	speed = w->player.mov_speed;
-	if (keyboard_state[SDL_SCANCODE_D] || keyboard_state[SDL_SCANCODE_RIGHT])
+	if (w->keyboard_state[SDL_SCANCODE_D] || w->keyboard_state[SDL_SCANCODE_RIGHT])
 	{
 		if (!w->map[(int)(y - cosine * speed)][(int)x])
 			w->player.pos_float.y -= cosine * speed;
 		if (!w->map[(int)y][(int)(x + sinus * speed)])
 			w->player.pos_float.x += sinus * speed;
 	}
-	if (keyboard_state[SDL_SCANCODE_A] || keyboard_state[SDL_SCANCODE_LEFT])
+	if (w->keyboard_state[SDL_SCANCODE_A] || w->keyboard_state[SDL_SCANCODE_LEFT])
 	{
 		if (!w->map[(int)(y - cosine * speed)][(int)x])
 			w->player.pos_float.y += cosine * speed;
