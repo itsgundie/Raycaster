@@ -69,8 +69,8 @@ void	slayer_position(t_wolfec *w)
 	if (w->params_vars.tmp->line[w->count.i2] == '-' 
 	&& w->params_vars.tmp->line[w->count.i2 + 1] == '1')
 	{
-		w->player.pos_float.x = w->count.i3 + 0.5;
-		w->player.pos_float.y = w->count.i + 0.5;
+		w->player.pos_float.x = (((float)w->count.i3) + 0.5);
+		w->player.pos_float.y = (((float)w->count.i) + 0.5);
 	} 	
 }
 

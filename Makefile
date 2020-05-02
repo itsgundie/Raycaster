@@ -16,7 +16,7 @@ SUR=$ \x1b[7m
 
 NAME = wolf3d
 
-CC = gcc -g
+CC = clang -g
 
 CC_FLAGS = 
 
@@ -72,6 +72,7 @@ clean:
 
 fclean: clean
 	@make -C libft fclean
+	@rm $(NAME)
 	@printf "$(BLUE)> Deleted : $(RED)$(NAME) -[-_-]- $(END)\n"
 
 re: fclean all
@@ -79,7 +80,7 @@ re: fclean all
 norme:
 	norminette $(SRC) $(INC)
 
-launch:
+run:
 	./wolf3d petite
 
 
