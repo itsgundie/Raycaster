@@ -3,9 +3,11 @@
 
 int		get_scaler_for_drawing_column(float tile_dimension, float distance)
 {
-	if (distance <= 0.0f)
-		return ((int)((float)WIN_HEIGHT / tile_dimension) + 1);
-	return((int)(((tile_dimension / distance) < 1.0f) ? (1.0f / (tile_dimension / distance)) : tile_dimension / distance));
+	// if (distance <= 0.0f)
+	// 	return ((int)((float)WIN_HEIGHT / tile_dimension) + 1);
+	float to_z_projection_plane = (WIN_WIDTH / 2) / tan(FOV / 2);
+	return((int)(tile_dimension / distance) * to_z_projection_plane);
+	//return((int)(((tile_dimension / distance) < 1.0f) ? (1.0f / (tile_dimension / distance)) : tile_dimension / distance));
 }
 
 void	get_surface_slice(t_ray	*this_ray, uint32_t *tex_column, SDL_Surface *this_surf)
@@ -38,13 +40,13 @@ void	render_it(t_wolfec *w)
 	q = 0;
 	while(q < WIN_WIDTH)
 	{
-	int scaler = get_scaler_for_drawing_column((float)TILE_SIZE, (float)w->ray[q].distance);
+	float scaler = get_scaler_for_drawing_column((float)TILE_SIZE, (float)w->ray[q].distance);
 	get_surface_slice(&(w->ray[q]), tex_column, (w->surf[0][(w->ray[q].hit_index)]));
 	color_index = ((uint8_t*)&tex_column);
 	start_draw.x = q;
-	start_draw.y = ((WIN_HEIGHT / 2) - (scaler * (TILE_SIZE / 2)));
+	start_draw.y = ((WIN_HEIGHT / 2) - (int)(scaler * (float)(TILE_SIZE / 2)));
 	(start_draw.y < 0) ? (start_draw.y = 0) : 0;
-	tex_draw_index += (scaler * TILE_SIZE) / 2;
+	tex_draw_index += ((int)(scaler * (float)TILE_SIZE)) / 2;
 	while(start_draw.y < WIN_HEIGHT)
 	{
 		scaler_loop	= 0;
