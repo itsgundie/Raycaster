@@ -129,7 +129,7 @@ typedef struct					s_wolfec
 	SDL_Surface			*surf[1][4];
 }								t_wolfec;
 
-extern int worldMap[24][24];
+// extern int worldMap[24][24];
 
 t_wolfec	*preparation(void);
 int			file_parser(t_wolfec *w, int fd);
@@ -161,7 +161,7 @@ int			calc_distance(t_v2_int *start, t_v2_int *end, float *angle);
 void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **map);
 int			find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray);
 void		mouse_click(t_wolfec *w);
-int			get_scaler_for_drawing_column(float tile_dimension, float distance);
+int			scale_column_to_draw(float tile_dimension, float distance);
 void		get_surface_slice(t_ray	*this_ray, uint32_t *tex_column, SDL_Surface *this_surf);
 void		render_it(t_wolfec *w);
 void		left_right(t_wolfec *w, float cosine, float sinus);

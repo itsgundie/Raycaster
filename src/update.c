@@ -26,8 +26,8 @@ void    update(t_wolfec *w)
     int q;
 
     q = -1;
-    // w->player.pos.x = (int)w->player.pos_float.x;
-    // w->player.pos.y = (int)w->player.pos_float.y;
+    w->player.pos.x = TILE_SIZE * (int)w->player.pos_float.x;
+    w->player.pos.y = TILE_SIZE * (int)w->player.pos_float.y;
     calculate_rays_angles(w, angle_between_rays(w->player.fov));
     while(++q < WIN_WIDTH)
     {
