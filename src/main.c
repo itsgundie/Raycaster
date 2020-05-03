@@ -52,8 +52,8 @@ int		main(int argc, char **argv)
     if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
 		ft_error("\033[0;32musage: ./wolf3d map");
     w = preparation();
-	//if (file_parser(w, fd))
-	//	create_map(w);
+	if (file_parser(w, fd))
+		create_map(w);
 	w->player.pos.x = 5 * TILE_SIZE + 7;//5 * TILE_SIZE + 13;
 	w->player.pos.y = 13 * TILE_SIZE + 5;//13 * TILE_SIZE + 13;
 	init_sdl(w);
