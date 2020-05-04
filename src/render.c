@@ -137,6 +137,8 @@ void	render_it(t_wolfec *w)
 		if (q > 630)
 			write(1, "\n", 1);
 	int col_height = scale_column_to_draw((float)TILE_SIZE, w->ray[q].distance);
+	// if (col_height <= 0)
+	// 	col_height = WIN_HEIGHT;
 	get_surface_slice(&(w->ray[q]), tex_column, (w->surf[0][(w->ray[q].hit_index) + 1]));
 	color_index = ((uint8_t*)&(tex_column[0]));
 	start_draw.x = q;
