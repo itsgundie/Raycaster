@@ -34,10 +34,7 @@ int     find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray, t_v2_int p
 	int y_offset;
 	
 	if ((coords.x < 0 || coords.x > WIN_WIDTH) || (coords.y < 0 || coords.x > WIN_HEIGHT))
-	{
-		this_ray->hit_index = 1;
-		return(1);
-	}
+		return(0);
 	x_offset = ((this_ray->look_left) ? -1 : 1);
 	y_offset = ((this_ray->look_up) ? -1 : 1);
 	x = (coords.x + x_offset) / TILE_SIZE;
@@ -73,7 +70,7 @@ void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **ma
 	intercept.y = (player_pos->y + (int)(((float)(player_pos->x - intercept.x)) / tan(this_ray->angle)));
 	step.x = ((this_ray->look_left) ? -TILE_SIZE : TILE_SIZE);
 	step.y = (int)((float)TILE_SIZE * tan(this_ray->angle));
-	//step.y *= (((this_ray->look_up) && step.y > 0) ? -1 : 1);
+	step.y *= (((this_ray->look_up) && step.y > 0) ? -1 : 1);
 	//step.y *= ((!(this_ray->look_up) && step.y < 0) ? -1 : 1);
 	//intercept.x += (this_ray->look_left ? -1 : 0);
 	// while((intercept.y + step.y) > 0 && (intercept.y + step.y) < WIN_HEIGHT
@@ -81,19 +78,13 @@ void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **ma
 	check = intercept;
 	while((check.y > 0) && (check.x > 0))
 	{
-		
+		check.x = (intercept.x + step.x);
+		check.y = (intercept.y + step.y);
 		if (find_an_obstacle(check, map, this_ray, *player_pos))
 			break ;
-		check.x += step.x;//(intercept.x + step.x);
-		check.y += step.y;//(intercept.y + step.y);
-	//	intercept = check;
+		intercept = check;
 	//	intercept.y = check.y;
 	}
-	// if (check.x < 0 || check.y < 0)
-	// {	
-	// 	(check.x < 0) ? (check.x = 128) : check.x;
-	// 	(check.y < 0) ? (check.y = 128) : check.y;
-	// }
 	this_ray->pos = check;
 //	this_ray->pos.y = check.y;
 	return ;
@@ -109,10 +100,10 @@ void	find_horizontal_intersection(t_ray *this_ray, t_v2_int *player_pos, int **m
 	
 	intercept.y = ((player_pos->y / TILE_SIZE) * TILE_SIZE);
 	intercept.y += ((this_ray->look_up) ? -1 : TILE_SIZE);
-	intercept.x = (player_pos->x + (int)(((float)(player_pos->y - intercept.y)) / tan(this_ray->angle)));
+	intercept.x = (player_pos->x + (int)((float)(player_pos->y - intercept.y) / tan(this_ray->angle)));
 	step.y = ((this_ray->look_up) ? -TILE_SIZE : TILE_SIZE);
 	step.x = (int)(((float)TILE_SIZE) / tan(this_ray->angle));
-	//step.x *= ((this_ray->look_left && step.x > 0) ? -1 : 1);
+	step.x *= ((this_ray->look_left && step.x > 0) ? -1 : 1);
 	//step.x *= ((!(this_ray->look_left) && step.x < 0) ? -1 : 1);
 	//intercept.y += ((this_ray->look_up) ? -1 : 0);
 	// while((intercept.y + step.y) > 0 && (intercept.y + step.y) < WIN_HEIGHT 
@@ -120,18 +111,13 @@ void	find_horizontal_intersection(t_ray *this_ray, t_v2_int *player_pos, int **m
 	check = intercept;
 	while((check.y > 0) && (check.x > 0))
 	{
+	check.y = (intercept.y + step.y);
+	check.x = (intercept.x + step.x);
 	if (find_an_obstacle(check, map, this_ray, *player_pos))
 		break ;
-	check.y +=  step.y;
-	check.x +=	step.x;
-	//intercept = check;
+	intercept = check;
 	//intercept.y = check.y;
 	}
-	// if (check.x < 0 || check.y < 0)
-	// {	
-	// 	(check.x < 0) ? (check.x = 128) : check.x;
-	// 	(check.y < 0) ? (check.y = 128) : check.y;
-	// }
 	this_ray->pos = check;
 	//this_ray->pos.y = check.y;
 	return ;
@@ -162,8 +148,6 @@ void		find_wall(t_ray *this_ray, t_v2_int *player_pos, int **map)
                         ? hor_hit : this_ray->pos);
 	//this_ray->pos.y = ((horizontal_distance < vertical_distance) 
     //                    ? hor_hit.y : 0);
-	if (this_ray->distance <= 0.0f)
-		this_ray->distance = 1.0f;
 	this_ray->hit_index = ((horizontal_distance < vertical_distance) 
                         ? hit_index : 0);
 	this_ray->hit_is_hor = ((horizontal_distance < vertical_distance) 

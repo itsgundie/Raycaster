@@ -26,7 +26,7 @@ t_wolfec	*preparation(void)
 	if (!(w->params_list = (t_pars_list *)malloc(sizeof(t_pars_list))))
 		ft_error("malloc fuckup");
 	w->player.fov = degrees_to_rads((float)FOV);
-	w->player.angle = degrees_to_rads(0.0f); // random()
+	w->player.angle = degrees_to_rads(90.0f); // random()
 	w->player.rot_speed = ROTATIONSPEED;
 	w->player.mov_speed = MOVESPEED;
 	w->params_list->line = NULL;
