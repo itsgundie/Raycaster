@@ -8,7 +8,12 @@ float       degrees_to_rads(float degrees)
 
 float		normalize_angle(float angle)
 {
-	return((float)fabs(fmod(angle, 2 * M_PI)));
+	if (angle < 0.0f)
+		return(2 * M_PI - angle);
+	else
+		return(fabs(fmod(angle, (2 * M_PI))));
+	
+	//return((float)fabs(fmod(angle, 2 * M_PI)));
 }
 
 t_wolfec	*preparation(void)

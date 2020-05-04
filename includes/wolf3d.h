@@ -1,11 +1,15 @@
 #ifndef WOLF3D_H
 # define WOLF3D_H
 
-# define WIN_WIDTH		1000
-# define WIN_HEIGHT		700
-# define FOV			60
-# define ROTATIONSPEED	0.2f
-# define MOVESPEED		0.1f
+#define FPS 60
+#define FRAME_TARGET_TIME (1000 / FPS)
+
+
+# define WIN_WIDTH		800
+# define WIN_HEIGHT		600
+# define FOV			66
+# define ROTATIONSPEED	0.01f
+# define MOVESPEED		0.01f
 
 # define PLAYER_HEIGHT		16
 # define TILE_SIZE			128
@@ -159,7 +163,7 @@ void		find_wall(t_ray *this_ray, t_v2_int *player_pos, int **map);
 t_v2_int	calc_center(int	width, int height);
 int			calc_distance(t_v2_int *start, t_v2_int *end, float *angle);
 void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **map);
-int			find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray);
+int			find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray, t_v2_int player_pos);
 void		mouse_click(t_wolfec *w);
 int			scale_column_to_draw(float tile_dimension, float distance);
 void		get_surface_slice(t_ray	*this_ray, uint32_t *tex_column, SDL_Surface *this_surf);
@@ -171,6 +175,7 @@ void		update(t_wolfec *w);
 int			is_looking_left(float *angle);
 int			is_looking_up(float	*angle);
 void		slayer_position(t_wolfec *w);
+void		put_pixel_to_render(SDL_Renderer *rend, uint8_t *color, t_v2_int *coords);
 
 
 

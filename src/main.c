@@ -48,21 +48,30 @@ int		main(int argc, char **argv)
     int fd;
   	t_wolfec *w;
 
+	uint32_t prev_frame_time = 0;
+
     fd = 0;
     if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
 		ft_error("\033[0;32musage: ./wolf3d map");
     w = preparation();
 	if (file_parser(w, fd))
 		create_map(w);
-	w->player.pos.x = 5 * TILE_SIZE + 7;//5 * TILE_SIZE + 13;
-	w->player.pos.y = 13 * TILE_SIZE + 5;//13 * TILE_SIZE + 13;
+	// w->player.pos.x = 5 * TILE_SIZE + 7;//5 * TILE_SIZE + 13;
+	// w->player.pos.y = 13 * TILE_SIZE + 5;//13 * TILE_SIZE + 13;
 	init_sdl(w);
-	predraw(w);
 	texturembo(w);
   // SDL_Delay(5000);
 	while (w->event.type != SDL_QUIT)
 	{
-		// set_mouse(w);
+	    int delay_time = FRAME_TARGET_TIME - (SDL_GetTicks() - prev_frame_time);
+
+    	if (delay_time > 0 && delay_time <= FRAME_TARGET_TIME)
+        SDL_Delay(delay_time);
+    
+    	prev_frame_time = SDL_GetTicks();
+
+		predraw(w);
+		set_mouse(w);
 		events(w);
 		if (w->event.type == SDL_QUIT)
 			break ;

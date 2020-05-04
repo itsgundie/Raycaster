@@ -46,8 +46,11 @@ void	niz(t_wolfec *w)
 
 void	predraw(t_wolfec *w)
 {
-	SDL_SetRenderTarget(w->rend, w->back);
+	//SDL_SetRenderTarget(w->rend, w->back);
+	SDL_SetRenderTarget(w->rend, NULL);
+	//SDL_RenderClear(w->rend);
 	verh(w);
 	niz(w);
-	SDL_SetRenderTarget(w->rend, NULL);
+	//SDL_SetRenderTarget(w->rend, NULL);
+	//SDL_RenderPresent(w->rend);	
 }
