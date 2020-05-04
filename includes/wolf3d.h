@@ -5,11 +5,12 @@
 #define FRAME_TARGET_TIME (1000 / FPS)
 
 
-# define WIN_WIDTH		800
-# define WIN_HEIGHT		600
-# define FOV			66
+# define WIN_WIDTH		480
+# define WIN_HEIGHT		320
+# define FOV			42
 # define ROTATIONSPEED	0.01f
 # define MOVESPEED		200
+
 
 # define PLAYER_HEIGHT		16
 # define TILE_SIZE			128
