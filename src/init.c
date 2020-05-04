@@ -40,6 +40,7 @@ t_wolfec	*preparation(void)
 	w->count.i3 = 0;
 	//pthread_mutex_init(&w->mthread, NULL);
 	w->mouse_in_win_flag = 1;
+	w->keyboard_state = NULL;
 	return (w);
 }
 

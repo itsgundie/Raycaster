@@ -34,7 +34,7 @@ SRC_FILES =	main.c \
 		background.c \
 		render.c \
 		ray.c	\
-		move_or_die.c	\
+		move.c	\
 		update.c \
 		textures.c
 		
