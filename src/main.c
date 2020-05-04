@@ -61,7 +61,7 @@ int		main(int argc, char **argv)
 	init_sdl(w);
 	texturembo(w);
   // SDL_Delay(5000);
-	while (w->event.type != SDL_QUIT)
+	while (1)
 	{
 	    int delay_time = FRAME_TARGET_TIME - (SDL_GetTicks() - prev_frame_time);
 
@@ -72,10 +72,8 @@ int		main(int argc, char **argv)
 
 		predraw(w);
 		set_mouse(w);
-		events(w);
-		if (w->event.type == SDL_QUIT)
+		if (!(events(w)))
 			break ;
-		move(w);
 		update(w);
 		render_it(w);
 	}

@@ -9,7 +9,7 @@
 # define WIN_HEIGHT		600
 # define FOV			66
 # define ROTATIONSPEED	0.01f
-# define MOVESPEED		0.01f
+# define MOVESPEED		200
 
 # define PLAYER_HEIGHT		16
 # define TILE_SIZE			128
@@ -90,7 +90,7 @@ typedef struct					s_position
 	float				angle;
 	float				fov;
 	float				rot_speed;
-	float				mov_speed;
+	int					mov_speed;
 	int					look_up;
 	int					look_left;	
 }								t_position;
@@ -117,8 +117,7 @@ typedef	struct					s_ray
 
 typedef struct					s_wolfec
 {
-	SDL_Event			event;
-	const Uint8			*keyboard_state;
+
 	t_pars_vars			params_vars;
 	t_pars_list 		*params_list;
 	pthread_mutex_t		mthread;
@@ -145,8 +144,8 @@ void		create_map(t_wolfec *w);
 void		put_values_in_map(t_wolfec *w);
 void		niz(t_wolfec *w);
 void		verh(t_wolfec *w);
-void	 	events(t_wolfec *w);
-void		key_eater(t_wolfec *w);
+int			events(t_wolfec *w);
+int			key_eater(t_wolfec *w, SDL_Event event, const Uint8 *keyboard_state);
 void		set_mouse(t_wolfec *w);
 void		init_sdl(t_wolfec *w);
 void		predraw(t_wolfec *w);
@@ -164,18 +163,19 @@ t_v2_int	calc_center(int	width, int height);
 int			calc_distance(t_v2_int *start, t_v2_int *end, float *angle);
 void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **map);
 int			find_an_obstacle(t_v2_int coords, int **map, t_ray *this_ray, t_v2_int player_pos);
-void		mouse_click(t_wolfec *w);
+void		mouse_click(t_wolfec *w, SDL_Event event);
 int			scale_column_to_draw(float tile_dimension, float distance);
 void		get_surface_slice(t_ray	*this_ray, uint32_t *tex_column, SDL_Surface *this_surf);
 void		render_it(t_wolfec *w);
-void		left_right(t_wolfec *w, float cosine, float sinus);
-void		forward_back(t_wolfec *w, float cosine, float sinus);
-void		move(t_wolfec *w);
+void		left_right(t_wolfec *w, float cosine, float sinus, const Uint8 *keyboard_state);
+void		forward_back(t_wolfec *w, float cosine, float sinus, const Uint8 *keyboard_state);
+void		move_or_die(t_wolfec *w, const Uint8 *keyboard_state);
 void		update(t_wolfec *w);
 int			is_looking_left(float *angle);
 int			is_looking_up(float	*angle);
 void		slayer_position(t_wolfec *w);
 void		put_pixel_to_render(SDL_Renderer *rend, uint8_t *color, t_v2_int *coords);
+void		mouse_crawl(t_wolfec *w, SDL_Event event);
 
 
 
