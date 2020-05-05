@@ -28,7 +28,7 @@ ifeq ($(UNAME), Linux)
 	SDL_LIB = -L SDL2_Linux/lib/ -l SDL2 -lm -l SDL2_image
 	SDL = $(SDL_INC) $(SDL_LIB)
 else
-	SDL_INC = -I /SDL/inc/
+	SDL_INC = /SDL/inc/
 	SDL_LIB = -L SDL/lib/ -l SDL2 -L SDL/lib/ -l SDL2_image
 	SDL = $(SDL_INC) $(SDL_LIB)
 endif
