@@ -12,7 +12,7 @@ int		scale_column_to_draw(float tile_dimension, float distance)
 	float to_z_projection_plane;
 	to_z_projection_plane = (((float)WIN_WIDTH / 2) / tan(degrees_to_rads((float)(FOV / 2))));
 	rez = ((int)(fabs((tile_dimension / distance) * to_z_projection_plane)));; // tile_dimension))); //));
-	return((rez)); //>> 1) << 1);
+	return((rez >> 2) << 2);
 	//max = ((int)(fabs((((tile_dimension / WIN_HEIGHT) * tile_dimension)))));;
 	//return((rez < max) ? rez : max);
 	// if (ska < 1.00f)

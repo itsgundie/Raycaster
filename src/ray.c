@@ -74,11 +74,11 @@ void		find_vertical_intersection(t_ray *this_ray, t_v2_int *player_pos, int **ma
 
 	intercept.x = ((player_pos->x / TILE_SIZE) * TILE_SIZE);
 	intercept.x += ((this_ray->look_left) ? 0 : TILE_SIZE);
-	intercept.y = (player_pos->y + (int)(((float)(player_pos->x - intercept.x)) / tan(this_ray->angle)));
+	intercept.y = (player_pos->y + (int)(((float)(player_pos->x - intercept.x)) * tan(this_ray->angle)));
 	step.x = ((this_ray->look_left) ? -TILE_SIZE : TILE_SIZE);
-	step.y = (int)((float)TILE_SIZE * tan(this_ray->angle));
-	//step.y *= (((this_ray->look_up) && step.y > 0) ? -1 : 1);
-	//step.y *= ((!(this_ray->look_up) && step.y < 0) ? -1 : 1);
+	step.y = (int)(((float)TILE_SIZE) * tan(this_ray->angle));
+	step.y *= (((this_ray->look_up) && step.y > 0) ? -1 : 1);
+	step.y *= ((!(this_ray->look_up) && step.y < 0) ? -1 : 1);
 	//intercept.x += (this_ray->look_left ? -1 : 0);
 	// while((intercept.y + step.y) > 0 && (intercept.y + step.y) < WIN_HEIGHT
 	// 	&& (intercept.x + step.x) > 0 && (intercept.x + step.x) < WIN_WIDTH)
@@ -115,9 +115,12 @@ void	find_horizontal_intersection(t_ray *this_ray, t_v2_int *player_pos, int **m
 	intercept.y += ((this_ray->look_up) ? -1 : TILE_SIZE);
 	intercept.x = (player_pos->x + (int)(((float)(player_pos->y - intercept.y)) / tan(this_ray->angle)));
 	step.y = ((this_ray->look_up) ? -TILE_SIZE : TILE_SIZE);
+	float one = tan(this_ray->angle);
+	float two = (float)TILE_SIZE;
+	int three = (int)(two / one);
 	step.x = (int)(((float)TILE_SIZE) / tan(this_ray->angle));
-	//step.x *= ((this_ray->look_left && step.x > 0) ? -1 : 1);
-	//step.x *= ((!(this_ray->look_left) && step.x < 0) ? -1 : 1);
+	step.x *= ((this_ray->look_left && step.x > 0) ? -1 : 1);
+	step.x *= ((!(this_ray->look_left) && step.x < 0) ? -1 : 1);
 	//intercept.y += ((this_ray->look_up) ? -1 : 0);
 	// while((intercept.y + step.y) > 0 && (intercept.y + step.y) < WIN_HEIGHT 
 	// 	&& (intercept.x + step.x) > 0 && (intercept.x + step.x) < WIN_WIDTH)
@@ -169,7 +172,7 @@ void		find_wall(t_ray *this_ray, t_v2_int *player_pos, int **map, t_v2_int map_s
 	if (this_ray->distance <= 0.0f)
 		this_ray->distance = 1.0f;
 	this_ray->hit_index = ((horizontal_distance < vertical_distance) 
-                        ? hit_index : 0);
+                        ? hit_index : this_ray->hit_index);
 	this_ray->hit_is_hor = ((horizontal_distance < vertical_distance) 
                         ? 1 : 0);
 	return ;
