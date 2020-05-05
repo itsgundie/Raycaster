@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME = libft.a
-CC = clang
+CC = gcc
 FLAGS = -c
 INCLUDES = -I $(HEADERS_DIRECTORY)
 HEADERS_LIST = 	libft.h 	\

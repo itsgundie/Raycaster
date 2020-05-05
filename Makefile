@@ -18,20 +18,24 @@ SUR=$ \x1b[7m
 
 NAME = wolf3d
 
-CC = clang -g -v
+CC = clang -g
 
 
 CC_FLAGS = 
 
-ifeq ($(UNAME), Linux)
-	SDL_INC = -I SDL2_Linux/include/
-	SDL_LIB = -L SDL2_Linux/lib/ -l SDL2 -lm -l SDL2_image
-	SDL = $(SDL_INC) $(SDL_LIB)
-else
-	SDL_INC = /SDL/inc/
-	SDL_LIB = -L SDL/lib/ -l SDL2 -L SDL/lib/ -l SDL2_image
-	SDL = $(SDL_INC) $(SDL_LIB)
-endif
+# ifeq ($(UNAME), Linux)
+# 	SDL_INC = -I SDL2_Linux/include/
+# 	SDL_LIB = -L SDL2_Linux/lib/ -l SDL2 -lm -l SDL2_image
+# 	SDL = $(SDL_INC) $(SDL_LIB)
+# else
+# 	SDL_INC = /SDL/inc/
+# 	SDL_LIB = -L SDL/lib/ -l SDL2 -L SDL/lib/ -l SDL2_image
+# 	SDL = $(SDL_INC) $(SDL_LIB)
+# endif
+
+SDL_INC = -I ./SDL/inc/
+SDL_LIB = -L ./SDL/lib/ -l SDL2 -L SDL/lib/ -l SDL2_image
+SDL = $(SDL_INC) $(SDL_LIB)
 
 SRC_PATH = ./src/
 
@@ -56,7 +60,7 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 
 INC_PATH = includes/
 
-INC_FILES = #wolf3d.h
+INC_FILES = wolf3d.h
 
 INC = $(addprefix $(INC_PATH), $(INC_FILES))
 
@@ -75,7 +79,7 @@ $(NAME): $(LIBFT)
 
 
 clean:
-	@make -C ../libft/ clean
+	@make -C ./libft/ clean
 	@printf "$(BLUE)> Deleted : $(RED)$(OBJ_PATH)$(END)\n"
 
 fclean: clean

@@ -36,7 +36,7 @@ void    update(t_wolfec *w)
     calculate_rays_angles(w, normalize_angle(angle_between_rays(w->player.fov)));
     while(++q < WIN_WIDTH)
     {
-        if (q > 314)
+        if (w->ray[q].angle == 0.0656685531)
             write(1, "\n", 1);
         find_wall(&(w->ray[q]), &(w->player.pos), (w->map), map_size);
     }
