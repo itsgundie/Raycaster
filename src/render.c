@@ -11,8 +11,8 @@ int		scale_column_to_draw(float tile_dimension, float distance)
 	//distance = (WIN_HEIGHT > distance ? distance : WIN_HEIGHT);
 	float to_z_projection_plane;
 	to_z_projection_plane = (((float)WIN_WIDTH / 2) / tan(degrees_to_rads((float)(FOV / 2))));
-	rez = ((int)(fabs((((tile_dimension / distance) * tile_dimension))))); // tile_dimension))); //));
-	return((rez)); //>> 1) << 1);
+	rez = ((int)(fabs((tile_dimension / distance) * to_z_projection_plane)));; // tile_dimension))); //));
+	return((rez >> 2) << 2);
 	//max = ((int)(fabs((((tile_dimension / WIN_HEIGHT) * tile_dimension)))));;
 	//return((rez < max) ? rez : max);
 	// if (ska < 1.00f)
@@ -149,29 +149,31 @@ void	render_it(t_wolfec *w)
 	int draw_length = ((col_height < WIN_HEIGHT) ? col_height : WIN_HEIGHT);
 	int loop = 0;
 	float step_y = (((float)col_height / (float)TILE_SIZE) - (float)((int)((float)col_height / (float)TILE_SIZE)));
-	// if (col_height > WIN_HEIGHT)
-	// {
-	// 	index = (float)( TILE_SIZE - 1 - ((int)((float)WIN_HEIGHT / (float)(col_height) * (float)TILE_SIZE) / 2));
-	// 		// color_index = color_index + 4 * ( TILE_SIZE - 1 
-	// 		// - ((int)((float)WIN_HEIGHT / (float)(scaler) * (float)TILE_SIZE) / 2));
-	// }
+	if (col_height > WIN_HEIGHT)
+	{
+		index = (float)( TILE_SIZE - 1 - ((int)((float)WIN_HEIGHT / (float)(col_height) * (float)TILE_SIZE) / 2));
+			// color_index = color_index + 4 * ( TILE_SIZE - 1 
+			// - ((int)((float)WIN_HEIGHT / (float)(scaler) * (float)TILE_SIZE) / 2));
+	}
 	uint32_t *color_ptr;
-	uint32_t color = 0x88888888;
+	uint32_t color = 0xFFFFFFFF;
 	color_ptr = &color;
 	color_index = ((uint8_t*)color_ptr);
 	while ((draw_length > 0) && (start_draw.y < WIN_HEIGHT))
 	{
-		// loop = 0;
-		// while (loop < (scale) && (scale > 1))
-		// {
-		// 	put_pixel_to_render((w->rend), &(color_index[0]), &start_draw);
-		// 	start_draw.y++;
-		// 	loop++;
-		// 	draw_length--;
-		// }
+		loop = 0;
+		while (loop < (scale) && (scale > 1))
+		{
+			put_pixel_to_render((w->rend), &(color_index[0]), &start_draw);
+			// put_pixel_to_render((w->rend), &(color_index[((int)index) * 4]), &start_draw);
+			start_draw.y++;
+			loop++;
+			draw_length--;
+		}
 		if ((draw_length > 0) && (start_draw.y < WIN_HEIGHT))
 		{
 			put_pixel_to_render((w->rend), &(color_index[0]), &start_draw);
+			// put_pixel_to_render((w->rend), &(color_index[(((int)index) * 4)]), &start_draw);
 			draw_length--;
 			(start_draw.y)++;
 		}

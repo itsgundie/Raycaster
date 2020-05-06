@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amargy <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: cspare <cspare@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/26 17:53:17 by amargy            #+#    #+#              #
-#    Updated: 2019/05/15 14:50:44 by amargy           ###   ########.fr        #
+#    Updated: 2020/05/05 13:09:00 by cspare           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 CC = gcc
-FLAGS = -O3 -c
+FLAGS = -c
 INCLUDES = -I $(HEADERS_DIRECTORY)
 HEADERS_LIST = 	libft.h 	\
 				ft_printf.h \

@@ -1,5 +1,7 @@
 .PHONY: all clean fclean re
 
+UNAME := $(shell uname)
+
 GREY=$ \x1b[30m
 RED=$ \x1b[31m
 GREEN=$ \x1b[32m
@@ -18,12 +20,22 @@ NAME = wolf3d
 
 CC = clang -g
 
+
 CC_FLAGS = 
 
-SDL_INC = -I /SDL/inc/
-SDL_LIB = -L SDL/lib/ -l SDL2 -L SDL/lib/ -l SDL2_image
-SDL = $(SDL_INC) $(SDL_LIB)
+# ifeq ($(UNAME), Linux)
+# 	SDL_INC = -I SDL2_Linux/include/
+# 	SDL_LIB = -L SDL2_Linux/lib/ -l SDL2 -lm -l SDL2_image
+# 	SDL = $(SDL_INC) $(SDL_LIB)
+# else
+# 	SDL_INC = /SDL/inc/
+# 	SDL_LIB = -L SDL/lib/ -l SDL2 -L SDL/lib/ -l SDL2_image
+# 	SDL = $(SDL_INC) $(SDL_LIB)
+# endif
 
+SDL_INC = -I ./SDL/inc/
+SDL_LIB = -L ./SDL/lib/ -l SDL2 -L SDL/lib/ -l SDL2_image
+SDL = $(SDL_INC) $(SDL_LIB)
 
 SRC_PATH = ./src/
 
@@ -46,7 +58,7 @@ OBJ_FILES = $(SRC_FILES: .c=.o)
 
 OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 
-INC_PATH = ./includes/
+INC_PATH = includes/
 
 INC_FILES = wolf3d.h
 
@@ -62,12 +74,12 @@ $(LIBFT):
 	@make -C libft/
 
 $(NAME): $(LIBFT)
-	$(CC) $(SRC) $(LIBFT) -o $(NAME) -I $(INC) $(SDL)
+	$(CC) $(SRC) $(LIBFT) -I $(INC) $(SDL) -o $(NAME)
 	@printf "\n$(BLUE)> $@ : $(GREEN)Success !$(END)\n\n"
 
 
 clean:
-	@make -C libft/ clean
+	@make -C ./libft/ clean
 	@printf "$(BLUE)> Deleted : $(RED)$(OBJ_PATH)$(END)\n"
 
 fclean: clean
