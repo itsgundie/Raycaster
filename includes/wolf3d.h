@@ -9,7 +9,7 @@
 # define WIN_HEIGHT		320
 # define FOV			42
 # define ROTATIONSPEED	0.01f
-# define MOVESPEED		10.01f
+# define MOVESPEED		200.0f
 
 # define PLAYER_HEIGHT		16
 # define TILE_SIZE			128
