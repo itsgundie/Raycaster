@@ -33,7 +33,7 @@ int     find_an_obstacle(t_v2_int *coords, int **map, t_ray *this_ray, t_v2_int 
 	int x_offset;
 	int y_offset;
 	
-	if ((coords->x < 0 || coords->x > map_size.x) || (coords->y < 0 || coords->y > map_size.y))
+	if (coords->x < 0 || coords->x > map_size.x || coords->y < 0 || coords->y > map_size.y)
 	{
 		// coords->x < 0 ? coords->x = 128 : 0;
 		// coords->y < 0 ? coords->y = 128 : 0;
@@ -175,5 +175,6 @@ void		find_wall(t_ray *this_ray, t_v2_int *player_pos, int **map, t_v2_int map_s
                         ? hit_index : this_ray->hit_index);
 	this_ray->hit_is_hor = ((horizontal_distance < vertical_distance) 
                         ? 1 : 0);
+	this_ray->distance = ((float)((int)this_ray->distance));
 	return ;
 }
