@@ -9,7 +9,7 @@
 # define WIN_HEIGHT		320
 # define FOV			42
 # define ROTATIONSPEED	0.01f
-# define MOVESPEED		200.0f
+# define MOVESPEED		70.0f
 
 # define PLAYER_HEIGHT		16
 # define TILE_SIZE			128
@@ -39,13 +39,13 @@
 # include <pthread.h>
 # include <limits.h>
 # include <float.h>
-# include "../SDL/inc/SDL.h"
-# include "../SDL/inc/SDL_surface.h"
-# include "../SDL/inc/SDL_video.h"
-# include "../SDL/inc/SDL_render.h"
-# include "../SDL/inc/SDL_pixels.h"
-# include "../SDL/inc/SDL_events.h"
-# include "../SDL/inc/SDL_image.h"
+# include "../SDL/include/SDL2/SDL.h"
+# include "../SDL/include/SDL2/SDL_surface.h"
+# include "../SDL/include/SDL2/SDL_video.h"
+# include "../SDL/include/SDL2/SDL_render.h"
+# include "../SDL/include/SDL2/SDL_pixels.h"
+# include "../SDL/include/SDL2/SDL_events.h"
+# include "../SDL/include/SDL2/SDL_image.h"
 
 // # include "../SDL/SDL_surface.h"
 // # include "../SDL/SDL_video.h"

@@ -36,7 +36,11 @@ void		mouse_crawl(t_wolfec *w)
 	if (w->mouse_in_win_flag == 1)
 	{
 		if (w->event.motion.xrel != 0)
+		{
 			w->player.angle -= w->event.motion.xrel * w->player.rot_speed;
+			w->player.angle = normalize_angle(w->player.angle);
+		}
+		
 	}
 	return ;
 }
