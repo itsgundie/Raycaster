@@ -12,7 +12,7 @@ int		scale_column_to_draw(float tile_dimension, float distance)
 	float to_z_projection_plane;
 	to_z_projection_plane = (((float)WIN_WIDTH / 2) / tan(degrees_to_rads((float)(FOV / 2))));
 	rez = ((int)(fabs((tile_dimension / distance) * to_z_projection_plane)));; // tile_dimension))); //));
-	return((rez >> 2) << 2);
+	return((rez >> 1) << 1);
 	//max = ((int)(fabs((((tile_dimension / WIN_HEIGHT) * tile_dimension)))));;
 	//return((rez < max) ? rez : max);
 	// if (ska < 1.00f)
@@ -161,15 +161,15 @@ void	render_it(t_wolfec *w)
 	color_index = ((uint8_t*)color_ptr);
 	while ((draw_length > 0) && (start_draw.y < WIN_HEIGHT))
 	{
-		loop = 0;
-		while (loop < (scale) && (scale > 1))
-		{
-			put_pixel_to_render((w->rend), &(color_index[0]), &start_draw);
-			// put_pixel_to_render((w->rend), &(color_index[((int)index) * 4]), &start_draw);
-			start_draw.y++;
-			loop++;
-			draw_length--;
-		}
+		// loop = 0;
+		// while (loop < (scale) && (scale > 1))
+		// {
+		// 	put_pixel_to_render((w->rend), &(color_index[0]), &start_draw);
+		// 	// put_pixel_to_render((w->rend), &(color_index[((int)index) * 4]), &start_draw);
+		// 	start_draw.y++;
+		// 	loop++;
+		// 	draw_length--;
+		// }
 		if ((draw_length > 0) && (start_draw.y < WIN_HEIGHT))
 		{
 			put_pixel_to_render((w->rend), &(color_index[0]), &start_draw);

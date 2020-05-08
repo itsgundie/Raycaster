@@ -5,8 +5,8 @@
 #define FRAME_TARGET_TIME (1000 / FPS)
 
 
-# define WIN_WIDTH		480
-# define WIN_HEIGHT		320
+# define WIN_WIDTH		1920
+# define WIN_HEIGHT		1080
 # define FOV			42
 # define ROTATIONSPEED	0.01f
 # define MOVESPEED		70.0f
