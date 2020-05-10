@@ -12,6 +12,8 @@
 #define TWO_PI		6.28318530
 
 #define TILE_SIZE	128
+#define TEXTURE_WIDTH	128
+#define TEXTURE_HEIGHT	128
 #define MAP_COLUMNS 20
 #define MAP_ROWS	13
 
@@ -90,20 +92,24 @@ typedef struct	s_player
 	float		rotate_speed;
 }				t_player;
 
-typedef struct	s_wolf3d
+typedef struct		s_wolf3d
 {
-	SDL_Window* window;
-	SDL_Renderer* render;
+	SDL_Window*		window;
+	SDL_Renderer*	render;
 	SDL_Texture*	color_tex;
-	t_player	player;
-	t_ray		rays[WIN_WIDTH];
-	uint32_t*	color_buffer;
+	uint32_t*		wall_texture;
+	t_player		player;
+	t_ray			rays[WIN_WIDTH];
+	uint32_t*		color_buffer;
 }				t_wolf3d;
 
 int		init(t_wolf3d *blazko)
 {
 	blazko->window = NULL;
 	blazko->render = NULL;
+	blazko->wall_texture = NULL;
+	blazko->color_buffer = NULL;
+	blazko->color_tex = NULL;
 
 	if ((SDL_Init(SDL_INIT_EVERYTHING)))
 	{
@@ -126,7 +132,14 @@ int		init(t_wolf3d *blazko)
 
 void	destroy(t_wolf3d *blazko)
 {
-	free(blazko->color_buffer);
+	int q;
+
+	q = -1;
+	// free(blazko->color_buffer);
+	// while (blazko->wall_textures[q])
+	// 	free(blazko->wall_textures[q])
+	// blazko->color_buffer = NULL;
+	// blazko->wall_textures = NULL;
 	SDL_DestroyRenderer(blazko->render);
 	SDL_DestroyWindow(blazko->window);
 	SDL_Quit();
@@ -141,11 +154,29 @@ int		error_exit(char *str, t_wolf3d *blazko)
 
 void	setup(t_wolf3d *blazko)
 {
+	int x;
+	int y;
+
+	x = -1;
+	y = -1;
+	
 	if (!(blazko->color_buffer = (uint32_t*)malloc(sizeof(uint32_t) 
 					* (uint32_t)WIN_WIDTH * (uint32_t)WIN_HEIGHT)))
 		error_exit("Malloc Not OK -_-\n", blazko);
 	blazko->color_tex = SDL_CreateTexture(blazko->render,
-	 	SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIN_WIDTH, WIN_HEIGHT);	
+	 	SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIN_WIDTH, WIN_HEIGHT);
+	if (!(blazko->wall_texture = (uint32_t*)malloc(sizeof(uint32_t) 
+					* (uint32_t)TEXTURE_WIDTH * (uint32_t)TEXTURE_HEIGHT)))
+		error_exit("Malloc Not OK, Particularly the wall texture -_-\n", blazko);
+	
+	while (++x < TEXTURE_WIDTH)
+	{
+		while (++y < TEXTURE_HEIGHT)
+		{
+			blazko->wall_texture[TEXTURE_WIDTH * y + x] = (((x % 8) && (y % 8)) ? 0xFF000000 : 0xFF0000FF);
+		}
+		//0xFF888888 : 0xFF223344
+	}
 	blazko->player.pos.x = WIN_WIDTH / 2;
 	blazko->player.pos.y = WIN_HEIGHT / 2;
 	blazko->player.width = 1;
@@ -482,6 +513,10 @@ void	make3d(t_wolf3d *blazko)
 	int y;
 	float dist_to_proj_plane;
 	float perpendicular_dist;
+	uint32_t color_from_tex;
+	t_v2int	offset;
+	
+	
 	q = -1;
 	dist_to_proj_plane = (WIN_WIDTH / 2) / tan(blazko->player.fov / 2);
 
@@ -493,12 +528,25 @@ void	make3d(t_wolf3d *blazko)
 		blazko->rays[q].draw_start = (blazko->rays[q].draw_start < 0) ? 0 : blazko->rays[q].draw_start;
 		blazko->rays[q].draw_end = (WIN_HEIGHT / 2 + (blazko->rays[q].wall_height / 2));
 		blazko->rays[q].draw_end = (blazko->rays[q].draw_end > WIN_HEIGHT) ? WIN_HEIGHT : blazko->rays[q].draw_end;
+		
 		y = -1;
 		while (++y < blazko->rays[q].draw_start)
 			blazko->color_buffer[(WIN_WIDTH * y) + q] = 0xFF440011;
+		
+		if (blazko->rays[q].hit_is_vert) 
+			offset.x = ((int)blazko->rays[q].wall_hit.y) % TEXTURE_HEIGHT;
+		else 
+			offset.x = ((int)blazko->rays[q].wall_hit.x) % TEXTURE_WIDTH;
+
 		y -= 1;
 		while(++y < blazko->rays[q].draw_end)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = (blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+		{
+			int from_top = (y - (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
+			offset.y = from_top * (((float)TEXTURE_HEIGHT) / blazko->rays[q].wall_height);
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = 
+						blazko->wall_texture[(TEXTURE_WIDTH * offset.y) + offset.x]; 
+			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+		}
 		y -= 1;
 		while(++y < WIN_HEIGHT)
 			blazko->color_buffer[(WIN_WIDTH * y) + q] = 0xFF220000;
