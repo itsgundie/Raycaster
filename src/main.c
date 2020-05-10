@@ -168,12 +168,15 @@ void	setup(t_wolf3d *blazko)
 	if (!(blazko->wall_texture = (uint32_t*)malloc(sizeof(uint32_t) 
 					* (uint32_t)TEXTURE_WIDTH * (uint32_t)TEXTURE_HEIGHT)))
 		error_exit("Malloc Not OK, Particularly the wall texture -_-\n", blazko);
-	
-	while (++x < TEXTURE_WIDTH)
+	bzero(blazko->wall_texture, (sizeof(uint32_t) * (uint32_t)TEXTURE_HEIGHT * (uint32_t)TEXTURE_WIDTH));
+	while (++y < TEXTURE_HEIGHT)
 	{
-		while (++y < TEXTURE_HEIGHT)
+		x = -1;
+		while (++x < TEXTURE_WIDTH)
 		{
-			blazko->wall_texture[TEXTURE_WIDTH * y + x] = (((x % 8) && (y % 8)) ? 0xFF000000 : 0xFF0000FF);
+			uint32_t border = rand() % rand();
+			uint32_t fill = rand() / rand();
+			blazko->wall_texture[TEXTURE_WIDTH * y + x] = (((x % 8 < rand()) && ((y / 8 < rand())) ? fill : border));
 		}
 		//0xFF888888 : 0xFF223344
 	}
@@ -492,10 +495,10 @@ void	input(int *game_on, t_wolf3d *blazko)
 void	update(t_wolf3d *blazko, long long *ticks_last_frame)
 {
 	int time_to_wait;
-	// time_to_wait = FRAME_TIME - (SDL_GetTicks() - *ticks_last_frame);
+	time_to_wait = FRAME_TIME - (SDL_GetTicks() - *ticks_last_frame);
 
-	// if (time_to_wait > 0 && time_to_wait <= FRAME_TIME)
-	// 	SDL_Delay(time_to_wait);
+	if (time_to_wait > 0 && time_to_wait <= FRAME_TIME)
+		SDL_Delay(time_to_wait);
 
 	while(!(SDL_TICKS_PASSED(SDL_GetTicks(), (*ticks_last_frame + FRAME_TIME))));
 
@@ -541,11 +544,10 @@ void	make3d(t_wolf3d *blazko)
 		y -= 1;
 		while(++y < blazko->rays[q].draw_end)
 		{
-			int from_top = (y - (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
-			offset.y = from_top * (((float)TEXTURE_HEIGHT) / blazko->rays[q].wall_height);
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = 
-						blazko->wall_texture[(TEXTURE_WIDTH * offset.y) + offset.x]; 
-			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
+			offset.y = from_top * ((float)TEXTURE_HEIGHT / blazko->rays[q].wall_height);
+			uint32_t color_from_tex = blazko->wall_texture[(TEXTURE_WIDTH * offset.y) + offset.x];
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = color_from_tex;			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
 		}
 		y -= 1;
 		while(++y < WIN_HEIGHT)
