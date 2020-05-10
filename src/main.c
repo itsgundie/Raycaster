@@ -67,6 +67,9 @@ typedef struct	s_ray
 	t_v2		wall_hit;
 	int			hit_is_vert;
 	float		distance;
+	int			wall_height;
+	int			draw_start;
+	int			draw_end;
 	int			ray_is_up;
 	int			ray_is_left;
 	int			ray_is_down;
@@ -473,6 +476,30 @@ void	update(t_wolf3d *blazko, long long *ticks_last_frame)
 
 }
 
+void	make3d(t_wolf3d *blazko)
+{
+	int q;
+	int y;
+	float dist_to_proj_plane;
+	float perpendicular_dist;
+	q = -1;
+	dist_to_proj_plane = (WIN_WIDTH / 2) / tan(blazko->player.fov / 2);
+
+	while (++q < RAYS_NUM)
+	{
+		perpendicular_dist	= blazko->rays[q].distance * cos(blazko->rays[q].angle - blazko->player.rotation_angle);
+		blazko->rays[q].wall_height = (int)((TILE_SIZE / perpendicular_dist) * dist_to_proj_plane);
+		blazko->rays[q].draw_start = (WIN_HEIGHT / 2 - (blazko->rays[q].wall_height / 2));
+		blazko->rays[q].draw_start = (blazko->rays[q].draw_start < 0) ? 0 : blazko->rays[q].draw_start;
+		blazko->rays[q].draw_end = (WIN_HEIGHT / 2 + (blazko->rays[q].wall_height / 2));
+		blazko->rays[q].draw_end = (blazko->rays[q].draw_end > WIN_HEIGHT) ? WIN_HEIGHT : blazko->rays[q].draw_end;
+		y = blazko->rays[q].draw_start - 1;
+		while(++y < blazko->rays[q].draw_end)
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = (blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+	}
+}
+
+
 void	clear_color_buf(uint32_t *color_buf, uint32_t color)
 {
 	int x;
@@ -499,6 +526,8 @@ void	render(t_wolf3d *blazko)
 
 	SDL_SetRenderDrawColor(blazko->render, 0, 0, 0 , 255);
 	SDL_RenderClear(blazko->render);
+
+	make3d(blazko);
 
 	render_color_buf(blazko);
 	clear_color_buf(blazko->color_buffer, 0xFF333333);
