@@ -320,7 +320,7 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	
 	if (distance_ver < distance_hor)
 	{
-		this_ray->distance = distance_ver;
+		this_ray->distance = (distance_ver <= 0 ? 1 : distance_ver);
 		this_ray->wall_hit.x = hit_point_ver.x;
 		this_ray->wall_hit.y = hit_point_ver.y;
 		this_ray->hit_side = side_index_ver;
@@ -329,7 +329,7 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	else
 	{
 		{
-		this_ray->distance = distance_hor;
+		this_ray->distance = (distance_hor <= 0 ? 1 : distance_hor);
 		this_ray->wall_hit.x = hit_point_hor.x;
 		this_ray->wall_hit.y = hit_point_hor.y;
 		this_ray->hit_side = side_index_hor;
@@ -493,9 +493,15 @@ void	make3d(t_wolf3d *blazko)
 		blazko->rays[q].draw_start = (blazko->rays[q].draw_start < 0) ? 0 : blazko->rays[q].draw_start;
 		blazko->rays[q].draw_end = (WIN_HEIGHT / 2 + (blazko->rays[q].wall_height / 2));
 		blazko->rays[q].draw_end = (blazko->rays[q].draw_end > WIN_HEIGHT) ? WIN_HEIGHT : blazko->rays[q].draw_end;
-		y = blazko->rays[q].draw_start - 1;
+		y = -1;
+		while (++y < blazko->rays[q].draw_start)
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = 0xFF440011;
+		y -= 1;
 		while(++y < blazko->rays[q].draw_end)
 			blazko->color_buffer[(WIN_WIDTH * y) + q] = (blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+		y -= 1;
+		while(++y < WIN_HEIGHT)
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = 0xFF220000;
 	}
 }
 
