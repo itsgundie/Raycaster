@@ -1,5 +1,6 @@
 
 #include <../includes/wolf3d.h>
+#include "../includes/textures.h"
 
 const int map[MAP_ROWS][MAP_COLUMNS] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1},

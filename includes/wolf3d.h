@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include "textures.h"
 #include "../libft/libft.h"
 
 #include "SDL.h"
