@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include "textures.h"
 
 #include "SDL.h"
 
@@ -11,11 +12,12 @@
 #define PI			3.14159265
 #define TWO_PI		6.28318530
 
-#define TILE_SIZE	128
+#define TILE_SIZE		128
 #define TEXTURE_WIDTH	128
 #define TEXTURE_HEIGHT	128
 #define MAP_COLUMNS 20
 #define MAP_ROWS	13
+#define NUM_OF_TEXTURES		8
 
 #define MINIMAP_SCALE	0.1
 
@@ -26,6 +28,8 @@
 #define FOV			66
 
 #define RAYS_NUM	WIN_WIDTH
+
+
 
 #define FPS			30
 #define FRAME_TIME	(1000 / FPS)
@@ -38,15 +42,15 @@ const int map[MAP_ROWS][MAP_COLUMNS] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1},
+    {1, 0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 1, 0, 1, 0, 1, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1},
+    {1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+    {1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1},
+    {1, 0, 0, 0, 6, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 7, 6, 5, 4, 3, 2, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
 
@@ -98,6 +102,7 @@ typedef struct		s_wolf3d
 	SDL_Renderer*	render;
 	SDL_Texture*	color_tex;
 	uint32_t*		wall_texture;
+	uint32_t*		textures[NUM_OF_TEXTURES];
 	t_player		player;
 	t_ray			rays[WIN_WIDTH];
 	uint32_t*		color_buffer;
@@ -165,21 +170,33 @@ void	setup(t_wolf3d *blazko)
 		error_exit("Malloc Not OK -_-\n", blazko);
 	blazko->color_tex = SDL_CreateTexture(blazko->render,
 	 	SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIN_WIDTH, WIN_HEIGHT);
-	if (!(blazko->wall_texture = (uint32_t*)malloc(sizeof(uint32_t) 
-					* (uint32_t)TEXTURE_WIDTH * (uint32_t)TEXTURE_HEIGHT)))
-		error_exit("Malloc Not OK, Particularly the wall texture -_-\n", blazko);
-	bzero(blazko->wall_texture, (sizeof(uint32_t) * (uint32_t)TEXTURE_HEIGHT * (uint32_t)TEXTURE_WIDTH));
-	while (++y < TEXTURE_HEIGHT)
-	{
-		x = -1;
-		while (++x < TEXTURE_WIDTH)
-		{
-			uint32_t border = rand() % rand();
-			uint32_t fill = rand() / rand();
-			blazko->wall_texture[TEXTURE_WIDTH * y + x] = (((x % 8 < rand()) && ((y / 8 < rand())) ? fill : border));
-		}
+	// if (!(blazko->wall_texture = (uint32_t*)malloc(sizeof(uint32_t) 
+	// 				* (uint32_t)TEXTURE_WIDTH * (uint32_t)TEXTURE_HEIGHT)))
+	// 	error_exit("Malloc Not OK, Particularly the wall texture -_-\n", blazko);
+	// bzero(blazko->wall_texture, (sizeof(uint32_t) * (uint32_t)TEXTURE_HEIGHT * (uint32_t)TEXTURE_WIDTH));
+	
+	blazko->textures[0] = (uint32_t*) TEXTURE_FRY;
+	blazko->textures[1] = (uint32_t*) TEXTURE_LAUGHING_MAN;
+	blazko->textures[2] = (uint32_t*) TEXTURE_TRAVOLTA;
+	blazko->textures[3] = (uint32_t*) TEXTURE_JESUS;
+	blazko->textures[4] = (uint32_t*) TEXTURE_WORLD_OF_PAIN;
+	blazko->textures[5] = (uint32_t*) TEXTURE_DUDE;
+	blazko->textures[6] = (uint32_t*) TEXTURE_UR_OPINION;
+	blazko->textures[7] = (uint32_t*) TEXTURE_STEP_OVER_THE_LINE;
+
+	
+	
+	// while (++y < TEXTURE_HEIGHT)
+	// {
+	// 	x = -1;
+	// 	while (++x < TEXTURE_WIDTH)
+	// 	{
+	// 		uint32_t border = rand() % rand();
+	// 		uint32_t fill = rand() / rand();
+	// 		blazko->wall_texture[TEXTURE_WIDTH * y + x] = (((x % 8 < rand()) && ((y / 8 < rand())) ? fill : border));
+	// 	}
 		//0xFF888888 : 0xFF223344
-	}
+
 	blazko->player.pos.x = WIN_WIDTH / 2;
 	blazko->player.pos.y = WIN_HEIGHT / 2;
 	blazko->player.width = 1;
@@ -542,11 +559,12 @@ void	make3d(t_wolf3d *blazko)
 			offset.x = ((int)blazko->rays[q].wall_hit.x) % TEXTURE_WIDTH;
 
 		y -= 1;
+		int texture_index = (blazko->rays[q].hit_side) - 1;
 		while(++y < blazko->rays[q].draw_end)
 		{
 			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
 			offset.y = from_top * ((float)TEXTURE_HEIGHT / blazko->rays[q].wall_height);
-			uint32_t color_from_tex = blazko->wall_texture[(TEXTURE_WIDTH * offset.y) + offset.x];
+			uint32_t color_from_tex = blazko->textures[texture_index][(TEXTURE_WIDTH * offset.y) + offset.x];
 			blazko->color_buffer[(WIN_WIDTH * y) + q] = color_from_tex;			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
 		}
 		y -= 1;
