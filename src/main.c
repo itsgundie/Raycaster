@@ -251,6 +251,28 @@ float calc_distance(float x1, float y1, float x2, float y2)
 	return(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
+void	find_wall_side(t_ray *this_ray)
+{
+	if (this_ray->hit_side == 1)
+	{
+		if (this_ray->hit_is_vert)
+		{
+			(this_ray->ray_is_up && this_ray->ray_is_left) ? this_ray->hit_side = 3 : 0;
+			(this_ray->ray_is_up && this_ray->ray_is_right) ? this_ray->hit_side = 1 : 0;
+			(this_ray->ray_is_down && this_ray->ray_is_right) ? this_ray->hit_side = 3 : 0;
+			(this_ray->ray_is_down && this_ray->ray_is_left) ? this_ray->hit_side = 1 : 0;
+		}
+		else
+		{
+			(this_ray->ray_is_up && this_ray->ray_is_left) ? this_ray->hit_side = 2 : 0;
+			(this_ray->ray_is_up && this_ray->ray_is_right) ? this_ray->hit_side = 2 : 0;
+			(this_ray->ray_is_down && this_ray->ray_is_right) ? this_ray->hit_side = 0 : 0;
+			(this_ray->ray_is_down && this_ray->ray_is_left) ? this_ray->hit_side = 0 : 0;
+		}	
+	}
+	return ;
+}
+
 void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 {
 	// t_v2 intercept;
@@ -302,8 +324,8 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 			hit_point_hor.x = next_hor.x;
 			hit_point_hor.y = next_hor.y;
 
-			side_index_hor = map[(int)floor(check_hor.y / TILE_SIZE)]
-								[(int)floor(check_hor.x / TILE_SIZE)];
+			side_index_hor = (map[(int)floor(check_hor.y / TILE_SIZE)]
+								[(int)floor(check_hor.x / TILE_SIZE)]);
 			was_hit_horizont = TRUE;
 			break;
 		}
@@ -386,6 +408,7 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 		this_ray->hit_side = side_index_hor;
 		this_ray->hit_is_vert = FALSE;
 	}
+	find_wall_side(this_ray);
 	}
 }
 
@@ -559,7 +582,7 @@ void	make3d(t_wolf3d *blazko)
 			offset.x = ((int)blazko->rays[q].wall_hit.x) % TEXTURE_WIDTH;
 
 		y -= 1;
-		int texture_index = (blazko->rays[q].hit_side) - 1;
+		int texture_index = (blazko->rays[q].hit_side);
 		while(++y < blazko->rays[q].draw_end)
 		{
 			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
