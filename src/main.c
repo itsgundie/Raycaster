@@ -1,36 +1,5 @@
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-
-#include "SDL.h"
-
-#define TRUE		1
-#define FALSE		0
-
-#define PI			3.14159265
-#define TWO_PI		6.28318530
-
-#define TILE_SIZE	128
-#define MAP_COLUMNS 20
-#define MAP_ROWS	13
-
-#define MINIMAP_SCALE	0.1
-
-#define WIN_WIDTH 	1280
-#define WIN_HEIGHT 	720
-#define WIN_TITLE	"IDEAS_FROM_THE_DEEP"
-
-#define FOV			66
-
-#define RAYS_NUM	WIN_WIDTH
-
-#define FPS			30
-#define FRAME_TIME	(1000 / FPS)
-
-
-
-
+#include <../includes/wolf3d.h>
 
 const int map[MAP_ROWS][MAP_COLUMNS] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1},
@@ -48,57 +17,6 @@ const int map[MAP_ROWS][MAP_COLUMNS] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
 
-typedef struct	s_v2int
-{
-	int			x;
-	int			y;
-}				t_v2int;
-
-
-typedef struct	s_v2
-{
-	float		x;
-	float		y;
-}				t_v2;
-
-typedef struct	s_ray
-{
-	float		angle;
-	t_v2		wall_hit;
-	int			hit_is_vert;
-	float		distance;
-	int			wall_height;
-	int			draw_start;
-	int			draw_end;
-	int			ray_is_up;
-	int			ray_is_left;
-	int			ray_is_down;
-	int			ray_is_right;
-	int			hit_side;
-}				t_ray;
-
-typedef struct	s_player
-{
-	t_v2		pos;
-	float		fov;
-	float		width;
-	float		height;
-	int			turn_direction;
-	int			walk_direction;
-	float		rotation_angle;
-	float		move_speed;
-	float		rotate_speed;
-}				t_player;
-
-typedef struct	s_wolf3d
-{
-	SDL_Window* window;
-	SDL_Renderer* render;
-	SDL_Texture*	color_tex;
-	t_player	player;
-	t_ray		rays[WIN_WIDTH];
-	uint32_t*	color_buffer;
-}				t_wolf3d;
 
 int		init(t_wolf3d *blazko)
 {
@@ -470,8 +388,8 @@ void	update(t_wolf3d *blazko, long long *ticks_last_frame)
 
 	float delta_time = (SDL_GetTicks() - *ticks_last_frame) * 1000.0f;
 	*ticks_last_frame = SDL_GetTicks();
-	make_a_move(blazko, delta_time);
-	raycast(blazko);
+	make_a_move(blazko, delta_time); //?
+	raycast(blazko); //?
 
 
 }
@@ -529,7 +447,6 @@ void	render_color_buf(t_wolf3d *blazko)
 
 void	render(t_wolf3d *blazko)
 {
-
 	SDL_SetRenderDrawColor(blazko->render, 0, 0, 0 , 255);
 	SDL_RenderClear(blazko->render);
 
@@ -542,22 +459,24 @@ void	render(t_wolf3d *blazko)
 	render_rays(blazko);
 	render_player(blazko);
 	
-
 	SDL_RenderPresent(blazko->render);
-	
 }
 
 
-int		main(void)
+int		main(int argc, char **argv)
 {
+	int fd;
 	int game_on = 0;
 	long long ticks_last_frame;
 	t_wolf3d *blazko = NULL;
 	
-	ticks_last_frame = SDL_GetTicks();
-
+	//if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
+		//ft_error("usage: ./wolf3d map");
 	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
 		printf("Malloc not OK \{~_~}/\n");
+	//if (file_parser(blazko, fd))
+		//create_map(blazko);
+	ticks_last_frame = SDL_GetTicks();
 	if (!(game_on = init(blazko)))
 		return(1);
 	setup(blazko);
@@ -567,7 +486,6 @@ int		main(void)
 		update(blazko, &ticks_last_frame);
 		make_a_move(blazko, ticks_last_frame);
 		render(blazko);
-
 	}
 	destroy(blazko);
 	return(0);
