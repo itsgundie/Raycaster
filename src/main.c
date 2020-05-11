@@ -1,5 +1,4 @@
 
-
 #include <../includes/wolf3d.h>
 
 const int map[MAP_ROWS][MAP_COLUMNS] = {

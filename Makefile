@@ -21,6 +21,7 @@ LIBFT = $(LIB_DIR)/libft.a
 
 #    SOURCES AND HEADERS    #
 HEADER = includes/wolf3d.h
+TEXTHEADER = includes/textures.h
 
 SRC_FILES = main.c \
 			parse.c \
@@ -37,13 +38,13 @@ INCL = -I $(SDL_INC_DIR) -I $(SRC_INC_DIR) -I $(LIB_INC_DIR)
 
 all: $(NAME)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER) $(TEXTHEADER)
 	$(CC) -c $< -o $@ -I $(SRC_INC_DIR) $(INCL) $(CFLGS_DBG)
 
 $(LIBFT):
 	@$(MAKE) -C $(LIB_DIR)
 
-$(NAME): $(OBJ_DIR) $(OBJS) $(LIBFT) $(HEADER)
+$(NAME): $(OBJ_DIR) $(OBJS) $(LIBFT) $(HEADER) $(TEXTHEADER)
 	$(CC) $(CFLGS) $(WFLGS) -o $(NAME) $(INCL) $(LFLGS) $(OBJS) $(CFLGS_DBG)
 
 clean:

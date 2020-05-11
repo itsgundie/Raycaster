@@ -13,7 +13,7 @@ int		check_line(t_wolf3d *blazko)
 			blazko->params_vars.minus_one_found++;
 			blazko->params_vars.line_width++;
 			if (blazko->params_vars.minus_one_found > 1)
-				ft_error("\033[0;31mInput error: need one -1 on map");
+				ft_error("Input error: need one -1 on map");
 			blazko->count.i += 2;
 		}
 		else if	((blazko->params_vars.line[blazko->count.i] >= '0' && blazko->params_vars.line[blazko->count.i] <= '9'))
@@ -41,7 +41,7 @@ int		check_line_width(t_wolf3d *blazko)
 	if (blazko->params_vars.tmp_line_width != blazko->params_vars.line_width)
 	{
 		destroy(blazko);
-		ft_error("\033[0;31mMap must be rectangle");		
+		ft_error("Map must be rectangle");		
 	}
 	return (1);
 }
@@ -56,10 +56,10 @@ int		file_parser(t_wolf3d *blazko, int fd)
 		if ((check_line(blazko) && check_line_width(blazko)))
 			add_string_in_list(blazko);
 		else
-			ft_error("\033[0;31mInput error");
+			ft_error("Input error");
 	}
 	if (blazko->params_vars.minus_one_found == 0)
-		ft_error("\033[0;31mInput error: need one -1 on map");
+		ft_error("Input error: need one -1 on map");
 	return (1);
 }
 	// Position

@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <fcntl.h>
-#include "SDL.h"
+#include "textures.h"
 #include "../libft/libft.h"
+
+#include "SDL.h"
 
 #define TRUE		1
 #define FALSE		0
@@ -14,9 +15,12 @@
 #define PI			3.14159265
 #define TWO_PI		6.28318530
 
-#define TILE_SIZE	128
+#define TILE_SIZE		128
+#define TEXTURE_WIDTH	128
+#define TEXTURE_HEIGHT	128
 #define MAP_COLUMNS 20
 #define MAP_ROWS	13
+#define NUM_OF_TEXTURES		8
 
 #define MINIMAP_SCALE	0.1
 
@@ -106,6 +110,8 @@ typedef struct	s_player
 
 typedef struct	s_wolf3d
 {
+	uint32_t*		wall_texture;
+	uint32_t*		textures[NUM_OF_TEXTURES];
 	t_2dmap map;
 	t_counters count;
 	t_pars_vars	params_vars;
