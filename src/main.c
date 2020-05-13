@@ -25,8 +25,14 @@ int		init(t_wolf3d *blazko)
 	blazko->wall_texture = NULL;
 	blazko->color_buffer = NULL;
 	blazko->color_tex = NULL;
+	blazko->sound.badmusic = NULL;
+	blazko->sound.is_m = 0;
+	if (!(blazko->params_vars.params_list = (t_pars_list *)malloc(sizeof(t_pars_list))))
+		printf("Malloc failed\n");
+	blazko->params_vars.tmp = blazko->params_vars.params_list;
+	blazko->params_vars.params_list->line = NULL;
 
-	if ((SDL_Init(SDL_INIT_EVERYTHING)))
+	if ((SDL_Init(SDL_INIT_EVERYTHING)) || (SDL_Init(SDL_INIT_AUDIO)))
 	{
 		printf("Error Initializing SDL\n");
 		return(FALSE);
@@ -55,6 +61,9 @@ void	destroy(t_wolf3d *blazko)
 	// 	free(blazko->wall_textures[q])
 	// blazko->color_buffer = NULL;
 	// blazko->wall_textures = NULL;
+	//Mix_FreeChunk(wave);
+	Mix_FreeMusic(blazko->sound.badmusic);
+	Mix_CloseAudio();
 	SDL_DestroyRenderer(blazko->render);
 	SDL_DestroyWindow(blazko->window);
 	SDL_Quit();
@@ -417,6 +426,19 @@ void	input(int *game_on, t_wolf3d *blazko)
 	}
 	else if (event.type == SDL_KEYDOWN)
 	{
+		if (event.key.keysym.sym == SDLK_m)
+		{
+			if (blazko->sound.is_m == 0)
+			{
+				blazko->sound.is_m = 1;
+				Mix_PlayMusic(blazko->sound.badmusic, 15);
+			}
+			else
+			{
+				blazko->sound.is_m = 0;
+				Mix_FadeOutMusic(500);
+			}
+		}
 		if (event.key.keysym.sym == SDLK_ESCAPE)
 			*game_on = FALSE;
 		if (event.key.keysym.sym == SDLK_UP)
@@ -545,6 +567,21 @@ void	render(t_wolf3d *blazko)
 	SDL_RenderPresent(blazko->render);
 }
 
+void	music_on(t_wolf3d *blazko)
+{	
+	blazko->sound.badmusic = NULL;
+	if(Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096)) 
+		ft_error("very bad music");
+	//wave = Mix_LoadWAV(WAV_PATH);
+	//if (wave == NULL)
+	//	return -1;
+	blazko->sound.badmusic = Mix_LoadMUS("sound/music.ogg");
+	if (blazko->sound.badmusic == NULL)
+		ft_error("very bad music");
+	Mix_AllocateChannels(10);
+	Mix_VolumeMusic(15);
+}
+
 
 int		main(int argc, char **argv)
 {
@@ -553,16 +590,17 @@ int		main(int argc, char **argv)
 	long long ticks_last_frame;
 	t_wolf3d *blazko = NULL;
 	
-	//if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
-		//ft_error("usage: ./wolf3d map");
+	if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
+		ft_error("usage: ./wolf3d map");
 	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
 		printf("Malloc not OK \{~_~}/\n");
-	//if (file_parser(blazko, fd))
-		//create_map(blazko);
 	ticks_last_frame = SDL_GetTicks();
 	if (!(game_on = init(blazko)))
 		return(1);
+	if (file_parser(blazko, fd))
+		create_map(blazko);
 	setup(blazko);
+	music_on(blazko);
 	while(game_on)
 	{
 		input(&game_on, blazko);

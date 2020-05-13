@@ -7,6 +7,7 @@
 #include "../libft/libft.h"
 
 #include "SDL.h"
+#include "SDL_mixer.h"
 
 #define TRUE		1
 #define FALSE		0
@@ -33,6 +34,9 @@
 
 #define FPS			30
 #define FRAME_TIME	(1000 / FPS)
+
+//#define WAV_PATH ""
+//#define MUS_PATH "../sound/LAST.ogg"
 
 typedef struct	s_v2int
 {
@@ -76,6 +80,7 @@ typedef struct					s_pars_vars
 	t_pars_list			*tmp;
 	int					minus_one_found;
 	int					number_of_lines;
+	t_pars_list 		*params_list;
 }								t_pars_vars;
 
 typedef struct	s_ray
@@ -107,20 +112,26 @@ typedef struct	s_player
 	float		rotate_speed;
 }				t_player;
 
+typedef struct	s_sound
+{
+	int 			is_m;
+	Mix_Music 		*badmusic;
+}				t_sound;
+
 typedef struct	s_wolf3d
 {
+	t_sound			sound;
 	uint32_t*		wall_texture;
 	uint32_t*		textures[NUM_OF_TEXTURES];
-	t_2dmap map;
-	t_counters count;
-	t_pars_vars	params_vars;
-	t_pars_list *params_list;
-	SDL_Window* window;
-	SDL_Renderer* render;
+	t_2dmap 		map;
+	t_counters 		count;
+	t_pars_vars		params_vars;
+	SDL_Window* 	window;
+	SDL_Renderer* 	render;
 	SDL_Texture*	color_tex;
-	t_player	player;
-	t_ray		rays[WIN_WIDTH];
-	uint32_t*	color_buffer;
+	t_player		player;
+	t_ray			rays[WIN_WIDTH];
+	uint32_t*		color_buffer;
 }				t_wolf3d;
 
 int			main(int argc, char **argv);
@@ -153,5 +164,6 @@ void		make3d(t_wolf3d *blazko);
 void		clear_color_buf(uint32_t *color_buf, uint32_t color);
 void		render_color_buf(t_wolf3d *blazko);
 void		render(t_wolf3d *blazko);
+void		music_on();
 
 #endif
