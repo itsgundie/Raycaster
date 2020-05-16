@@ -104,8 +104,8 @@ void	setup(t_wolf3d *blazko)
 	blazko->player.move_speed = 5;
 	blazko->player.rotate_speed = 5 * (PI / 180);
 	blazko->frame_time = 1000 / FPS;
-	blazko->map.columns = blazko->params_vars.line_width;
-	blazko->map.rows = blazko->params_vars.number_of_lines;
+	blazko->map.columns = blazko->params_vars.line_width + 2;
+	blazko->map.rows = blazko->params_vars.number_of_lines + 2;
 }
 
 int		find_an_obstacle(float x, float y, t_2dmap *kapta)
@@ -117,7 +117,7 @@ int		find_an_obstacle(float x, float y, t_2dmap *kapta)
 		return (TRUE);
 	check.x = (int)(x / TILE_SIZE);
 	check.y = (int)(y / TILE_SIZE);
-	return(kapta->map[check.y][check.x] != 0);
+	return(kapta->map[check.y][check.x] == 1);
 }
 
 void	make_a_move(t_wolf3d *blazko, float delta_time)
@@ -355,7 +355,7 @@ void	render_map(t_wolf3d *blazko)           							//need refactor
 		{
 			int tile_x = (k * TILE_SIZE);
 			int tile_y = (j * TILE_SIZE);
-			int tile_color = blazko->map.map[j][k] != 0 ? 255 : 0;
+			int tile_color = blazko->map.map[j][k] == 1 ? 255 : 0;
 			SDL_SetRenderDrawColor(blazko->render, tile_color, tile_color, tile_color, 255);
 			SDL_Rect map_tile_rect = {tile_x * MINIMAP_SCALE, tile_y * MINIMAP_SCALE,
 										 TILE_SIZE * MINIMAP_SCALE, TILE_SIZE * MINIMAP_SCALE};
