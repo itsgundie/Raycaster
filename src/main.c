@@ -112,8 +112,8 @@ int		find_an_obstacle(float x, float y, t_2dmap *kapta)
 {
 	t_v2int check;
 
-	if (x < 0 || x > (kapta->columns * TILE_SIZE)
-		|| y < 0 || y > (kapta->rows * TILE_SIZE))
+	if (x <= 0 || x >= (kapta->columns * TILE_SIZE)
+		|| y <= 0 || y >= (kapta->rows * TILE_SIZE))
 		return (TRUE);
 	check.x = (int)(x / TILE_SIZE);
 	check.y = (int)(y / TILE_SIZE);
