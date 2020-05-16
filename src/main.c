@@ -93,13 +93,11 @@ void	setup(t_wolf3d *blazko)
 	blazko->color_buffer = NULL;
 	blazko->color_tex = NULL;
 	texture_manager(blazko);
-	//blazko->player.pos.x = MAP_COLUMNS * TILE_SIZE / 2 ;
-	//blazko->player.pos.y = MAP_ROWS * TILE_SIZE / 2;
 	blazko->player.width = 1;
 	blazko->player.height = 1;
 	blazko->player.turn_direction = 0;
 	blazko->player.walk_direction = 0;
-	blazko->player.rotation_angle = PI / 2;
+	blazko->player.rotation_angle = PI * 2.0f;
 	blazko->player.fov = (FOV * (PI / 180));
 	blazko->player.move_speed = 5;
 	blazko->player.rotate_speed = 5 * (PI / 180);
@@ -466,23 +464,37 @@ void	update(t_wolf3d *blazko, long long *ticks_last_frame)
 
 }
 
-uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical)
+uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int disco)
 {
-	int a;
-	int b;
-	int g;
-	int r;
-
-	if (intensity > 1.5f && !(is_vertical))
+	uint32_t a;
+	uint32_t r;
+	uint32_t g;
+	uint32_t b;
+	// if (intensity > 1.5f && !(is_vertical))
+	// 	return(color);
+	// if (intensity > 1.2f && is_vertical)
+	// 	return(color);
+	// if (disco)
+	// {
+	// 	a = (color >> 24) & 0xFF;
+	// 	r = (int)(((color >> 16) & 0xFF) * intensity);
+	// 	g = (int)(((color >> 8) & 0xFF) * intensity);
+	// 	b = (int)((color & 0xFF) * intensity);
+	// 	return((a << 24) | (r << 16) | (g << 8) | b);
+	// }
+	if (color == 0)
+		return(0);
+	if (intensity > 1.0f)
+		return(0);
+	if (intensity <= 0.0f)
 		return(color);
-	if (intensity > 1.2f && is_vertical)
-		return(color);
-	intensity *= (is_vertical ? 0.7 : 1.0f);
-	a = (color >> 24) & 0xFF;
-	b = (int)(((color >> 16) & 0xFF) * intensity);
-	g = (int)(((color >> 8) & 0xFF) * intensity);
-	r = (int)((color & 0xFF) * intensity);
-	return((a << 24) | (b << 16) | (g << 8) | r);
+	intensity = 1.0f - intensity;
+	is_vertical ? intensity -= 0.1 : intensity;
+	a = ((color >> 24) & 0xFF);
+	r = (((color >> 16) & 0xFF) * intensity);
+	g = (((color >> 8) & 0xFF) * intensity);
+	b = ((color & 0xFF) * intensity);
+	return((a << 24) | (r << 16) | (g << 8) | b);
 }
 
 
@@ -510,7 +522,7 @@ void	make3d(t_wolf3d *blazko)
 		
 		y = -1;
 		while (++y < blazko->rays[q].draw_start)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = 0xFF110044; //((blazko->rays[q].hit_is_vert) 
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = 0xFF440011; //((blazko->rays[q].hit_is_vert) 
 										//? make_darkness(0xFF110044, luminess * 0.6) : make_darkness(0xFF110044, luminess));//0xFF110044;
 		
 		if (blazko->rays[q].hit_is_vert) 
@@ -522,15 +534,15 @@ void	make3d(t_wolf3d *blazko)
 		int texture_index = (blazko->rays[q].hit_side);
 		while(++y < blazko->rays[q].draw_end)
 		{
-			float luminess = 1.0 / (blazko->rays[q].distance / (float)TILE_SIZE);
+			float luminess = (perpendicular_dist / (float)TILE_SIZE) * 0.1f;
 			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
 			offset.y = from_top * ((float)TEXTURE_HEIGHT / blazko->rays[q].wall_height);
 			uint32_t color_from_tex = blazko->textures[texture_index][(TEXTURE_WIDTH * offset.y) + offset.x];
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = make_darkness(color_from_tex, luminess, (blazko->rays[q].hit_is_vert));			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = make_darkness(color_from_tex, luminess, blazko->rays[q].hit_is_vert, blazko->sound.is_m);			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
 		}
 		y -= 1;
 		while(++y < WIN_HEIGHT)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = (0xFF000022);
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = (0xFF220011);
 	}
 }
 
