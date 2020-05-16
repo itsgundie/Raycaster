@@ -104,6 +104,7 @@ typedef struct	s_ray
 	float		angle;
 	t_v2		wall_hit;
 	int			hit_is_vert;
+	int			hit_is_horz;
 	float		distance;
 	int			wall_height;
 	int			draw_start;
