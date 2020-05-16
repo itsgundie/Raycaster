@@ -6,6 +6,7 @@
 #include <limits.h>
 #include <math.h>
 #include "../libft/libft.h"
+#include <time.h>
 
 #include "SDL.h"
 #include "SDL_mixer.h"
@@ -132,7 +133,26 @@ typedef struct	s_player
 typedef struct	s_sound
 {
 	int 			is_m;
-	Mix_Chunk		*step;
+	Mix_Chunk		*s1;
+	Mix_Chunk		*s2;
+	Mix_Chunk		*s3;
+	Mix_Chunk		*s4;
+	Mix_Chunk		*s5;
+	Mix_Chunk		*s6;
+	Mix_Chunk		*s7;
+	Mix_Chunk		*s8;
+	Mix_Chunk		*s9;
+	Mix_Chunk		*s10;
+	Mix_Chunk		*s11;
+	Mix_Chunk		*s12;
+	Mix_Chunk		*s13;
+	Mix_Chunk		*s14;
+	Mix_Chunk		*s15;
+	Mix_Chunk		*s16;
+	Mix_Chunk		*s17;
+	Mix_Chunk		*s18;
+	Mix_Chunk		*s19;
+	Mix_Chunk		*s20;
 	Mix_Music 		*badmusic;
 }				t_sound;
 
@@ -188,4 +208,5 @@ void		music_on();
 int			fck(t_wolf3d *blazko);
 uint32_t	make_darkness(uint32_t color, float intensity, int is_vertical, int disco);
 void		stop_step(t_wolf3d *blazko);
+void		play_step(t_wolf3d *blazko);
 #endif

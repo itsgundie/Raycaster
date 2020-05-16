@@ -93,11 +93,13 @@ void	setup(t_wolf3d *blazko)
 	blazko->color_buffer = NULL;
 	blazko->color_tex = NULL;
 	texture_manager(blazko);
+	//blazko->player.pos.x = MAP_COLUMNS * TILE_SIZE / 2 ;
+	//blazko->player.pos.y = MAP_ROWS * TILE_SIZE / 2;
 	blazko->player.width = 1;
 	blazko->player.height = 1;
 	blazko->player.turn_direction = 0;
 	blazko->player.walk_direction = 0;
-	blazko->player.rotation_angle = PI * 2.0f;
+	blazko->player.rotation_angle = PI / 2;
 	blazko->player.fov = (FOV * (PI / 180));
 	blazko->player.move_speed = 5;
 	blazko->player.rotate_speed = 5 * (PI / 180);
@@ -149,11 +151,10 @@ float calc_distance(float x1, float y1, float x2, float y2)
 	return(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
-void	find_wall_side(t_ray *this_ray, t_2dmap *kapta)
+void	find_wall_side(t_ray *this_ray)
 {
 	t_v2int pos;
 
-	
 	pos.x = (int)(this_ray->wall_hit.x / (float)TILE_SIZE);
 	pos.y = (int)(this_ray->wall_hit.y / (float)TILE_SIZE);
 
@@ -163,25 +164,17 @@ void	find_wall_side(t_ray *this_ray, t_2dmap *kapta)
 	{
 		if (this_ray->hit_is_vert)
 		{
-			if (this_ray->ray_is_up && this_ray->ray_is_left)
-				this_ray->hit_side = 1;
-			else if (this_ray->ray_is_down && this_ray->ray_is_left)
-				this_ray->hit_side = 1;
-			else if (this_ray->ray_is_up && this_ray->ray_is_right)
-				this_ray->hit_side = 3;
-			else if (this_ray->ray_is_down && this_ray->ray_is_right)
-				this_ray->hit_side = 3;
+			(this_ray->ray_is_up && this_ray->ray_is_left) ? this_ray->hit_side = 3 : 0;
+			(this_ray->ray_is_up && this_ray->ray_is_right) ? this_ray->hit_side = 1 : 0;
+			(this_ray->ray_is_down && this_ray->ray_is_right) ? this_ray->hit_side = 3 : 0;
+			(this_ray->ray_is_down && this_ray->ray_is_left) ? this_ray->hit_side = 1 : 0;
 		}
 		else
 		{
-			if (this_ray->ray_is_up && this_ray->ray_is_left)
-				this_ray->hit_side = 2;
-			else if (this_ray->ray_is_up && this_ray->ray_is_right)
-				this_ray->hit_side = 2;
-			else if (this_ray->ray_is_down && this_ray->ray_is_right)
-				this_ray->hit_side = 0;
-			else if (this_ray->ray_is_down && this_ray->ray_is_left)
-				this_ray->hit_side = 0;
+			(this_ray->ray_is_up && this_ray->ray_is_left) ? this_ray->hit_side = 2 : 0;
+			(this_ray->ray_is_up && this_ray->ray_is_right) ? this_ray->hit_side = 2 : 0;
+			(this_ray->ray_is_down && this_ray->ray_is_right) ? this_ray->hit_side = 0 : 0;
+			(this_ray->ray_is_down && this_ray->ray_is_left) ? this_ray->hit_side = 0 : 0;
 		}	
 	}
 	return ;
@@ -289,13 +282,14 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 		this_ray->distance = (distance_ver <= 0 ? 1 : distance_ver);
 		this_ray->hit_is_horz = FALSE;
 	}
+	
 	else
 	{
 		*this_ray = save_horz_data;
 		this_ray->distance = (distance_hor <= 0 ? 1 : distance_hor);
 		this_ray->hit_is_vert = FALSE;
 	}
-	find_wall_side(this_ray, &(blazko->map));
+	find_wall_side(this_ray);
 }
 
 int	is_looking_down(float angle)
@@ -384,8 +378,27 @@ void	render_rays(t_wolf3d *blazko)
 
 void	play_step(t_wolf3d *blazko)
 {
+	int r;
+
+	r = 0;
+	srand(time(NULL));
+	while (r == 0)
+		r = rand() % 6;
 	if (!Mix_Playing(2))
-		Mix_PlayChannel(2, blazko->sound.step, 0);	
+	{
+	if (r == 1)
+		Mix_PlayChannel(2, blazko->sound.s1, 0);
+	if (r == 2)
+		Mix_PlayChannel(2, blazko->sound.s2, 0);
+	if (r == 3)
+		Mix_PlayChannel(2, blazko->sound.s3, 0);
+	if (r == 4)
+		Mix_PlayChannel(2, blazko->sound.s4, 0);
+	if (r == 5)
+		Mix_PlayChannel(2, blazko->sound.s5, 0);
+	if (r == 6)
+		Mix_PlayChannel(2, blazko->sound.s6, 0);
+	 }
 }
 
 void	stop_step(t_wolf3d *blazko)
@@ -394,7 +407,8 @@ void	stop_step(t_wolf3d *blazko)
 	&& blazko->player.walk_direction == 0
 	&& blazko->player.turn_direction == 0
 	&& blazko->player.turn_direction == 0)
-	Mix_HaltChannel(2);
+		Mix_FadeOutChannel(2, 200);
+		//Mix_HaltChannel(2);
 }
 
 void	input(int *game_on, t_wolf3d *blazko)
@@ -448,22 +462,22 @@ void	input(int *game_on, t_wolf3d *blazko)
 		if (event.key.keysym.sym == SDLK_UP)
 		{
 			blazko->player.walk_direction = 0;
-			stop_step(blazko);
+			//stop_step(blazko);
 		}
 		if (event.key.keysym.sym == SDLK_DOWN)
 		{
 			blazko->player.walk_direction = 0;
-			stop_step(blazko);
+			//stop_step(blazko);
 		}
 		if (event.key.keysym.sym == SDLK_RIGHT)
 		{
 			blazko->player.turn_direction = 0;
-			stop_step(blazko);
+			//stop_step(blazko);
 		}
 		if (event.key.keysym.sym == SDLK_LEFT)
 		{
 			blazko->player.turn_direction = 0;
-			stop_step(blazko);
+			//stop_step(blazko);
 		}
 	}
 	return ;
@@ -487,32 +501,23 @@ void	update(t_wolf3d *blazko, long long *ticks_last_frame)
 
 }
 
-uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int disco)
+uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical)
 {
-	t_argb palet;
-	uint32_t disco_move;
-	if (disco)
-	{
-		disco_move = random();
-		palet.a = (color & disco_move) >> 24;
-		palet.r = (color & disco_move) >> 16;
-		palet.g = (color & disco_move) >> 8;
-		palet.b = (color & disco_move);
-		return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
-	}
-	if (color == 0)
-		return(0);
-	if (intensity > 0.9f)
-		return(0);
-	if (intensity <= 0.0f)
+	int a;
+	int b;
+	int g;
+	int r;
+
+	if (intensity > 1.5f && !(is_vertical))
 		return(color);
-	intensity = 1.0f - intensity;
-	is_vertical ? intensity -= 0.1 : intensity;
-	palet.a = ((color >> 24) & 0xFF);
-	palet.r = (((color >> 16) & 0xFF) * intensity);
-	palet.g = (((color >> 8) & 0xFF) * intensity);
-	palet.b = ((color & 0xFF) * intensity);
-	return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
+	if (intensity > 1.2f && is_vertical)
+		return(color);
+	intensity *= (is_vertical ? 0.7 : 1.0f);
+	a = (color >> 24) & 0xFF;
+	b = (int)(((color >> 16) & 0xFF) * intensity);
+	g = (int)(((color >> 8) & 0xFF) * intensity);
+	r = (int)((color & 0xFF) * intensity);
+	return((a << 24) | (b << 16) | (g << 8) | r);
 }
 
 
@@ -540,7 +545,7 @@ void	make3d(t_wolf3d *blazko)
 		
 		y = -1;
 		while (++y < blazko->rays[q].draw_start)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = blazko->sound.is_m ? rand() : 0xFF440011; //((blazko->rays[q].hit_is_vert) 
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = 0xFF110044; //((blazko->rays[q].hit_is_vert) 
 										//? make_darkness(0xFF110044, luminess * 0.6) : make_darkness(0xFF110044, luminess));//0xFF110044;
 		
 		if (blazko->rays[q].hit_is_vert) 
@@ -552,17 +557,15 @@ void	make3d(t_wolf3d *blazko)
 		int texture_index = (blazko->rays[q].hit_side);
 		while(++y < blazko->rays[q].draw_end)
 		{
-			if (q == WIN_WIDTH / 2)
-				printf("stop\n");
-			float luminess = (perpendicular_dist / (float)TILE_SIZE) * 0.1f;
+			float luminess = 1.0 / (blazko->rays[q].distance / (float)TILE_SIZE);
 			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
 			offset.y = from_top * ((float)TEXTURE_HEIGHT / blazko->rays[q].wall_height);
 			uint32_t color_from_tex = blazko->textures[texture_index][(TEXTURE_WIDTH * offset.y) + offset.x];
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = make_darkness(color_from_tex, luminess, blazko->rays[q].hit_is_vert, blazko->sound.is_m);			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = make_darkness(color_from_tex, luminess, (blazko->rays[q].hit_is_vert));			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
 		}
 		y -= 1;
 		while(++y < WIN_HEIGHT)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = ( blazko->sound.is_m ? rand() & 0x88660022 : 0xFF220011);
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = (0xFF000022);
 	}
 }
 
@@ -603,6 +606,7 @@ void	render(t_wolf3d *blazko)
 	render_player(blazko);
 	
 	SDL_RenderPresent(blazko->render);
+	stop_step(blazko);
 }
 
 void	music_on(t_wolf3d *blazko)
@@ -611,10 +615,21 @@ void	music_on(t_wolf3d *blazko)
 	if(Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096))
 		ft_error("very bad music");
 	blazko->sound.badmusic = Mix_LoadMUS("sound/music.ogg");
-	blazko->sound.step = Mix_LoadWAV("sound/step.ogg");
-	if (blazko->sound.badmusic == NULL || blazko->sound.step == NULL)
+	blazko->sound.s1 = Mix_LoadWAV("sound/steps/1.ogg");
+	blazko->sound.s2 = Mix_LoadWAV("sound/steps/2.ogg");
+	blazko->sound.s3 = Mix_LoadWAV("sound/steps/3.ogg");
+	blazko->sound.s4 = Mix_LoadWAV("sound/steps/4.ogg");
+	blazko->sound.s5 = Mix_LoadWAV("sound/steps/5.ogg");
+	blazko->sound.s6 = Mix_LoadWAV("sound/steps/6.ogg");
+	if (blazko->sound.badmusic == NULL
+	|| blazko->sound.s1 == NULL
+	|| blazko->sound.s2 == NULL
+	|| blazko->sound.s3 == NULL
+	|| blazko->sound.s4 == NULL
+	|| blazko->sound.s5 == NULL
+	|| blazko->sound.s6 == NULL)
 		ft_error("very bad music");
-	Mix_AllocateChannels(10);
+	Mix_AllocateChannels(23);
 	Mix_VolumeMusic(15);
 }
 
