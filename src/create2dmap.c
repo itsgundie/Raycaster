@@ -38,7 +38,7 @@ void	put_values_in_map(t_wolf3d *blazko)
 	}
 	while (blazko->count.i3 <= blazko->params_vars.line_width + 1)
 		blazko->map.map[blazko->count.i][blazko->count.i3++] = 1;
-	}
+}
 
 void	create_map(t_wolf3d *blazko)
 {

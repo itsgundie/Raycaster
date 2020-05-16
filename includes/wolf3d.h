@@ -4,10 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <math.h>
 #include "../libft/libft.h"
 
 #include "SDL.h"
 #include "SDL_mixer.h"
+#include "SDL_image.h"
 
 #define TRUE		1
 #define FALSE		0
@@ -18,9 +20,10 @@
 #define TILE_SIZE		128
 #define TEXTURE_WIDTH	128
 #define TEXTURE_HEIGHT	128
+
 #define MAP_COLUMNS 20
 #define MAP_ROWS	13
-#define NUM_OF_TEXTURES		8
+#define NUM_OF_TEXTURES		5
 
 #define MINIMAP_SCALE	0.1
 
@@ -33,7 +36,15 @@
 #define RAYS_NUM	WIN_WIDTH
 
 #define FPS			30
-#define FRAME_TIME	(1000 / FPS)
+
+#define TEXTURE_0 "./textures/north.png"
+#define TEXTURE_1 "./textures/east.png"
+#define TEXTURE_2 "./textures/south.png"
+#define TEXTURE_3 "./textures/over_the_line.png"
+#define TEXTURE_4 "./textures/fry.png"
+#define TEXTURE_5 "./textures/dude.png"
+#define TEXTURE_6 "./textures/your_opinion.png"
+#define TEXTURE_7 "./textures/over_the_line.png"
 
 //#define WAV_PATH ""
 //#define MUS_PATH "../sound/LAST.ogg"
@@ -120,18 +131,20 @@ typedef struct	s_sound
 
 typedef struct	s_wolf3d
 {
-	t_sound			sound;
-	uint32_t*		wall_texture;
-	uint32_t*		textures[NUM_OF_TEXTURES];
-	t_2dmap 		map;
-	t_counters 		count;
-	t_pars_vars		params_vars;
 	SDL_Window* 	window;
 	SDL_Renderer* 	render;
 	SDL_Texture*	color_tex;
-	t_player		player;
-	t_ray			rays[WIN_WIDTH];
+	uint32_t*		wall_texture;
 	uint32_t*		color_buffer;
+	SDL_Surface*	surfs_for_texes[NUM_OF_TEXTURES];
+	uint32_t*		textures[NUM_OF_TEXTURES];
+	t_ray			rays[WIN_WIDTH];
+	t_sound			sound;
+	t_2dmap 		map;
+	t_counters 		count;
+	t_pars_vars		params_vars;
+	t_player		player;
+	int				frame_time;
 }				t_wolf3d;
 
 int			main(int argc, char **argv);
@@ -147,7 +160,7 @@ void		destroy(t_wolf3d *blazko);
 int			init(t_wolf3d *blazko);
 int			error_exit(char *str, t_wolf3d *blazko);
 void		setup(t_wolf3d *blazko);
-int			find_an_obstacle(float x, float y);
+int			find_an_obstacle(float x, float y, t_2dmap *kapta);
 void		make_a_move(t_wolf3d *blazko, float delta_time);
 float		normalize_angle(float angle);
 float 		calc_distance(float x1, float y1, float x2, float y2);

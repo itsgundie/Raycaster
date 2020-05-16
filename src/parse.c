@@ -43,7 +43,7 @@ int		check_line_width(t_wolf3d *blazko)
 	if (blazko->params_vars.tmp_line_width != blazko->params_vars.line_width)
 	{
 		destroy(blazko);
-		ft_error("Map must be rectangle");		
+		ft_error("Map must be rectangle or squared");		
 	}
 	return (1);
 }
