@@ -26,8 +26,15 @@ int		init(t_wolf3d *blazko)
 {
 	blazko->window = NULL;
 	blazko->render = NULL;
+	blazko->wall_texture = NULL;
 	blazko->color_buffer = NULL;
 	blazko->color_tex = NULL;
+	blazko->sound.badmusic = NULL;
+	blazko->sound.is_m = 0;
+	if (!(blazko->params_vars.params_list = (t_pars_list *)malloc(sizeof(t_pars_list))))
+		printf("Malloc failed\n");
+	blazko->params_vars.tmp = blazko->params_vars.params_list;
+	blazko->params_vars.params_list->line = NULL;
 
 	if ((SDL_Init(SDL_INIT_EVERYTHING)))
 	{
