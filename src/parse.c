@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amargy <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/10 19:05:27 by amargy            #+#    #+#             */
+/*   Updated: 2020/05/14 19:06:46 by amargy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/wolf3d.h"
 
 int		check_line(t_wolf3d *blazko)
@@ -10,7 +22,8 @@ int		check_line(t_wolf3d *blazko)
 			blazko->count.i++;
 		if (blazko->params_vars.line[blazko->count.i] == '\0')
 			return (1);
-		if (blazko->params_vars.line[blazko->count.i] == '-' && blazko->params_vars.line[blazko->count.i + 1] == '1')
+		if (blazko->params_vars.line[blazko->count.i] == '-'
+		&& blazko->params_vars.line[blazko->count.i + 1] == '1')
 		{
 			blazko->params_vars.minus_one_found++;
 			blazko->params_vars.line_width++;
@@ -18,7 +31,8 @@ int		check_line(t_wolf3d *blazko)
 				ft_error("Input error: need one -1 on map");
 			blazko->count.i += 2;
 		}
-		else if	((blazko->params_vars.line[blazko->count.i] >= '0' && blazko->params_vars.line[blazko->count.i] <= '9'))
+		else if ((blazko->params_vars.line[blazko->count.i] >= '0'
+		&& blazko->params_vars.line[blazko->count.i] <= '9'))
 			blazko->params_vars.line_width++;
 		else
 			return (0);
@@ -43,7 +57,7 @@ int		check_line_width(t_wolf3d *blazko)
 	if (blazko->params_vars.tmp_line_width != blazko->params_vars.line_width)
 	{
 		destroy(blazko);
-		ft_error("Map must be rectangle");		
+		ft_error("Map must be rectangle or squared");
 	}
 	return (1);
 }
@@ -64,4 +78,3 @@ int		file_parser(t_wolf3d *blazko, int fd)
 		ft_error("Input error: need one -1 on map");
 	return (1);
 }
-	// Position
