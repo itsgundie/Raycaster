@@ -199,8 +199,8 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	next_hor.x = intercept_hor.x;
 	next_hor.y = intercept_hor.y;
 
-	while (next_hor.x >= 0 && next_hor.x <= (MAP_COLUMNS * TILE_SIZE)
-			&& next_hor.y >= 0 && next_hor.y <= (MAP_ROWS * TILE_SIZE))
+	while (next_hor.x >= 0 && next_hor.x <= (blazko->map.columns * TILE_SIZE)
+			&& next_hor.y >= 0 && next_hor.y <= (blazko->map.rows * TILE_SIZE))
 	{
 		check_hor.x = next_hor.x;
 		check_hor.y = next_hor.y + (this_ray->ray_is_up ? -1 : 0);
@@ -247,8 +247,8 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	next_ver.x = intercept_ver.x;
 	next_ver.y = intercept_ver.y;
 
-	while (next_ver.x >= 0 && next_ver.x <= (MAP_COLUMNS * TILE_SIZE) 
-		&& next_ver.y >= 0 && next_ver.y <= (MAP_ROWS * TILE_SIZE))
+	while (next_ver.x >= 0 && next_ver.x <= (blazko->map.columns * TILE_SIZE) 
+		&& next_ver.y >= 0 && next_ver.y <= (blazko->map.rows * TILE_SIZE))
 	{
 		check_ver.x = next_ver.x + (this_ray->ray_is_left ? -1 : 0);
 		check_ver.y = next_ver.y;
@@ -348,10 +348,10 @@ void	render_map(t_wolf3d *blazko)           							//need refactor
 	j = 0;
 	k = 0;
 
-	while (j < MAP_ROWS)
+	while (j < blazko->map.rows)
 	{
 		k = 0;
-		while (k < MAP_COLUMNS)
+		while (k < blazko->map.columns)
 		{
 			int tile_x = (k * TILE_SIZE);
 			int tile_y = (j * TILE_SIZE);
