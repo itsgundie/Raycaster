@@ -8,6 +8,8 @@ int		check_line(t_wolf3d *blazko)
 	{
 		while (blazko->params_vars.line[blazko->count.i] == ' ')
 			blazko->count.i++;
+		if (blazko->params_vars.line[blazko->count.i] == '\0')
+			return (1);
 		if (blazko->params_vars.line[blazko->count.i] == '-' && blazko->params_vars.line[blazko->count.i + 1] == '1')
 		{
 			blazko->params_vars.minus_one_found++;
@@ -36,7 +38,7 @@ void	add_string_in_list(t_wolf3d *blazko)
 
 int		check_line_width(t_wolf3d *blazko)
 {
-	if (blazko->params_list->line == NULL)
+	if (blazko->params_vars.params_list->line == NULL)
 		blazko->params_vars.tmp_line_width = blazko->params_vars.line_width;
 	if (blazko->params_vars.tmp_line_width != blazko->params_vars.line_width)
 	{
