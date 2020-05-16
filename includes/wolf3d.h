@@ -39,13 +39,11 @@
 #define FPS			30
 
 #define TEXTURE_0 "./textures/north.png"
-#define TEXTURE_1 "./textures/east.png"
+#define TEXTURE_1 "./textures/fry.png"
 #define TEXTURE_2 "./textures/south.png"
-#define TEXTURE_3 "./textures/over_the_line.png"
-#define TEXTURE_4 "./textures/fry.png"
-#define TEXTURE_5 "./textures/dude.png"
-#define TEXTURE_6 "./textures/your_opinion.png"
-#define TEXTURE_7 "./textures/over_the_line.png"
+#define TEXTURE_3 "./textures/laughing_man.png"
+#define TEXTURE_4 "./textures/over_the_line.png"
+
 
 //#define WAV_PATH ""
 //#define MUS_PATH "../sound/LAST.ogg"
@@ -63,6 +61,13 @@ typedef struct	s_v2
 	float		y;
 }				t_v2;
 
+typedef struct	s_argb
+{
+	uint32_t	a;	
+	uint32_t	r;	
+	uint32_t	g;	
+	uint32_t	b;	
+}				t_argb;
 
 typedef struct	s_2dmap
 {
@@ -200,7 +205,7 @@ void		render_color_buf(t_wolf3d *blazko);
 void		render(t_wolf3d *blazko);
 void		music_on();
 int			fck(t_wolf3d *blazko);
+uint32_t	make_darkness(uint32_t color, float intensity, int is_vertical, int disco);
 void		stop_step(t_wolf3d *blazko);
 void		play_step(t_wolf3d *blazko);
-
 #endif
