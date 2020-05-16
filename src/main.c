@@ -487,35 +487,30 @@ void	update(t_wolf3d *blazko, long long *ticks_last_frame)
 
 uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int disco)
 {
-	uint32_t a;
-	uint32_t r;
-	uint32_t g;
-	uint32_t b;
-	// if (intensity > 1.5f && !(is_vertical))
-	// 	return(color);
-	// if (intensity > 1.2f && is_vertical)
-	// 	return(color);
-	// if (disco)
-	// {
-	// 	a = (color >> 24) & 0xFF;
-	// 	r = (int)(((color >> 16) & 0xFF) * intensity);
-	// 	g = (int)(((color >> 8) & 0xFF) * intensity);
-	// 	b = (int)((color & 0xFF) * intensity);
-	// 	return((a << 24) | (r << 16) | (g << 8) | b);
-	// }
+	t_argb palet;
+	uint32_t disco_move;
+	if (disco)
+	{
+		disco_move = random();
+		palet.a = (color & disco_move) >> 24;
+		palet.r = (color & disco_move) >> 16;
+		palet.g = (color & disco_move) >> 8;
+		palet.b = (color & disco_move);
+		return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
+	}
 	if (color == 0)
 		return(0);
-	if (intensity > 1.0f)
+	if (intensity > 0.9f)
 		return(0);
 	if (intensity <= 0.0f)
 		return(color);
 	intensity = 1.0f - intensity;
 	is_vertical ? intensity -= 0.1 : intensity;
-	a = ((color >> 24) & 0xFF);
-	r = (((color >> 16) & 0xFF) * intensity);
-	g = (((color >> 8) & 0xFF) * intensity);
-	b = ((color & 0xFF) * intensity);
-	return((a << 24) | (r << 16) | (g << 8) | b);
+	palet.a = ((color >> 24) & 0xFF);
+	palet.r = (((color >> 16) & 0xFF) * intensity);
+	palet.g = (((color >> 8) & 0xFF) * intensity);
+	palet.b = ((color & 0xFF) * intensity);
+	return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
 }
 
 
@@ -555,6 +550,8 @@ void	make3d(t_wolf3d *blazko)
 		int texture_index = (blazko->rays[q].hit_side);
 		while(++y < blazko->rays[q].draw_end)
 		{
+			if (q == WIN_WIDTH / 2)
+				printf("stop\n");
 			float luminess = (perpendicular_dist / (float)TILE_SIZE) * 0.1f;
 			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
 			offset.y = from_top * ((float)TEXTURE_HEIGHT / blazko->rays[q].wall_height);

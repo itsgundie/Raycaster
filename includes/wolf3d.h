@@ -62,6 +62,13 @@ typedef struct	s_v2
 	float		y;
 }				t_v2;
 
+typedef struct	s_argb
+{
+	uint32_t	a;	
+	uint32_t	r;	
+	uint32_t	g;	
+	uint32_t	b;	
+}				t_argb;
 
 typedef struct	s_2dmap
 {
