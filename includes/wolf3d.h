@@ -126,6 +126,7 @@ typedef struct	s_player
 typedef struct	s_sound
 {
 	int 			is_m;
+	Mix_Chunk		*step;
 	Mix_Music 		*badmusic;
 }				t_sound;
 
@@ -178,5 +179,6 @@ void		clear_color_buf(uint32_t *color_buf, uint32_t color);
 void		render_color_buf(t_wolf3d *blazko);
 void		render(t_wolf3d *blazko);
 void		music_on();
+int			fck(t_wolf3d *blazko);
 
 #endif

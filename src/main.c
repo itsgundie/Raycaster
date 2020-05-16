@@ -320,14 +320,13 @@ void	raycast(t_wolf3d *blazko)
 	}
 }
 
-
-void	render_player(t_wolf3d *blazko)
+void	render_player(t_wolf3d *blazko)                                 //need refactor breizenheima
 {
 	SDL_SetRenderDrawColor(blazko->render, 255, 255, 255, 255);
 	SDL_Rect player_rect = {blazko->player.pos.x * MINIMAP_SCALE,
-							 blazko->player.pos.y * MINIMAP_SCALE,
-							 blazko->player.width * MINIMAP_SCALE,
-							 blazko->player.height * MINIMAP_SCALE};
+							blazko->player.pos.y * MINIMAP_SCALE,
+							blazko->player.width * MINIMAP_SCALE,
+							blazko->player.height * MINIMAP_SCALE};
 	SDL_RenderFillRect(blazko->render, &player_rect);
 	SDL_RenderDrawLine(blazko->render, blazko->player.pos.x * MINIMAP_SCALE,
 						blazko->player.pos.y * MINIMAP_SCALE,
@@ -335,7 +334,7 @@ void	render_player(t_wolf3d *blazko)
 						blazko->player.pos.y * MINIMAP_SCALE + sin (blazko->player.rotation_angle) * 40);
 }
 
-void	render_map(t_wolf3d *blazko)
+void	render_map(t_wolf3d *blazko)           							//need refactor
 {
 	int j;
 	int k;
@@ -377,6 +376,12 @@ void	render_rays(t_wolf3d *blazko)
 	}
 }
 
+void	play_step(t_wolf3d *blazko)
+{
+		if (!Mix_Playing(2))
+			Mix_PlayChannel(2, blazko->sound.step, 0);	
+}
+
 void	input(int *game_on, t_wolf3d *blazko)
 {
 	SDL_Event event;
@@ -403,13 +408,25 @@ void	input(int *game_on, t_wolf3d *blazko)
 		if (event.key.keysym.sym == SDLK_ESCAPE)
 			*game_on = FALSE;
 		if (event.key.keysym.sym == SDLK_UP)
+		{
 			blazko->player.walk_direction = +1;
+			play_step(blazko);
+		}
 		if (event.key.keysym.sym == SDLK_DOWN)
+		{
 			blazko->player.walk_direction = -1;
+			play_step(blazko);
+		}
 		if (event.key.keysym.sym == SDLK_RIGHT)
+		{
 			blazko->player.turn_direction = +1;
+			play_step(blazko);
+		}
 		if (event.key.keysym.sym == SDLK_LEFT)
+		{
 			blazko->player.turn_direction = -1;
+			play_step(blazko);
+		}
 	}
 	else if (event.type == SDL_KEYUP)
 	{
@@ -553,13 +570,11 @@ void	render(t_wolf3d *blazko)
 void	music_on(t_wolf3d *blazko)
 {	
 	blazko->sound.badmusic = NULL;
-	if(Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096)) 
+	if(Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096))
 		ft_error("very bad music");
-	//wave = Mix_LoadWAV(WAV_PATH);
-	//if (wave == NULL)
-	//	return -1;
 	blazko->sound.badmusic = Mix_LoadMUS("sound/music.ogg");
-	if (blazko->sound.badmusic == NULL)
+	blazko->sound.step = Mix_LoadWAV("sound/step.ogg");
+	if (blazko->sound.badmusic == NULL || blazko->sound.step == NULL)
 		ft_error("very bad music");
 	Mix_AllocateChannels(10);
 	Mix_VolumeMusic(15);
