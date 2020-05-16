@@ -69,4 +69,5 @@ void	create_map(t_wolf3d *blazko)
 	blazko->count.i = 0;
 	blazko->params_vars.tmp = blazko->params_vars.params_list;
 	put_values_in_map(blazko);
+	blazko->count.i = 0;
 }
