@@ -151,7 +151,7 @@ float calc_distance(float x1, float y1, float x2, float y2)
 	return(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
-void	find_wall_side(t_ray *this_ray)
+void	find_wall_side(t_ray *this_ray, t_2dmap *kapta)
 {
 	t_v2int pos;
 
@@ -289,7 +289,7 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 		this_ray->distance = (distance_hor <= 0 ? 1 : distance_hor);
 		this_ray->hit_is_vert = FALSE;
 	}
-	find_wall_side(this_ray);
+	find_wall_side(this_ray, &(blazko->map));
 }
 
 int	is_looking_down(float angle)
@@ -497,27 +497,34 @@ void	update(t_wolf3d *blazko, long long *ticks_last_frame)
 	*ticks_last_frame = SDL_GetTicks();
 	make_a_move(blazko, delta_time); //?
 	raycast(blazko); //?
-
-
 }
 
-uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical)
+uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int disco)
 {
-	int a;
-	int b;
-	int g;
-	int r;
-
-	if (intensity > 1.5f && !(is_vertical))
+	t_argb palet;
+	uint32_t disco_move;
+	if (disco)
+	{
+		disco_move = random();
+		palet.a = (color & disco_move) >> 24;
+		palet.r = (color & disco_move) >> 16;
+		palet.g = (color & disco_move) >> 8;
+		palet.b = (color & disco_move);
+		return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
+	}
+	if (color == 0)
+		return(0);
+	if (intensity > 0.9f)
+		return(0);
+	if (intensity <= 0.0f)
 		return(color);
-	if (intensity > 1.2f && is_vertical)
-		return(color);
-	intensity *= (is_vertical ? 0.7 : 1.0f);
-	a = (color >> 24) & 0xFF;
-	b = (int)(((color >> 16) & 0xFF) * intensity);
-	g = (int)(((color >> 8) & 0xFF) * intensity);
-	r = (int)((color & 0xFF) * intensity);
-	return((a << 24) | (b << 16) | (g << 8) | r);
+	intensity = 1.0f - intensity;
+	is_vertical ? intensity -= 0.1 : intensity;
+	palet.a = ((color >> 24) & 0xFF);
+	palet.r = (((color >> 16) & 0xFF) * intensity);
+	palet.g = (((color >> 8) & 0xFF) * intensity);
+	palet.b = ((color & 0xFF) * intensity);
+	return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
 }
 
 
@@ -561,7 +568,7 @@ void	make3d(t_wolf3d *blazko)
 			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
 			offset.y = from_top * ((float)TEXTURE_HEIGHT / blazko->rays[q].wall_height);
 			uint32_t color_from_tex = blazko->textures[texture_index][(TEXTURE_WIDTH * offset.y) + offset.x];
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = make_darkness(color_from_tex, luminess, (blazko->rays[q].hit_is_vert));			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = make_darkness(color_from_tex, luminess, (blazko->rays[q].hit_is_vert), blazko->sound.is_m);			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
 		}
 		y -= 1;
 		while(++y < WIN_HEIGHT)
