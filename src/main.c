@@ -384,8 +384,17 @@ void	render_rays(t_wolf3d *blazko)
 
 void	play_step(t_wolf3d *blazko)
 {
-		if (!Mix_Playing(2))
-			Mix_PlayChannel(2, blazko->sound.step, 0);	
+	if (!Mix_Playing(2))
+		Mix_PlayChannel(2, blazko->sound.step, 0);	
+}
+
+void	stop_step(t_wolf3d *blazko)
+{
+	if (blazko->player.walk_direction == 0 
+	&& blazko->player.walk_direction == 0
+	&& blazko->player.turn_direction == 0
+	&& blazko->player.turn_direction == 0)
+	Mix_HaltChannel(2);
 }
 
 void	input(int *game_on, t_wolf3d *blazko)
@@ -437,13 +446,25 @@ void	input(int *game_on, t_wolf3d *blazko)
 	else if (event.type == SDL_KEYUP)
 	{
 		if (event.key.keysym.sym == SDLK_UP)
+		{
 			blazko->player.walk_direction = 0;
+			stop_step(blazko);
+		}
 		if (event.key.keysym.sym == SDLK_DOWN)
+		{
 			blazko->player.walk_direction = 0;
+			stop_step(blazko);
+		}
 		if (event.key.keysym.sym == SDLK_RIGHT)
+		{
 			blazko->player.turn_direction = 0;
+			stop_step(blazko);
+		}
 		if (event.key.keysym.sym == SDLK_LEFT)
+		{
 			blazko->player.turn_direction = 0;
+			stop_step(blazko);
+		}
 	}
 	return ;
 }

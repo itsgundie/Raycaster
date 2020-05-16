@@ -180,5 +180,6 @@ void		render_color_buf(t_wolf3d *blazko);
 void		render(t_wolf3d *blazko);
 void		music_on();
 int			fck(t_wolf3d *blazko);
+void		stop_step(t_wolf3d *blazko);
 
 #endif
