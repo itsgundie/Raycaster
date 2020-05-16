@@ -75,7 +75,6 @@ void texture_manager(t_wolf3d *blazko)
 				SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING,
 		 		WIN_WIDTH, WIN_HEIGHT)))
 		error_exit("Malloc of color_tex Not OK -_-\n", blazko);
-	texture_manager(blazko);
 	blazko->surfs_for_texes[0] = IMG_Load(TEXTURE_0);
 	blazko->surfs_for_texes[1] = IMG_Load(TEXTURE_1);
 	blazko->surfs_for_texes[2] = IMG_Load(TEXTURE_2);
