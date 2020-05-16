@@ -38,13 +38,11 @@
 #define FPS			30
 
 #define TEXTURE_0 "./textures/north.png"
-#define TEXTURE_1 "./textures/east.png"
+#define TEXTURE_1 "./textures/fry.png"
 #define TEXTURE_2 "./textures/south.png"
-#define TEXTURE_3 "./textures/over_the_line.png"
-#define TEXTURE_4 "./textures/fry.png"
-#define TEXTURE_5 "./textures/dude.png"
-#define TEXTURE_6 "./textures/your_opinion.png"
-#define TEXTURE_7 "./textures/over_the_line.png"
+#define TEXTURE_3 "./textures/laughing_man.png"
+#define TEXTURE_4 "./textures/over_the_line.png"
+
 
 //#define WAV_PATH ""
 //#define MUS_PATH "../sound/LAST.ogg"

@@ -149,23 +149,43 @@ float calc_distance(float x1, float y1, float x2, float y2)
 	return(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
-void	find_wall_side(t_ray *this_ray)
+void	find_wall_side(t_ray *this_ray, t_2dmap *kapta)
 {
-	if (this_ray->hit_side == 1)
+	t_v2int pos;
+
+	
+	pos.x = (int)(this_ray->wall_hit.x / (float)TILE_SIZE);
+	pos.y = (int)(this_ray->wall_hit.y / (float)TILE_SIZE);
+
+	if (pos.x == 0 || pos.x == (kapta->columns - 1) || pos.y == 0 || pos.y == (kapta->rows - 1))
+	{
+		this_ray->hit_side = 4;
+		return ;
+	}
+
+	if (this_ray->hit_side)
 	{
 		if (this_ray->hit_is_vert)
 		{
-			(this_ray->ray_is_up && this_ray->ray_is_left) ? this_ray->hit_side = 3 : 0;
-			(this_ray->ray_is_up && this_ray->ray_is_right) ? this_ray->hit_side = 1 : 0;
-			(this_ray->ray_is_down && this_ray->ray_is_right) ? this_ray->hit_side = 3 : 0;
-			(this_ray->ray_is_down && this_ray->ray_is_left) ? this_ray->hit_side = 1 : 0;
+			if (this_ray->ray_is_up && this_ray->ray_is_left)
+				this_ray->hit_side = 1;
+			else if (this_ray->ray_is_down && this_ray->ray_is_left)
+				this_ray->hit_side = 1;
+			else if (this_ray->ray_is_up && this_ray->ray_is_right)
+				this_ray->hit_side = 3;
+			else if (this_ray->ray_is_down && this_ray->ray_is_right)
+				this_ray->hit_side = 3;
 		}
 		else
 		{
-			(this_ray->ray_is_up && this_ray->ray_is_left) ? this_ray->hit_side = 2 : 0;
-			(this_ray->ray_is_up && this_ray->ray_is_right) ? this_ray->hit_side = 2 : 0;
-			(this_ray->ray_is_down && this_ray->ray_is_right) ? this_ray->hit_side = 0 : 0;
-			(this_ray->ray_is_down && this_ray->ray_is_left) ? this_ray->hit_side = 0 : 0;
+			if (this_ray->ray_is_up && this_ray->ray_is_left)
+				this_ray->hit_side = 2;
+			else if (this_ray->ray_is_up && this_ray->ray_is_right)
+				this_ray->hit_side = 2;
+			else if (this_ray->ray_is_down && this_ray->ray_is_right)
+				this_ray->hit_side = 0;
+			else if (this_ray->ray_is_down && this_ray->ray_is_left)
+				this_ray->hit_side = 0;
 		}	
 	}
 	return ;
@@ -285,15 +305,14 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	}
 	else
 	{
-		{
+	
 		this_ray->distance = (distance_hor <= 0 ? 1 : distance_hor);
 		this_ray->wall_hit.x = hit_point_hor.x;
 		this_ray->wall_hit.y = hit_point_hor.y;
 		this_ray->hit_side = side_index_hor;
 		this_ray->hit_is_vert = FALSE;
 	}
-	find_wall_side(this_ray);
-	}
+	find_wall_side(this_ray, &(blazko->map));
 }
 
 int	is_looking_down(float angle)
@@ -538,7 +557,7 @@ void	make3d(t_wolf3d *blazko)
 		
 		y = -1;
 		while (++y < blazko->rays[q].draw_start)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = 0xFF440011; //((blazko->rays[q].hit_is_vert) 
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = blazko->sound.is_m ? rand() : 0xFF440011; //((blazko->rays[q].hit_is_vert) 
 										//? make_darkness(0xFF110044, luminess * 0.6) : make_darkness(0xFF110044, luminess));//0xFF110044;
 		
 		if (blazko->rays[q].hit_is_vert) 
@@ -560,7 +579,7 @@ void	make3d(t_wolf3d *blazko)
 		}
 		y -= 1;
 		while(++y < WIN_HEIGHT)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = (0xFF220011);
+			blazko->color_buffer[(WIN_WIDTH * y) + q] = ( blazko->sound.is_m ? rand() & 0x88660022 : 0xFF220011);
 	}
 }
 
