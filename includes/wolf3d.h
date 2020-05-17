@@ -130,6 +130,14 @@ typedef struct	s_player
 	float		rotate_speed;
 }				t_player;
 
+typedef struct	s_raycast
+{
+	t_v2 intercept;
+	t_v2 step;
+	t_v2 next;
+	t_v2 check;
+}				t_raycast;
+
 typedef struct	s_sound
 {
 	int 			is_m;
