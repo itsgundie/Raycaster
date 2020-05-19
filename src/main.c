@@ -78,7 +78,7 @@ void	find_wall_side(t_ray *this_ray, t_2dmap *kapta)
 	pos.x = (int)(this_ray->wall_hit.x / (float)TILE_SIZE);
 	pos.y = (int)(this_ray->wall_hit.y / (float)TILE_SIZE);
 
-	if (pos.x == 0 || pos.x == (kapta->columns - 1) || pos.y == 0 || pos.y == (kapta->rows - 1))
+	if (pos.x <= 1 || pos.x > (kapta->columns - 2) || pos.y <= 1 || pos.y > (kapta->rows - 2))
 		this_ray->hit_side = 4;
 	else if (this_ray->hit_side)
 	{
@@ -409,8 +409,8 @@ void	raycast(t_wolf3d *blazko)
 	float ray_angle = blazko->player.rotation_angle - (blazko->player.fov / 2);
 	while (++q < WIN_WIDTH)
 	{
-		if (q >= 541)
-			printf("Stop right there");
+		// if (q >= 541)
+		// 	printf("Stop right there");
 		blazko->rays[q].angle = normalize_angle(ray_angle);
 		blazko->rays[q].ray_is_down = is_looking_down(blazko->rays[q].angle);
 		blazko->rays[q].ray_is_right = is_looking_right(blazko->rays[q].angle);
