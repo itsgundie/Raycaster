@@ -217,4 +217,6 @@ int			fck(t_wolf3d *blazko);
 uint32_t	make_darkness(uint32_t color, float intensity, int is_vertical, int disco);
 void		stop_step(t_wolf3d *blazko);
 void		play_step(t_wolf3d *blazko);
+void 		texture_manager(t_wolf3d *blazko);
+
 #endif

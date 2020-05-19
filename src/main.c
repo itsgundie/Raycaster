@@ -1,68 +1,6 @@
 
 #include <../includes/wolf3d.h>
 
-
-void	destroy(t_wolf3d *blazko)
-{
-	int q;
-
-	q = NUM_OF_TEXTURES;
-	free(blazko->color_buffer);
-	blazko->color_buffer = NULL;
-	while (--q >= 0)
-	{
-		SDL_FreeSurface(blazko->surfs_for_texes[q]);
-		blazko->surfs_for_texes[q] = NULL;
-		blazko->textures[q] = NULL;
-	}
-	SDL_DestroyTexture(blazko->color_tex);
-	SDL_DestroyRenderer(blazko->render);
-	SDL_DestroyWindow(blazko->window);
-	SDL_Quit();
-}
-
-
-int		init(t_wolf3d *blazko)
-{
-	blazko->window = NULL;
-	blazko->render = NULL;
-	blazko->wall_texture = NULL;
-	blazko->color_buffer = NULL;
-	blazko->color_tex = NULL;
-	blazko->sound.badmusic = NULL;
-	blazko->sound.is_m = 0;
-	if (!(blazko->params_vars.params_list = (t_pars_list *)malloc(sizeof(t_pars_list))))
-		printf("Malloc failed\n");
-	blazko->params_vars.tmp = blazko->params_vars.params_list;
-	blazko->params_vars.params_list->line = NULL;
-
-	if ((SDL_Init(SDL_INIT_EVERYTHING)))
-	{
-		printf("Error Initializing SDL\n");
-		return(FALSE);
-	}
-	if (!(blazko->window = SDL_CreateWindow(WIN_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIN_WIDTH, WIN_HEIGHT, 0)))
-	{
-		printf("Error creating SDL window\n");
-		return(FALSE);
-	}
-	if (!(blazko->render = SDL_CreateRenderer(blazko->window, -1, 0)))
-	{
-		printf("Error creating SDL render\n");
-		return(FALSE);
-	}
-	//SDL_SetRenderDrawBlendMode(blazko->render, SDL_BLENDMODE_MOD);
-	return(TRUE);
-}
-
-
-int		error_exit(char *str, t_wolf3d *blazko)
-{
-	printf("%s", str);
-	destroy(blazko);
-	exit(1);
-}
-
 void texture_manager(t_wolf3d *blazko)
 {
 	int q;
@@ -86,24 +24,6 @@ void texture_manager(t_wolf3d *blazko)
 	q = -1;
 	while (++q < NUM_OF_TEXTURES)
 		blazko->textures[q] = (uint32_t*)(blazko->surfs_for_texes[q]->pixels);
-}
-
-void	setup(t_wolf3d *blazko)
-{
-	blazko->color_buffer = NULL;
-	blazko->color_tex = NULL;
-	texture_manager(blazko);
-	blazko->player.width = 1;
-	blazko->player.height = 1;
-	blazko->player.turn_direction = 0;
-	blazko->player.walk_direction = 0;
-	blazko->player.rotation_angle = TWO_PI;
-	blazko->player.fov = (FOV * (PI / 180));
-	blazko->player.move_speed = 5;
-	blazko->player.rotate_speed = 5 * (PI / 180);
-	blazko->frame_time = 1000 / FPS;
-	blazko->map.columns = blazko->params_vars.line_width + 2;
-	blazko->map.rows = blazko->params_vars.number_of_lines + 2;
 }
 
 int		find_an_obstacle(float x, float y, t_2dmap *kapta)
@@ -293,12 +213,6 @@ void horz_intersect(t_wolf3d *blazko, t_ray *this_ray)
 
 		if (find_an_obstacle(check_hor.x, check_hor.y, &(blazko->map)))
 		{
-			this_ray->wall_hit.x = next_hor.x;
-			this_ray->wall_hit.y = next_hor.y;
-
-			this_ray->hit_side = (blazko->map.map[(int)floor(check_hor.y / TILE_SIZE)]
-								[(int)floor(check_hor.x / TILE_SIZE)]);
-			this_ray->hit_is_horz = TRUE;
 			break;
 		}
 		else
@@ -307,12 +221,15 @@ void horz_intersect(t_wolf3d *blazko, t_ray *this_ray)
 			next_hor.y += step_hor.y;
 		}
 	}
+	this_ray->wall_hit.x = next_hor.x;
+	this_ray->wall_hit.y = next_hor.y;
+	this_ray->hit_side = (blazko->map.map[(int)floor(check_hor.y / TILE_SIZE)]
+		[(int)floor(check_hor.x / TILE_SIZE)]);
+	this_ray->hit_is_horz = TRUE;
 }
-
 
 void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 {
-
 	t_v2 intercept_hor;
 	t_v2 step_hor;
 	t_v2 next_hor;
@@ -327,7 +244,8 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	hit_point_hor.y = this_ray->wall_hit.y;
 	was_hit_horizont = this_ray->hit_is_horz;
 	side_index_hor = this_ray->hit_side;
-	// Horizontal intersection //
+	
+	//Horizontal intersection //
 	// intercept_hor.y = floor(blazko->player.pos.y / TILE_SIZE) * TILE_SIZE;
 	// intercept_hor.y += (this_ray->ray_is_down) ? TILE_SIZE : 0;
 
@@ -409,7 +327,6 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 			next_ver.x += step_ver.x;
 			next_ver.y += step_ver.y;
 		}
-		
 	}
 
 	//// DISTANCE ///
@@ -440,7 +357,6 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	find_wall_side(this_ray, &(blazko->map));
 	}
 }
-
 
 // void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 // {
@@ -561,41 +477,6 @@ void	render_rays(t_wolf3d *blazko)
 	}
 }
 
-void	play_step(t_wolf3d *blazko)
-{
-	int r;
-
-	r = 0;
-	srand(time(NULL));
-	while (r == 0)
-		r = rand() % 6;
-	if (!Mix_Playing(2))
-	{
-	if (r == 1)
-		Mix_PlayChannel(2, blazko->sound.s1, 0);
-	if (r == 2)
-		Mix_PlayChannel(2, blazko->sound.s2, 0);
-	if (r == 3)
-		Mix_PlayChannel(2, blazko->sound.s3, 0);
-	if (r == 4)
-		Mix_PlayChannel(2, blazko->sound.s4, 0);
-	if (r == 5)
-		Mix_PlayChannel(2, blazko->sound.s5, 0);
-	if (r == 6)
-		Mix_PlayChannel(2, blazko->sound.s6, 0);
-	 }
-}
-
-void	stop_step(t_wolf3d *blazko)
-{
-	if (blazko->player.walk_direction == 0 
-	&& blazko->player.walk_direction == 0
-	&& blazko->player.turn_direction == 0
-	&& blazko->player.turn_direction == 0)
-		Mix_FadeOutChannel(2, 200);
-		//Mix_HaltChannel(2);
-}
-
 void	input(int *game_on, t_wolf3d *blazko)
 {
 	SDL_Event event;
@@ -684,7 +565,6 @@ void	update(t_wolf3d *blazko, long long *ticks_last_frame)
 	raycast(blazko); //?
 }
 
-
 uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int disco)
 {
 	t_argb palet;
@@ -712,7 +592,6 @@ uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int di
 	palet.b = ((color & 0xFF) * intensity);
 	return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
 }
-
 
 void	make3d(t_wolf3d *blazko)
 {
@@ -764,8 +643,6 @@ void	make3d(t_wolf3d *blazko)
 	}
 }
 
-
-
 void	clear_color_buf(uint32_t *color_buf, uint32_t color)
 {
 	int x;
@@ -804,31 +681,6 @@ void	render(t_wolf3d *blazko)
 	SDL_RenderPresent(blazko->render);
 	stop_step(blazko);
 }
-
-void	music_on(t_wolf3d *blazko)
-{	
-	blazko->sound.badmusic = NULL;
-	if(Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096))
-		ft_error("very bad music");
-	blazko->sound.badmusic = Mix_LoadMUS("sound/music.ogg");
-	blazko->sound.s1 = Mix_LoadWAV("sound/steps/1.ogg");
-	blazko->sound.s2 = Mix_LoadWAV("sound/steps/2.ogg");
-	blazko->sound.s3 = Mix_LoadWAV("sound/steps/3.ogg");
-	blazko->sound.s4 = Mix_LoadWAV("sound/steps/4.ogg");
-	blazko->sound.s5 = Mix_LoadWAV("sound/steps/5.ogg");
-	blazko->sound.s6 = Mix_LoadWAV("sound/steps/6.ogg");
-	if (blazko->sound.badmusic == NULL
-	|| blazko->sound.s1 == NULL
-	|| blazko->sound.s2 == NULL
-	|| blazko->sound.s3 == NULL
-	|| blazko->sound.s4 == NULL
-	|| blazko->sound.s5 == NULL
-	|| blazko->sound.s6 == NULL)
-		ft_error("very bad music");
-	Mix_AllocateChannels(23);
-	Mix_VolumeMusic(15);
-}
-
 
 int		main(int argc, char **argv)
 {
