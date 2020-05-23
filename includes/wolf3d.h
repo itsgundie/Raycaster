@@ -223,5 +223,6 @@ void		key_up(t_wolf3d *blazko, SDL_Event event);
 void		music_on_off(t_wolf3d *blazko);
 void		render_rectangle(t_wolf3d *blazko, int tile_y, int tile_x);
 void		render_line(t_wolf3d *blazko, int start_y, int start_x, int end_y, int end_x);
+void		find_wall_side(t_ray *this_ray, t_2dmap *kapta);
 
 #endif
