@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <../includes/wolf3d.h>
+#include "../includes/wolf3d.h"
 
 void	slayer_position(t_wolf3d *blazko)
 {

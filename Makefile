@@ -22,7 +22,7 @@ LIBFT = $(LIB_DIR)/libft.a
 
 #    SOURCES AND HEADERS    #
 HEADER = includes/wolf3d.h
-TEXTHEADER = includes/textures.h
+TEXTHEADER =
 
 SRC_FILES = main.c \
 			parse.c \

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <../includes/wolf3d.h>
+#include "../includes/wolf3d.h"
 
 void	music_on_off(t_wolf3d *blazko)
 {

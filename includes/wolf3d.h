@@ -36,7 +36,7 @@
 
 #define RAYS_NUM	WIN_WIDTH
 
-#define FPS			30
+#define FPS			60
 
 #define TEXTURE_0 "./textures/north.png"
 #define TEXTURE_1 "./textures/fry.png"
