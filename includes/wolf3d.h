@@ -192,7 +192,7 @@ void		create_map(t_wolf3d *blazko);
 void		put_values_in_map(t_wolf3d *blazko);
 void		slayer_position(t_wolf3d *blazko);
 void		destroy(t_wolf3d *blazko);
-int			init(t_wolf3d *blazko);
+t_wolf3d 	*init();
 int			error_exit(char *str, t_wolf3d *blazko);
 void		setup(t_wolf3d *blazko);
 int			find_an_obstacle(float x, float y, t_2dmap *kapta);
@@ -206,7 +206,6 @@ void		raycast(t_wolf3d *blazko);
 void		render_player(t_wolf3d *blazko);
 void		render_map(t_wolf3d *blazko);
 void		render_rays(t_wolf3d *blazko);
-void		input(int *game_on, t_wolf3d *blazko);
 void		update(t_wolf3d *blazko, long long *ticks_last_frame);
 void		make3d(t_wolf3d *blazko);
 void		clear_color_buf(uint32_t *color_buf, uint32_t color);
@@ -218,5 +217,11 @@ uint32_t	make_darkness(uint32_t color, float intensity, int is_vertical, int dis
 void		stop_step(t_wolf3d *blazko);
 void		play_step(t_wolf3d *blazko);
 void 		texture_manager(t_wolf3d *blazko);
+int			put_in(t_wolf3d *blazko);
+int			key_down(t_wolf3d *blazko, SDL_Event event);
+void		key_up(t_wolf3d *blazko, SDL_Event event);
+void		music_on_off(t_wolf3d *blazko);
+void		render_rectangle(t_wolf3d *blazko, int tile_y, int tile_x);
+void		render_line(t_wolf3d *blazko, int start_y, int start_x, int end_y, int end_x);
 
 #endif

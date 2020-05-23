@@ -52,8 +52,14 @@ int		init2(t_wolf3d *blazko)
 	return (TRUE);
 }
 
-int		init(t_wolf3d *blazko)
+t_wolf3d *init()
 {
+	t_wolf3d *blazko;
+
+	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
+		ft_error("Malloc not OK \{~_~}/\n");
+	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
+		ft_error("Malloc not OK \{~_~}/\n");
 	blazko->window = NULL;
 	blazko->render = NULL;
 	blazko->wall_texture = NULL;
@@ -68,5 +74,5 @@ int		init(t_wolf3d *blazko)
 	blazko->params_vars.params_list->line = NULL;
 	if (!(init2(blazko)))
 		return (FALSE);
-	return (TRUE);
+	return (blazko);
 }

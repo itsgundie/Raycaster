@@ -27,6 +27,14 @@
 		"unordered_map": "c",
 		"utility": "c",
 		"vector": "c",
-		"sdl_surface.h": "c"
+		"sdl_surface.h": "c",
+		"__functional_base": "cpp",
+		"atomic": "cpp",
+		"bitset": "cpp",
+		"chrono": "cpp",
+		"__memory": "cpp",
+		"limits": "cpp",
+		"ratio": "cpp",
+		"system_error": "cpp"
 	}
 }

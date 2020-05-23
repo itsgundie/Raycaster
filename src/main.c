@@ -1,4 +1,3 @@
-
 #include <../includes/wolf3d.h>
 
 void texture_manager(t_wolf3d *blazko)
@@ -221,15 +220,17 @@ void horz_intersect(t_wolf3d *blazko, t_ray *this_ray)
 			next_hor.y += step_hor.y;
 		}
 	}
-	this_ray->wall_hit.x = next_hor.x;
-	this_ray->wall_hit.y = next_hor.y;
-	this_ray->hit_side = (blazko->map.map[(int)floor(check_hor.y / TILE_SIZE)]
-		[(int)floor(check_hor.x / TILE_SIZE)]);
-	this_ray->hit_is_horz = TRUE;
+			this_ray->wall_hit.x = next_hor.x;
+			this_ray->wall_hit.y = next_hor.y;
+
+			this_ray->hit_side = (blazko->map.map[(int)floor(check_hor.y / TILE_SIZE)]
+								[(int)floor(check_hor.x / TILE_SIZE)]);
+			this_ray->hit_is_horz = TRUE;
 }
 
 void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 {
+
 	t_v2 intercept_hor;
 	t_v2 step_hor;
 	t_v2 next_hor;
@@ -244,8 +245,7 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	hit_point_hor.y = this_ray->wall_hit.y;
 	was_hit_horizont = this_ray->hit_is_horz;
 	side_index_hor = this_ray->hit_side;
-	
-	//Horizontal intersection //
+	// Horizontal intersection //
 	// intercept_hor.y = floor(blazko->player.pos.y / TILE_SIZE) * TILE_SIZE;
 	// intercept_hor.y += (this_ray->ray_is_down) ? TILE_SIZE : 0;
 
@@ -327,6 +327,7 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 			next_ver.x += step_ver.x;
 			next_ver.y += step_ver.y;
 		}
+		
 	}
 
 	//// DISTANCE ///
@@ -357,6 +358,7 @@ void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 	find_wall_side(this_ray, &(blazko->map));
 	}
 }
+
 
 // void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 // {
@@ -419,134 +421,6 @@ void	raycast(t_wolf3d *blazko)
 		cast_this_ray(blazko, &(blazko->rays[q]));
 		ray_angle += (blazko->player.fov / WIN_WIDTH);
 	}
-}
-
-void	render_player(t_wolf3d *blazko)                                 //need refactor breizenheima
-{
-	SDL_SetRenderDrawColor(blazko->render, 255, 255, 255, 255);
-	SDL_Rect player_rect = {blazko->player.pos.x * MINIMAP_SCALE,
-							blazko->player.pos.y * MINIMAP_SCALE,
-							blazko->player.width * MINIMAP_SCALE,
-							blazko->player.height * MINIMAP_SCALE};
-	SDL_RenderFillRect(blazko->render, &player_rect);
-	SDL_RenderDrawLine(blazko->render, blazko->player.pos.x * MINIMAP_SCALE,
-						blazko->player.pos.y * MINIMAP_SCALE,
-						blazko->player.pos.x * MINIMAP_SCALE + cos(blazko->player.rotation_angle) * 40,
-						blazko->player.pos.y * MINIMAP_SCALE + sin (blazko->player.rotation_angle) * 40);
-}
-
-void	render_map(t_wolf3d *blazko)           							//need refactor
-{
-	int j;
-	int k;
-
-	j = 0;
-	k = 0;
-
-	while (j < blazko->map.rows)
-	{
-		k = 0;
-		while (k < blazko->map.columns)
-		{
-			int tile_x = (k * TILE_SIZE);
-			int tile_y = (j * TILE_SIZE);
-			int tile_color = blazko->map.map[j][k] == 1 ? 255 : 0;
-			SDL_SetRenderDrawColor(blazko->render, tile_color, tile_color, tile_color, 255);
-			SDL_Rect map_tile_rect = {tile_x * MINIMAP_SCALE, tile_y * MINIMAP_SCALE,
-										 TILE_SIZE * MINIMAP_SCALE, TILE_SIZE * MINIMAP_SCALE};
-			SDL_RenderFillRect(blazko->render, &map_tile_rect);
-			k++;
-		}
-		j++;
-	}
-}
-
-void	render_rays(t_wolf3d *blazko)
-{
-	int q;
-
-	q = -1;
-	SDL_SetRenderDrawColor(blazko->render, 255, 0, 0, 255);
-	while (++q < WIN_WIDTH)
-	{
-		SDL_RenderDrawLine(blazko->render,
-							blazko->player.pos.x * MINIMAP_SCALE,
-							blazko->player.pos.y * MINIMAP_SCALE,
-							blazko->rays[q].wall_hit.x * MINIMAP_SCALE,
-							blazko->rays[q].wall_hit.y * MINIMAP_SCALE);
-	}
-}
-
-void	input(int *game_on, t_wolf3d *blazko)
-{
-	SDL_Event event;
-	SDL_PollEvent(&event);
-	if (event.type == SDL_QUIT)
-	{
-		*game_on = FALSE;
-	}
-	else if (event.type == SDL_KEYDOWN)
-	{
-		if (event.key.keysym.sym == SDLK_m)
-		{
-			if (blazko->sound.is_m == 0)
-			{
-				blazko->sound.is_m = 1;
-				Mix_PlayMusic(blazko->sound.badmusic, 15);
-			}
-			else
-			{
-				blazko->sound.is_m = 0;
-				Mix_FadeOutMusic(500);
-			}
-		}
-		if (event.key.keysym.sym == SDLK_ESCAPE)
-			*game_on = FALSE;
-		if (event.key.keysym.sym == SDLK_UP)
-		{
-			blazko->player.walk_direction = +1;
-			play_step(blazko);
-		}
-		if (event.key.keysym.sym == SDLK_DOWN)
-		{
-			blazko->player.walk_direction = -1;
-			play_step(blazko);
-		}
-		if (event.key.keysym.sym == SDLK_RIGHT)
-		{
-			blazko->player.turn_direction = +1;
-			play_step(blazko);
-		}
-		if (event.key.keysym.sym == SDLK_LEFT)
-		{
-			blazko->player.turn_direction = -1;
-			play_step(blazko);
-		}
-	}
-	else if (event.type == SDL_KEYUP)
-	{
-		if (event.key.keysym.sym == SDLK_UP)
-		{
-			blazko->player.walk_direction = 0;
-			//stop_step(blazko);
-		}
-		if (event.key.keysym.sym == SDLK_DOWN)
-		{
-			blazko->player.walk_direction = 0;
-			//stop_step(blazko);
-		}
-		if (event.key.keysym.sym == SDLK_RIGHT)
-		{
-			blazko->player.turn_direction = 0;
-			//stop_step(blazko);
-		}
-		if (event.key.keysym.sym == SDLK_LEFT)
-		{
-			blazko->player.turn_direction = 0;
-			//stop_step(blazko);
-		}
-	}
-	return ;
 }
 
 void	update(t_wolf3d *blazko, long long *ticks_last_frame)
@@ -676,7 +550,7 @@ void	render(t_wolf3d *blazko)
 
 	render_map(blazko);
 	render_rays(blazko);
-	render_player(blazko);
+	//render_player(blazko);
 	
 	SDL_RenderPresent(blazko->render);
 	stop_step(blazko);
@@ -684,25 +558,23 @@ void	render(t_wolf3d *blazko)
 
 int		main(int argc, char **argv)
 {
+	t_wolf3d *blazko;
 	int fd;
-	int game_on = 0;
 	long long ticks_last_frame;
-	t_wolf3d *blazko = NULL;
-	
+
 	if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
 		ft_error("usage: ./wolf3d map");
-	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
-		ft_error("Malloc not OK \{~_~}/\n");
 	ticks_last_frame = SDL_GetTicks();
-	if (!(game_on = init(blazko)))
-		return(1);
+	if (!(blazko = init()))
+		return (1);
 	if (file_parser(blazko, fd))
 		create_map(blazko);
 	setup(blazko);
 	music_on(blazko);
-	while(game_on)
+	while(1)
 	{
-		input(&game_on, blazko);
+		if (!(put_in(blazko)))
+			break ;
 		update(blazko, &ticks_last_frame);
 		make_a_move(blazko, ticks_last_frame);
 		render(blazko);
