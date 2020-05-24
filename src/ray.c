@@ -55,8 +55,8 @@ void	horz_intersect(t_wolf3d *blazko, t_ray *this_ray)
 	t_raycast hor = {0};
 
 	calc_horz_step(blazko, this_ray, &hor);
-	while (hor.next.x >= 0 && hor.next.x <= (blazko->map.columns * TILE_SIZE)
-			&& hor.next.y >= 0 && hor.next.y <= (blazko->map.rows * TILE_SIZE))
+	while (hor.next.x >= 0 && hor.next.x <= (blazko->map.columns * TILE_SIZE - 1)
+			&& hor.next.y >= 0 && hor.next.y <= (blazko->map.rows * TILE_SIZE - 1))
 	{
 		hor.check.x = hor.next.x;
 		hor.check.y = hor.next.y + (this_ray->ray_is_up ? -1 : 0);
@@ -96,8 +96,8 @@ void	vert_intersect(t_wolf3d *blazko, t_ray *this_ray)
 	t_raycast vert = {0};
 
 	calc_vert_step(blazko, this_ray, &vert);
-	while (vert.next.x >= 0 && vert.next.x <= (blazko->map.columns * TILE_SIZE) 
-		&& vert.next.y >= 0 && vert.next.y <= (blazko->map.rows * TILE_SIZE))
+	while (vert.next.x >= 0 && vert.next.x <= (blazko->map.columns * TILE_SIZE - 1) 
+		&& vert.next.y >= 0 && vert.next.y <= (blazko->map.rows * TILE_SIZE - 1))
 	{
 		vert.check.x = vert.next.x + (this_ray->ray_is_left ? -1 : 0);
 		vert.check.y = vert.next.y;

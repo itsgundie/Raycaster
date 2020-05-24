@@ -30,16 +30,24 @@ void	make_a_move(t_wolf3d *blazko, float delta_time)
 	float move_step;
 	t_v2	new_pos;
 
-	blazko->player.rotation_angle += ((blazko->player.turn_direction)
-			* (blazko->player.rotate_speed)); //* delta_time);
+	printf( "player angle before move is %f\n",blazko->player.rotation_angle);
+	printf( "player before move x - %f and y - %f\n", blazko->player.pos.x, blazko->player.pos.y);
+	blazko->player.rotation_angle += (((blazko->player.turn_direction)
+			* (blazko->player.rotate_speed))); //* delta_time);
+	blazko->player.rotation_angle = normalize_angle(blazko->player.rotation_angle);
 	move_step = blazko->player.walk_direction * blazko->player.move_speed; //* delta_time;
-	new_pos.x = blazko->player.pos.x + cos(blazko->player.rotation_angle) * move_step;
-	new_pos.y = blazko->player.pos.y + sin(blazko->player.rotation_angle) * move_step;
-	if (find_an_obstacle(new_pos.x ,new_pos.y, &(blazko->map)) == 0)
+	new_pos.x = (blazko->player.pos.x + cos(blazko->player.rotation_angle) * move_step);
+	new_pos.y = (blazko->player.pos.y + sin(blazko->player.rotation_angle) * move_step);
+	printf("this is a move_step - %f\n", move_step);
+	printf("this is a new_pos.x - %f\n", new_pos.x);
+	printf("this is a new_pos.y - %f\n", new_pos.y);
+	if (!(find_an_obstacle(floor(new_pos.x) ,floor(new_pos.y), &(blazko->map))))
 	{
 		blazko->player.pos.x = new_pos.x;
 		blazko->player.pos.y = new_pos.y;
 	}
+	printf( "player angle after move is %f\n",blazko->player.rotation_angle);
+	printf( "player after move x - %f and y - %f\n", blazko->player.pos.x, blazko->player.pos.y);
 }
 
 float	normalize_angle(float angle)
@@ -60,12 +68,12 @@ float calc_distance(float x1, float y1, float x2, float y2)
 
 int	is_looking_down(float angle)
 {
-	return(angle > 0 && angle < PI);
+	return(angle >= 0 && angle <= PI);
 }
 
 int	is_looking_right(float angle)
 {
-	return((angle < (0.5 * PI)) || (angle > (1.5 * PI)));
+	return((angle <= (0.5 * PI)) || (angle >= (1.5 * PI)));
 }
 
 void	update(t_wolf3d *blazko, long long *ticks_last_frame)
@@ -90,19 +98,13 @@ uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int di
 	uint32_t disco_move;
 	if (disco)
 	{
-		// disco_move = random();
-		// palet.a = (color & disco_move) >> 24;
-		// palet.r = (color & disco_move) >> 16;
-		// palet.g = (color & disco_move) >> 8;
-		// palet.b = (color & disco_move);
-		// return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
-	intensity = 1.0f - intensity;
-	is_vertical ? intensity -= 0.1 : intensity;
-	palet.a = ((color >> 24) & 0xFF);
-	palet.r = (((color >> 16) & 0xFF) / intensity * 2);
-	palet.g = (((color >> 8) & 0xFF) / intensity * 0.5f);
-	palet.b = ((color & 0xFF) / intensity * 0.33f);
-	return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);	
+		intensity = 1.0f - intensity;
+		is_vertical ? intensity -= 0.1 : intensity;
+		palet.a = ((color >> 24) & 0xFF);
+		palet.r = (((color >> 16) & 0xFF) / intensity * 2);
+		palet.g = (((color >> 8) & 0xFF) / intensity * 0.5f);
+		palet.b = ((color & 0xFF) / intensity * 0.33f);
+		return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);	
 	}
 	if (color == 0)
 		return(0);
@@ -155,8 +157,6 @@ void	make3d(t_wolf3d *blazko)
 		int texture_index = (blazko->rays[q].hit_side);
 		while(++y < blazko->rays[q].draw_end)
 		{
-			if (q == WIN_WIDTH / 2)
-				printf("stop\n");
 			float luminess = (perpendicular_dist / (float)TILE_SIZE) * 0.1f;
 			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
 			offset.y = from_top * ((float)TEXTURE_HEIGHT / blazko->rays[q].wall_height);
@@ -194,15 +194,11 @@ void	render(t_wolf3d *blazko)
 {
 	SDL_SetRenderDrawColor(blazko->render, 0, 0, 0 , 255);
 	SDL_RenderClear(blazko->render);
-
 	make3d(blazko);
-
 	render_color_buf(blazko);
 	clear_color_buf(blazko->color_buffer, 0xFF333333);
-
 	render_map(blazko);
 	render_rays(blazko);
-	
 	SDL_RenderPresent(blazko->render);
 	stop_step(blazko);
 }

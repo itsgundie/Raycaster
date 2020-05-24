@@ -11,7 +11,7 @@ SDL_INC_DIR = ./SDL/inc
 SDL_F_DIR = ./SDL/framework
 
 #    FLAGS    #
-CFLGS = -Wl -rpath $(SDL_F_DIR) -F $(SDL_F_DIR) -framework SDL2 -framework SDL2_mixer -framework SDL2_image -framework SDL2_ttf
+CFLGS = -Wl -rpath $(SDL_F_DIR) -F $(SDL_F_DIR) -framework SDL2 -framework SDL2_mixer -framework SDL2_image  -framework SDL2_ttf
 WFLGS = -Wall -Wextra -Werror
 CFLGS_DBG = -g
 LFLGS = -L$(LIB_DIR) -lft
