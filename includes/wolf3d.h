@@ -11,6 +11,7 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 
 #define TRUE		1
 #define FALSE		0
@@ -207,7 +208,13 @@ int			put_in(t_wolf3d *blazko);
 int			key_down(t_wolf3d *blazko, SDL_Event event);
 void		key_up(t_wolf3d *blazko, SDL_Event event);
 void		music_on_off(t_wolf3d *blazko);
-void		render_rectangle(t_wolf3d *blazko, int tile_y, int tile_x, int color);
-void		render_line(t_wolf3d *blazko, t_v2int start, int end_x, int end_y);
+void		render_rectangle(t_wolf3d *blazko, int tile_y, int tile_x);
+void		render_line(t_wolf3d *blazko, int start_y, int start_x, int end_y, int end_x);
+void		find_wall_side(t_ray *this_ray, t_2dmap *kapta);
+void		calc_horz_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *hor);
+void		calc_vert_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *vert);
+void		horz_intersect(t_wolf3d *blazko, t_ray *this_ray);
+void		vert_intersect(t_wolf3d *blazko, t_ray *this_ray);
+void		get_distance(t_wolf3d *blazko, t_ray *vert_ray, t_ray *hor_ray);
 
 #endif

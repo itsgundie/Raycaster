@@ -35,6 +35,7 @@
 		"__memory": "cpp",
 		"limits": "cpp",
 		"ratio": "cpp",
-		"system_error": "cpp"
+		"system_error": "cpp",
+		"cmath": "c"
 	}
 }
