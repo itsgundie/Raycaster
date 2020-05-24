@@ -90,12 +90,19 @@ uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int di
 	uint32_t disco_move;
 	if (disco)
 	{
-		disco_move = random();
-		palet.a = (color & disco_move) >> 24;
-		palet.r = (color & disco_move) >> 16;
-		palet.g = (color & disco_move) >> 8;
-		palet.b = (color & disco_move);
-		return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
+		// disco_move = random();
+		// palet.a = (color & disco_move) >> 24;
+		// palet.r = (color & disco_move) >> 16;
+		// palet.g = (color & disco_move) >> 8;
+		// palet.b = (color & disco_move);
+		// return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
+	intensity = 1.0f - intensity;
+	is_vertical ? intensity -= 0.1 : intensity;
+	palet.a = ((color >> 24) & 0xFF);
+	palet.r = (((color >> 16) & 0xFF) / intensity * 2);
+	palet.g = (((color >> 8) & 0xFF) / intensity * 0.5f);
+	palet.b = ((color & 0xFF) / intensity * 0.33f);
+	return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);	
 	}
 	if (color == 0)
 		return(0);

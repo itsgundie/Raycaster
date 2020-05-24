@@ -224,5 +224,10 @@ void		music_on_off(t_wolf3d *blazko);
 void		render_rectangle(t_wolf3d *blazko, int tile_y, int tile_x);
 void		render_line(t_wolf3d *blazko, int start_y, int start_x, int end_y, int end_x);
 void		find_wall_side(t_ray *this_ray, t_2dmap *kapta);
+void		calc_horz_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *hor);
+void		calc_vert_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *vert);
+void		horz_intersect(t_wolf3d *blazko, t_ray *this_ray);
+void		vert_intersect(t_wolf3d *blazko, t_ray *this_ray);
+void		get_distance(t_wolf3d *blazko, t_ray *vert_ray, t_ray *hor_ray);
 
 #endif

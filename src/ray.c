@@ -35,139 +35,127 @@ void	find_wall_side(t_ray *this_ray, t_2dmap *kapta)
 	return ;
 }
 
-void horz_intersect(t_wolf3d *blazko, t_ray *this_ray)
+void	calc_horz_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *hor)
 {
-	t_v2 intercept_hor;
-	t_v2 step_hor;
-	t_v2 next_hor;
-	t_v2 check_hor = {0};
+	hor->intercept.y = floor(blazko->player.pos.y / TILE_SIZE) * TILE_SIZE;
+	hor->intercept.y += (this_ray->ray_is_down) ? TILE_SIZE : 0;
+	hor->intercept.x = blazko->player.pos.x + 
+		(hor->intercept.y - blazko->player.pos.y) / tan(this_ray->angle);
+	hor->step.y = ((this_ray->ray_is_up) ? -1 : 1) * TILE_SIZE;
+	hor->step.x = TILE_SIZE / tan(this_ray->angle);
+	hor->step.x *= (this_ray->ray_is_left && hor->step.x > 0) ? -1 : 1;
+	hor->step.x *= (this_ray->ray_is_right && hor->step.x < 0) ? -1 : 1;
+	hor->next.x = hor->intercept.x;
+	hor->next.y = hor->intercept.y;
 
-	intercept_hor.y = floor(blazko->player.pos.y / TILE_SIZE) * TILE_SIZE;
-	intercept_hor.y += (this_ray->ray_is_down) ? TILE_SIZE : 0;
-	intercept_hor.x = blazko->player.pos.x + 
-		(intercept_hor.y - blazko->player.pos.y) / tan(this_ray->angle);
-	step_hor.y = ((this_ray->ray_is_up) ? -1 : 1) * TILE_SIZE;
-	step_hor.x = TILE_SIZE / tan(this_ray->angle);
-	step_hor.x *= (this_ray->ray_is_left && step_hor.x > 0) ? -1 : 1;
-	step_hor.x *= (this_ray->ray_is_right && step_hor.x < 0) ? -1 : 1;
-	next_hor.x = intercept_hor.x;
-	next_hor.y = intercept_hor.y;
-	while (next_hor.x >= 0 && next_hor.x <= (blazko->map.columns * TILE_SIZE)
-			&& next_hor.y >= 0 && next_hor.y <= (blazko->map.rows * TILE_SIZE))
+}
+
+void	horz_intersect(t_wolf3d *blazko, t_ray *this_ray)
+{
+	t_raycast hor = {0};
+
+	calc_horz_step(blazko, this_ray, &hor);
+	while (hor.next.x >= 0 && hor.next.x <= (blazko->map.columns * TILE_SIZE)
+			&& hor.next.y >= 0 && hor.next.y <= (blazko->map.rows * TILE_SIZE))
 	{
-		check_hor.x = next_hor.x;
-		check_hor.y = next_hor.y + (this_ray->ray_is_up ? -1 : 0);
+		hor.check.x = hor.next.x;
+		hor.check.y = hor.next.y + (this_ray->ray_is_up ? -1 : 0);
 
-		if ((find_an_obstacle(check_hor.x, check_hor.y, &(blazko->map))))
+		if ((this_ray->hit_side = (find_an_obstacle(hor.check.x,
+									hor.check.y, &(blazko->map)))))
 			break;
 		else
 		{
-			next_hor.x += step_hor.x;
-			next_hor.y += step_hor.y;
+			hor.next.x += hor.step.x;
+			hor.next.y += hor.step.y;
 		}
 	}
-	if (!check_hor.x && !check_hor.y)
+	if (!hor.check.x && !hor.check.y)
 	    this_ray->hit_side = 1;
-	this_ray->wall_hit.x = next_hor.x;
-	this_ray->wall_hit.y = next_hor.y;
+	this_ray->wall_hit.x = hor.next.x;
+	this_ray->wall_hit.y = hor.next.y;
 	this_ray->hit_is_horz = TRUE;
+}
+
+void	calc_vert_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *vert)
+{
+	vert->intercept.x = floor(blazko->player.pos.x / TILE_SIZE) * TILE_SIZE;
+	vert->intercept.x += (this_ray->ray_is_right ? TILE_SIZE : 0);
+	vert->intercept.y = blazko->player.pos.y + (vert->intercept.x - blazko->player.pos.x) * tan(this_ray->angle);
+	vert->step.x = TILE_SIZE;
+	vert->step.x *= (this_ray->ray_is_left ? -1 : 1);
+	vert->step.y = TILE_SIZE * tan(this_ray->angle);
+	vert->step.y *= (this_ray->ray_is_up && vert->step.y > 0) ? -1 : 1;
+	vert->step.y *= (this_ray->ray_is_down && vert->step.y < 0) ? -1 : 1;
+	vert->next.x = vert->intercept.x;
+	vert->next.y = vert->intercept.y;
+}
+
+void	vert_intersect(t_wolf3d *blazko, t_ray *this_ray)
+{
+	t_raycast vert = {0};
+
+	calc_vert_step(blazko, this_ray, &vert);
+	while (vert.next.x >= 0 && vert.next.x <= (blazko->map.columns * TILE_SIZE) 
+		&& vert.next.y >= 0 && vert.next.y <= (blazko->map.rows * TILE_SIZE))
+	{
+		vert.check.x = vert.next.x + (this_ray->ray_is_left ? -1 : 0);
+		vert.check.y = vert.next.y;
+
+		if ((this_ray->hit_side = (find_an_obstacle(vert.check.x,
+									vert.check.y, &(blazko->map)))))
+			 break;
+		else
+		{
+			vert.next.x += vert.step.x;
+			vert.next.y += vert.step.y;
+		}
+	}
+	if (!vert.check.x && !vert.check.y)
+	    this_ray->hit_side = 1;
+	this_ray->wall_hit.x = vert.next.x;
+	this_ray->wall_hit.y = vert.next.y;
+	this_ray->hit_is_vert = TRUE;
+}
+
+void	get_distance(t_wolf3d *blazko, t_ray *vert_ray, t_ray *hor_ray)
+{
+	float distance_hor;
+	float distance_ver;
+
+	distance_hor = (hor_ray->hit_is_horz ? 
+		calc_distance(blazko->player.pos.x, blazko->player.pos.y,
+			 hor_ray->wall_hit.x, hor_ray->wall_hit.y) : INT_MAX);
+	distance_ver = (vert_ray->hit_is_vert ? 
+		calc_distance(blazko->player.pos.x, blazko->player.pos.y,
+			vert_ray->wall_hit.x, vert_ray->wall_hit.y) : INT_MAX);
+	if (distance_hor < distance_ver)
+	{
+		vert_ray->distance = distance_hor;
+		vert_ray->wall_hit.x = hor_ray->wall_hit.x;
+		vert_ray->wall_hit.y = hor_ray->wall_hit.y;
+		vert_ray->hit_side = hor_ray->hit_side;
+		vert_ray->hit_is_vert = FALSE;
+	}
+	else
+		vert_ray->distance = distance_ver;
+	if (vert_ray->distance <= 0)
+		vert_ray->distance = 1;
 }
 
 void	cast_this_ray(t_wolf3d *blazko, t_ray *this_ray)
 {
-	t_v2 intercept_hor;
-	t_v2 step_hor;
-	t_v2 next_hor;
-	t_v2 check_hor;
-	t_v2 hit_point_hor = {0};
-	int	 was_hit_horizont = FALSE;
-	int side_index_hor = 0;
-	t_ray save_ray = *this_ray;
+	t_ray save_hor = {.wall_hit.x = 0, .wall_hit.y = 0,
+						.hit_is_horz = 0, .hit_side = 0};
 
 	horz_intersect(blazko, this_ray);
-	hit_point_hor.x = this_ray->wall_hit.x;
-	hit_point_hor.y = this_ray->wall_hit.y;
-	was_hit_horizont = this_ray->hit_is_horz;
-	side_index_hor = this_ray->hit_side;
-	
-	/// VERTICAL INTERSECTION ///
-
-	t_v2 intercept_ver;
-	t_v2 step_ver;
-	t_v2 next_ver;
-	t_v2 check_ver = {0};
-	t_v2 hit_point_ver = {0};
-	int	 was_hit_vert = FALSE;
-	int side_index_ver = 0;
-
-	intercept_ver.x = floor(blazko->player.pos.x / TILE_SIZE) * TILE_SIZE;
-	intercept_ver.x += (this_ray->ray_is_right ? TILE_SIZE : 0);
-
-	intercept_ver.y = blazko->player.pos.y + (intercept_ver.x - blazko->player.pos.x) * tan(this_ray->angle);
-
-	step_ver.x = TILE_SIZE;
-	step_ver.x *= (this_ray->ray_is_left ? -1 : 1);
-
-	step_ver.y = TILE_SIZE * tan(this_ray->angle);
-	step_ver.y *= (this_ray->ray_is_up && step_ver.y > 0) ? -1 : 1;
-	step_ver.y *= (this_ray->ray_is_down && step_ver.y < 0) ? -1 : 1;
-
-	next_ver.x = intercept_ver.x;
-	next_ver.y = intercept_ver.y;
-
-	while (next_ver.x >= 0 && next_ver.x <= (blazko->map.columns * TILE_SIZE) 
-		&& next_ver.y >= 0 && next_ver.y <= (blazko->map.rows * TILE_SIZE))
-	{
-		check_ver.x = next_ver.x + (this_ray->ray_is_left ? -1 : 0);
-		check_ver.y = next_ver.y;
-
-		if ((find_an_obstacle(check_ver.x, check_ver.y, &(blazko->map))))
-		{
-			 hit_point_ver.x = next_ver.x;
-			 hit_point_ver.y = next_ver.y;
-			 was_hit_vert = TRUE;
-			 break;
-		}
-		else
-		{
-			next_ver.x += step_ver.x;
-			next_ver.y += step_ver.y;
-		}
-	}
-	if (!check_ver.x && !check_ver.y)
-	{
-		check_ver.x = next_ver.x + (this_ray->ray_is_left ? -1 : 0);
-		check_ver.y = next_ver.y;	
-	}
-	side_index_ver = find_an_obstacle(check_ver.x, check_ver.y, &(blazko->map));
-
-	//// DISTANCE ///
-
-	float distance_hor = (was_hit_horizont ? 
-		calc_distance(blazko->player.pos.x, blazko->player.pos.y, hit_point_hor.x, hit_point_hor.y) : INT_MAX);
-	
-	float distance_ver = (was_hit_vert ? 
-		calc_distance(blazko->player.pos.x, blazko->player.pos.y, hit_point_ver.x, hit_point_ver.y) : INT_MAX);
-	
-	if (distance_ver <= distance_hor)
-	{
-		this_ray->distance = (distance_ver <= 0 ? 1 : distance_ver);
-		this_ray->wall_hit.x = hit_point_ver.x;
-		this_ray->wall_hit.y = hit_point_ver.y;
-		this_ray->hit_side = side_index_ver;
-		this_ray->hit_is_vert = TRUE;
-	}
-	else
-	{
-		{
-		this_ray->distance = (distance_hor <= 0 ? 1 : distance_hor);
-		this_ray->wall_hit.x = hit_point_hor.x;
-		this_ray->wall_hit.y = hit_point_hor.y;
-		this_ray->hit_side = side_index_hor;
-		this_ray->hit_is_vert = FALSE;
-	}
+	save_hor.wall_hit.x = this_ray->wall_hit.x;
+	save_hor.wall_hit.y = this_ray->wall_hit.y;
+	save_hor.hit_is_horz = this_ray->hit_is_horz;
+	save_hor.hit_side = this_ray->hit_side;
+	vert_intersect(blazko, this_ray);
+	get_distance(blazko, this_ray, &save_hor);
 	find_wall_side(this_ray, &(blazko->map));
-	}
 }
 
 void	raycast(t_wolf3d *blazko)
