@@ -542,14 +542,10 @@ void	render(t_wolf3d *blazko)
 	SDL_RenderClear(blazko->render);
 
 	make3d(blazko);
-
-	render_color_buf(blazko);
-	clear_color_buf(blazko->color_buffer, 0xFF333333);
-
 	render_map(blazko);
 	render_rays(blazko);
-	//render_player(blazko);
-	
+	render_color_buf(blazko);
+	clear_color_buf(blazko->color_buffer, 0xFF333333);
 	SDL_RenderPresent(blazko->render);
 	stop_step(blazko);
 }
