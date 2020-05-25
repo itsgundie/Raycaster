@@ -50,7 +50,7 @@ void	stop_step(t_wolf3d *blazko)
 void	music_on(t_wolf3d *blazko)
 {
 	blazko->sound.badmusic = NULL;
-	if (Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096))
+	if (Mix_OpenAudio(41000, MIX_DEFAULT_FORMAT, 2, 512))
 		ft_error("very bad music");
 	blazko->sound.badmusic = Mix_LoadMUS("sound/music.ogg");
 	blazko->sound.s1 = Mix_LoadWAV("sound/steps/1.ogg");
@@ -68,5 +68,5 @@ void	music_on(t_wolf3d *blazko)
 	|| blazko->sound.s6 == NULL)
 		ft_error("very bad music");
 	Mix_AllocateChannels(23);
-	Mix_VolumeMusic(15);
+	Mix_VolumeMusic(30);
 }

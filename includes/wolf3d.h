@@ -27,7 +27,7 @@
 #define MAP_ROWS	13
 #define NUM_OF_TEXTURES		5
 
-#define MINIMAP_SCALE	0.1
+#define MINIMAP_SCALE	0.11
 
 #define WIN_WIDTH 	1280
 #define WIN_HEIGHT 	720
@@ -148,20 +148,6 @@ typedef struct	s_sound
 	Mix_Chunk		*s4;
 	Mix_Chunk		*s5;
 	Mix_Chunk		*s6;
-	Mix_Chunk		*s7;
-	Mix_Chunk		*s8;
-	Mix_Chunk		*s9;
-	Mix_Chunk		*s10;
-	Mix_Chunk		*s11;
-	Mix_Chunk		*s12;
-	Mix_Chunk		*s13;
-	Mix_Chunk		*s14;
-	Mix_Chunk		*s15;
-	Mix_Chunk		*s16;
-	Mix_Chunk		*s17;
-	Mix_Chunk		*s18;
-	Mix_Chunk		*s19;
-	Mix_Chunk		*s20;
 	Mix_Music 		*badmusic;
 }				t_sound;
 
@@ -222,8 +208,8 @@ int			put_in(t_wolf3d *blazko);
 int			key_down(t_wolf3d *blazko, SDL_Event event);
 void		key_up(t_wolf3d *blazko, SDL_Event event);
 void		music_on_off(t_wolf3d *blazko);
-void		render_rectangle(t_wolf3d *blazko, int tile_y, int tile_x);
-void		render_line(t_wolf3d *blazko, int start_y, int start_x, int end_y, int end_x);
+void		render_rectangle(t_wolf3d *blazko, int tile_y, int tile_x, int color);
+void		render_line(t_wolf3d *blazko, t_v2int start, int end_x, int end_y);
 void		find_wall_side(t_ray *this_ray, t_2dmap *kapta);
 void		calc_horz_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *hor);
 void		calc_vert_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *vert);
