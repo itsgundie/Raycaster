@@ -7,7 +7,12 @@ void	make_a_move(t_wolf3d *blazko, float delta_time)
 
 	blazko->player.rot_angle += (((blazko->player.turn_direction)
 			* (blazko->player.rotate_speed)));
+<<<<<<< HEAD
 	blazko->player.rot_angle = normalize_angle(blazko->player.rot_angle);
+=======
+	blazko->player.
+	rot_angle = normalize_angle(blazko->player.rot_angle);
+>>>>>>> 8e688ce27f0910279bd62fbc66583871641c10e6
 	move_step = blazko->player.walk_direction * blazko->player.move_speed;
 	new_pos.x = (blazko->player.pos.x
 	+ cos(blazko->player.rot_angle) * move_step);

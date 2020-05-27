@@ -29,7 +29,8 @@ void			texture_manager(t_wolf3d *blazko)
 	blazko->surfs_for_texes[2] = IMG_Load(TEXTURE_2);
 	blazko->surfs_for_texes[3] = IMG_Load(TEXTURE_3);
 	blazko->surfs_for_texes[4] = IMG_Load(TEXTURE_4);
-	while (blazko->surfs_for_texes[++q]);
+	while (blazko->surfs_for_texes[q])
+		q++;
 	if (q < NUM_OF_TEXTURES)
 		error_exit("Malloc Not OK, particularly loading textures", blazko);
 	q = -1;
