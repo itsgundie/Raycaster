@@ -15,7 +15,7 @@ CFLGS = -Wl -rpath $(SDL_F_DIR) -F $(SDL_F_DIR) -framework SDL2 -framework SDL2_
 WFLGS = -Wall -Wextra -Werror
 CFLGS_DBG = -g
 LFLGS = -L$(LIB_DIR) -lft
-CC = gcc
+CC = clang
 
 #    LIBFT    #
 LIBFT = $(LIB_DIR)/libft.a
