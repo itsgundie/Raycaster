@@ -32,7 +32,10 @@ SRC_FILES = main.c \
 			destroy_everything.c \
 			put_in.c \
 			render_minimap.c \
-			ray.c
+			ray.c \
+			render.c \
+			draw.c \
+			calculations.c \
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJS = $(addprefix $(OBJ_DIR), $(SRC_FILES:%.c=%.o))

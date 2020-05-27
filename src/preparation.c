@@ -12,6 +12,31 @@
 
 #include "../includes/wolf3d.h"
 
+void			texture_manager(t_wolf3d *blazko)
+{
+	int q;
+
+	q = -1;
+	if (!(blazko->color_buffer = (uint32_t*)malloc(sizeof(uint32_t)
+			* (uint32_t)WIN_WIDTH * (uint32_t)WIN_HEIGHT)))
+		error_exit("Malloc of color_buff Not OK -_-\n", blazko);
+	if (!(blazko->color_tex = SDL_CreateTexture(blazko->render,
+				SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
+				WIN_WIDTH, WIN_HEIGHT)))
+		error_exit("Malloc of color_tex Not OK -_-\n", blazko);
+	blazko->surfs_for_texes[0] = IMG_Load(TEXTURE_0);
+	blazko->surfs_for_texes[1] = IMG_Load(TEXTURE_1);
+	blazko->surfs_for_texes[2] = IMG_Load(TEXTURE_2);
+	blazko->surfs_for_texes[3] = IMG_Load(TEXTURE_3);
+	blazko->surfs_for_texes[4] = IMG_Load(TEXTURE_4);
+	while (blazko->surfs_for_texes[++q]);
+	if (q < NUM_OF_TEXTURES)
+		error_exit("Malloc Not OK, particularly loading textures", blazko);
+	q = -1;
+	while (++q < NUM_OF_TEXTURES)
+		blazko->textures[q] = (uint32_t*)(blazko->surfs_for_texes[q]->pixels);
+}
+
 void			setup(t_wolf3d *blazko)
 {
 	blazko->color_buffer = NULL;
@@ -23,8 +48,8 @@ void			setup(t_wolf3d *blazko)
 	blazko->player.walk_direction = 0;
 	blazko->player.rotation_angle = TWO_PI;
 	blazko->player.fov = (FOV * (PI / 180));
-	blazko->player.move_speed = 5;
-	blazko->player.rotate_speed = 5 * (PI / 180);
+	blazko->player.move_speed = MOVE_SPEED;
+	blazko->player.rotate_speed = ROTATION_SPEED * (PI / 180);
 	blazko->frame_time = 1000 / FPS;
 	blazko->map.columns = blazko->params_vars.line_width + 2;
 	blazko->map.rows = blazko->params_vars.number_of_lines + 2;

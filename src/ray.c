@@ -1,6 +1,5 @@
 #include "../includes/wolf3d.h"
 
-
 int		find_an_obstacle(float x, float y, t_2dmap *kapta)
 {
 	t_v2int check;

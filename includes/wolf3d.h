@@ -38,6 +38,8 @@
 #define RAYS_NUM	WIN_WIDTH
 
 #define FPS			60
+#define MOVE_SPEED 	10
+#define ROTATION_SPEED 6
 
 #define TEXTURE_0 "./textures/north.png"
 #define TEXTURE_1 "./textures/fry.png"
@@ -204,7 +206,7 @@ int			fck(t_wolf3d *blazko);
 uint32_t	make_darkness(uint32_t color, float intensity, int is_vertical, int disco);
 void		stop_step(t_wolf3d *blazko);
 void		play_step(t_wolf3d *blazko);
-void 		texture_manager(t_wolf3d *blazko);
+void		texture_manager(t_wolf3d *blazko);
 int			put_in(t_wolf3d *blazko);
 int			key_down(t_wolf3d *blazko, SDL_Event event);
 void		key_up(t_wolf3d *blazko, SDL_Event event);
@@ -217,5 +219,8 @@ void		calc_vert_step(t_wolf3d *blazko, t_ray *this_ray, t_raycast *vert);
 void		horz_intersect(t_wolf3d *blazko, t_ray *this_ray);
 void		vert_intersect(t_wolf3d *blazko, t_ray *this_ray);
 void		get_distance(t_wolf3d *blazko, t_ray *vert_ray, t_ray *hor_ray);
+void		draw_ceiling(t_wolf3d *blazko, t_ray *this_ray, int *y, int x);
+void		draw_walls(t_wolf3d *blazko, t_ray *this_ray, int *y, int x);
+void		draw_floor(t_wolf3d *blazko, t_ray *this_ray, int *y, int x);
 
 #endif
