@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/28 01:20:40 by cspare            #+#    #+#             */
+/*   Updated: 2020/05/28 01:20:42 by cspare           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../includes/wolf3d.h"
 
 void	make_a_move(t_wolf3d *blazko, float delta_time)
@@ -7,12 +20,7 @@ void	make_a_move(t_wolf3d *blazko, float delta_time)
 
 	blazko->player.rot_angle += (((blazko->player.turn_direction)
 			* (blazko->player.rotate_speed)));
-<<<<<<< HEAD
 	blazko->player.rot_angle = normalize_angle(blazko->player.rot_angle);
-=======
-	blazko->player.
-	rot_angle = normalize_angle(blazko->player.rot_angle);
->>>>>>> 8e688ce27f0910279bd62fbc66583871641c10e6
 	move_step = blazko->player.walk_direction * blazko->player.move_speed;
 	new_pos.x = (blazko->player.pos.x
 	+ cos(blazko->player.rot_angle) * move_step);

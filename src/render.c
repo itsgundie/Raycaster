@@ -6,39 +6,11 @@
 /*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/28 00:39:51 by cspare            #+#    #+#             */
-/*   Updated: 2020/05/28 01:06:25 by cspare           ###   ########.fr       */
+/*   Updated: 2020/05/28 01:19:56 by cspare           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/wolf3d.h"
-
-uint32_t		make_darkness(uint32_t color, float depf, int vert, int disco)
-{
-	t_argb		palet;
-	uint32_t	disco_move;
-
-	if (disco)
-	{
-		depf = 1.0f - depf;
-		vert ? depf -= 0.1 : depf;
-		palet.a = ((color >> 24) & 0xFF);
-		palet.r = (((color >> 16) & 0xFF) / depf * 2);
-		palet.g = (((color >> 8) & 0xFF) / depf * 0.5f);
-		palet.b = ((color & 0xFF) / depf * 0.33f);
-		return ((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
-	}
-	if (color == 0 || depf > 0.9f)
-		return (0);
-	if (depf <= 0.0f)
-		return (color);
-	depf = 1.0f - depf;
-	vert ? depf -= 0.1 : depf;
-	palet.a = ((color >> 24) & 0xFF);
-	palet.r = (((color >> 16) & 0xFF) * depf);
-	palet.g = (((color >> 8) & 0xFF) * depf);
-	palet.b = ((color & 0xFF) * depf);
-	return ((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
-}
 
 void			make3d(t_wolf3d *blazko)
 {
@@ -63,18 +35,10 @@ void			make3d(t_wolf3d *blazko)
 		blazko->rays[q].draw_end = (blazko->rays[q].draw_end > WIN_HEIGHT)
 									? WIN_HEIGHT : blazko->rays[q].draw_end;
 		y = -1;
-		if (blazko->rays[q].draw_start > 0)
-			draw_ceiling(blazko, &(blazko->rays[q]), &y, q);
+		draw_ceiling(blazko, &(blazko->rays[q]), &y, q);
 		draw_walls(blazko, &(blazko->rays[q]), &y, q);
 		(y < WIN_HEIGHT) ? draw_floor(blazko, &(blazko->rays[q]), &y, q) : 0;
 	}
-}
-
-void			render_color_buf(t_wolf3d *blazko)
-{
-	SDL_UpdateTexture(blazko->color_tex, NULL,
-		blazko->color_buffer, (int)(WIN_WIDTH * (sizeof(uint32_t))));
-	SDL_RenderCopy(blazko->render, blazko->color_tex, NULL, NULL);
 }
 
 void			draw_ceiling(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
@@ -149,15 +113,9 @@ void			draw_walls(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
 	return ;
 }
 
-void			render(t_wolf3d *blazko)
+void			render_color_buf(t_wolf3d *blazko)
 {
-	SDL_SetRenderDrawColor(blazko->render, 0, 0, 0, 255);
-	SDL_RenderClear(blazko->render);
-	make3d(blazko);
-	render_map(blazko);
-	render_rays(blazko);
-	render_color_buf(blazko);
-	clear_color_buf(blazko->color_buffer, 0xFF333333);
-	SDL_RenderPresent(blazko->render);
-	stop_step(blazko);
+	SDL_UpdateTexture(blazko->color_tex, NULL,
+		blazko->color_buffer, (int)(WIN_WIDTH * (sizeof(uint32_t))));
+	SDL_RenderCopy(blazko->render, blazko->color_tex, NULL, NULL);
 }
