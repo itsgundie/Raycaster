@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/28 00:39:51 by cspare            #+#    #+#             */
+/*   Updated: 2020/05/28 00:39:54 by cspare           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/wolf3d.h"
 
-uint32_t	make_darkness(uint32_t color, float intensity,
+uint32_t		make_darkness(uint32_t color, float intensity,
 									int is_vertical, int disco)
 {
 	t_argb		palet;
@@ -65,9 +77,9 @@ void	render_color_buf(t_wolf3d *blazko)
 
 void	draw_ceiling(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
 {
-	uint32_t	color_step;
-	uint32_t	color;
-	uint32_t 	color_start;
+	uint32_t color_step;
+	uint32_t color;
+	uint32_t color_start;
 
 	color_start = 0xFF440011;
 	color = color_start;
@@ -77,8 +89,8 @@ void	draw_ceiling(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
 		color_step = 0x00010000;
 	while (++(*y) < this_ray->draw_start)
 	{
-		if (color >=  0xFFFFFFFF || color < color_start)
-			color_step = 0;	
+		if (color >= 0xFFFFFFFF || color < color_start)
+			color_step = 0;
 		blazko->color_buffer[(WIN_WIDTH * (*y)) + x] = color;
 		((*y) % 2 == 0) ? color += color_step : 0;
 	}
@@ -99,7 +111,7 @@ void	draw_floor(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
 		color_step = 0x00010000;
 	while (++(*y) < WIN_HEIGHT)
 	{
-		if (color <=  0 || color > color_start)
+		if (color <= 0 || color > color_start)
 			color_step = 0;
 		blazko->color_buffer[(WIN_WIDTH * (*y)) + x] = color;
 		((*y) % 2 == 0) ? color -= color_step : 0;
@@ -109,10 +121,10 @@ void	draw_floor(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
 
 void	draw_walls(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
 {
-	t_v2int	offset;
-	uint32_t color_from_tex;
-	float luminess;
-	int		texture_index;
+	t_v2int		offset;
+	uint32_t	color_from_tex;
+	float		luminess;
+	int			texture_index;
 
 	*y = blazko->rays[x].draw_start - 1;
 	if (blazko->rays[x].hit_is_vert)
