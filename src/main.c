@@ -5,15 +5,15 @@ void	make_a_move(t_wolf3d *blazko, float delta_time)
 	float	move_step;
 	t_v2	new_pos;
 
-	blazko->player.rotation_angle += (((blazko->player.turn_direction)
+	blazko->player.rot_angle += (((blazko->player.turn_direction)
 			* (blazko->player.rotate_speed)));
 	blazko->player.
-	rotation_angle = normalize_angle(blazko->player.rotation_angle);
+	rot_angle = normalize_angle(blazko->player.rot_angle);
 	move_step = blazko->player.walk_direction * blazko->player.move_speed;
 	new_pos.x = (blazko->player.pos.x
-	+ cos(blazko->player.rotation_angle) * move_step);
+	+ cos(blazko->player.rot_angle) * move_step);
 	new_pos.y = (blazko->player.pos.y
-	+ sin(blazko->player.rotation_angle) * move_step);
+	+ sin(blazko->player.rot_angle) * move_step);
 	if (!(find_an_obstacle(floor(new_pos.x), floor(new_pos.y), &(blazko->map))))
 	{
 		blazko->player.pos.x = new_pos.x;
