@@ -269,6 +269,19 @@ int		main(int argc, char **argv)
 		create_map(blazko);
 	setup(blazko);
 	music_on(blazko);
+	int i = 0;
+	int i2 = 0;
+	while (i < blazko->map.rows)
+	{
+		i2 = 0;
+		while (i2 < blazko->map.columns)
+		{
+			ft_printf("%d ", blazko->map.map[i][i2]);
+			i2++;
+		}
+		ft_printf("\n");
+		i++;
+	}
 	while(1)
 	{
 		if (!(put_in(blazko)))

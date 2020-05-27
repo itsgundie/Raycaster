@@ -32,7 +32,7 @@ int		check_line(t_wolf3d *blazko)
 			blazko->count.i += 2;
 		}
 		else if ((blazko->params_vars.line[blazko->count.i] >= '0'
-		&& blazko->params_vars.line[blazko->count.i] <= '9'))
+		&& blazko->params_vars.line[blazko->count.i] <= '1'))
 			blazko->params_vars.line_width++;
 		else
 			return (0);
@@ -43,6 +43,7 @@ int		check_line(t_wolf3d *blazko)
 
 void	add_string_in_list(t_wolf3d *blazko)
 {
+
 	blazko->params_vars.tmp->line = blazko->params_vars.line;
 	blazko->params_vars.tmp->next = (t_pars_list *)malloc(sizeof(t_pars_list));
 	blazko->params_vars.tmp = blazko->params_vars.tmp->next;

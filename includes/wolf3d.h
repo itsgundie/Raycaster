@@ -27,7 +27,7 @@
 #define MAP_ROWS	13
 #define NUM_OF_TEXTURES		5
 
-#define MINIMAP_SCALE	0.11
+#define MINIMAP_SCALE 16	
 
 #define WIN_WIDTH 	1280
 #define WIN_HEIGHT 	720
@@ -81,7 +81,8 @@ typedef struct					s_counters
 {
 	int					i;
 	int					i2;
-	int					i3;	
+	int					i3;
+	int					i4;
 }								t_counters;
 
 typedef struct					s_pars_list
