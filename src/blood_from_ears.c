@@ -44,7 +44,6 @@ void	stop_step(t_wolf3d *blazko)
 	&& blazko->player.turn_direction == 0
 	&& blazko->player.turn_direction == 0)
 		Mix_FadeOutChannel(2, 200);
-		//Mix_HaltChannel(2);
 }
 
 void	music_on(t_wolf3d *blazko)

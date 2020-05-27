@@ -12,7 +12,7 @@
 
 #include "../includes/wolf3d.h"
 
-void	setup(t_wolf3d *blazko)
+void			setup(t_wolf3d *blazko)
 {
 	blazko->color_buffer = NULL;
 	blazko->color_tex = NULL;
@@ -30,7 +30,7 @@ void	setup(t_wolf3d *blazko)
 	blazko->map.rows = blazko->params_vars.number_of_lines + 2;
 }
 
-int		init2(t_wolf3d *blazko)
+int				init2(t_wolf3d *blazko)
 {
 	if ((SDL_Init(SDL_INIT_EVERYTHING)))
 	{
@@ -48,13 +48,12 @@ int		init2(t_wolf3d *blazko)
 		printf("Error creating SDL render\n");
 		return (FALSE);
 	}
-	//SDL_SetRenderDrawBlendMode(blazko->render, SDL_BLENDMODE_MOD);
 	return (TRUE);
 }
 
-t_wolf3d *init()
+t_wolf3d		*init(void)
 {
-	t_wolf3d *blazko;
+	t_wolf3d	*blazko;
 
 	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
 		ft_error("Malloc not OK \{~_~}/\n");
