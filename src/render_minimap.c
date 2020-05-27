@@ -19,15 +19,15 @@ void	render_rectangle(t_wolf3d *blazko, int tile_y, int tile_x, int color)
 	int	end_y;
 	int	end_x;
 
-	start_y = tile_y * TILE_SIZE / MINIMAP_SCALE;
-	start_x = tile_x * TILE_SIZE / MINIMAP_SCALE;
-	end_y = start_y + TILE_SIZE / MINIMAP_SCALE;
-	end_x = start_x + TILE_SIZE / MINIMAP_SCALE;
+	start_y = tile_y * TILE_SIZE * MINIMAP_SCALE;
+	start_x = tile_x * TILE_SIZE * MINIMAP_SCALE;
+	end_y = start_y + TILE_SIZE * MINIMAP_SCALE;
+	end_x = start_x + TILE_SIZE * MINIMAP_SCALE;
 	while (++start_y < end_y)
 	{
 		while (++start_x < end_x)
 			blazko->color_buffer[(start_y * WIN_WIDTH) + start_x] = color;
-		start_x = tile_x * TILE_SIZE / MINIMAP_SCALE;
+		start_x = tile_x * TILE_SIZE * MINIMAP_SCALE;
 	}
 }
 
@@ -67,13 +67,13 @@ void	render_rays(t_wolf3d *blazko)
 
 	q = -1;
 	SDL_SetRenderDrawColor(blazko->render, 255, 0, 0, 255);
-	pos.x = blazko->player.pos.x / MINIMAP_SCALE;
-	pos.y = blazko->player.pos.y / MINIMAP_SCALE;
+	pos.x = blazko->player.pos.x * MINIMAP_SCALE;
+	pos.y = blazko->player.pos.y * MINIMAP_SCALE;
 	while (++q < WIN_WIDTH)
 	{
 		render_line(blazko, pos,
-			blazko->rays[q].wall_hit.x / MINIMAP_SCALE,
-			blazko->rays[q].wall_hit.y / MINIMAP_SCALE);
+			blazko->rays[q].wall_hit.x * MINIMAP_SCALE,
+			blazko->rays[q].wall_hit.y * MINIMAP_SCALE);
 	}
 }
 

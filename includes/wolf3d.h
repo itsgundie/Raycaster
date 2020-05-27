@@ -27,7 +27,7 @@
 #define MAP_ROWS	13
 #define NUM_OF_TEXTURES		5
 
-#define MINIMAP_SCALE 16	
+#define MINIMAP_SCALE 0.125	
 
 #define WIN_WIDTH 	1280
 #define WIN_HEIGHT 	720
