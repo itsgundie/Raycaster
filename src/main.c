@@ -121,19 +121,88 @@ uint32_t		make_darkness(uint32_t color, float intensity, int is_vertical, int di
 	return((palet.a << 24) | (palet.r << 16) | (palet.g << 8) | palet.b);
 }
 
+void	draw_ceiling(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
+{
+	uint32_t color_step;
+	uint32_t color;
+	t_argb	 grad = {0};
+	uint32_t color_start;
+
+	color_start = 0xFF440011;
+	color = color_start;
+	if (blazko->sound.is_m)
+		color_step = (0xFFFFFFFF - color) / this_ray->draw_start;
+	else
+		color_step = 0x00010000;
+	while (++(*y) < this_ray->draw_start)
+	{
+		if (color >=  0xFFFFFFFF || color < color_start)
+			color_step = 0;	
+		blazko->color_buffer[(WIN_WIDTH * (*y)) + x] = color;
+		((*y) % 2 == 0) ? color += color_step : 0;
+	}	
+}
+
+void	draw_floor(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
+{
+	uint32_t color_step;
+	uint32_t color;
+	t_argb	 grad = {0};
+	uint32_t color_start;
+
+	color_start = 0xFFFFFFFF;
+	color = color_start;
+	if (blazko->sound.is_m)
+		color_step = (0x66778899 - color) / this_ray->draw_start;
+	else
+		color_step = 0x00010000;
+	while (++(*y) < WIN_HEIGHT)
+	{
+		if (color <=  0 || color > color_start)
+			color_step = 0;	
+		blazko->color_buffer[(WIN_WIDTH * (*y)) + x] = color;
+		((*y) % 2 == 0) ? color -= color_step : 0;
+	}	
+}
+
+void	draw_walls(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
+{
+	t_v2int	offset;
+	uint32_t color_from_tex;
+	float luminess;
+	int		texture_index;
+
+	*y = blazko->rays[x].draw_start - 1;
+	if (blazko->rays[x].hit_is_vert) 
+			offset.x = ((int)blazko->rays[x].wall_hit.y) % TEXTURE_HEIGHT;
+		else 
+			offset.x = ((int)blazko->rays[x].wall_hit.x) % TEXTURE_WIDTH;
+		texture_index = (blazko->rays[x].hit_side);
+		while(++(*y) < blazko->rays[x].draw_end)
+		{
+			luminess = (this_ray->distance / (float)TILE_SIZE) * 0.1f;
+			offset.y = (*y + (blazko->rays[x].wall_height / 2) - 
+			(WIN_HEIGHT / 2)) * ((float)TEXTURE_HEIGHT 
+							/ blazko->rays[x].wall_height);
+			color_from_tex = blazko->textures[texture_index]
+							[(TEXTURE_WIDTH * offset.y) + offset.x];
+			blazko->color_buffer[(WIN_WIDTH * (*y)) + x] = 
+				make_darkness(color_from_tex, luminess, 
+					blazko->rays[x].hit_is_vert, blazko->sound.is_m);			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
+		}
+}
+
+
+
 void	make3d(t_wolf3d *blazko)
 {
 	int q;
 	int y;
 	float dist_to_proj_plane;
 	float perpendicular_dist;
-	uint32_t color_from_tex;
-	t_v2int	offset;
-	
 	
 	q = -1;
 	dist_to_proj_plane = (WIN_WIDTH / 2) / tan(blazko->player.fov / 2);
-
 	while (++q < RAYS_NUM)
 	{
 		perpendicular_dist	= blazko->rays[q].distance * cos(blazko->rays[q].angle - blazko->player.rotation_angle);
@@ -142,30 +211,12 @@ void	make3d(t_wolf3d *blazko)
 		blazko->rays[q].draw_start = (blazko->rays[q].draw_start < 0) ? 0 : blazko->rays[q].draw_start;
 		blazko->rays[q].draw_end = (WIN_HEIGHT / 2 + (blazko->rays[q].wall_height / 2));
 		blazko->rays[q].draw_end = (blazko->rays[q].draw_end > WIN_HEIGHT) ? WIN_HEIGHT : blazko->rays[q].draw_end;
-		
 		y = -1;
-		while (++y < blazko->rays[q].draw_start)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = blazko->sound.is_m ? rand() : 0xFF440011; //((blazko->rays[q].hit_is_vert) 
-										//? make_darkness(0xFF110044, luminess * 0.6) : make_darkness(0xFF110044, luminess));//0xFF110044;
-		
-		if (blazko->rays[q].hit_is_vert) 
-			offset.x = ((int)blazko->rays[q].wall_hit.y) % TEXTURE_HEIGHT;
-		else 
-			offset.x = ((int)blazko->rays[q].wall_hit.x) % TEXTURE_WIDTH;
-
-		y -= 1;
-		int texture_index = (blazko->rays[q].hit_side);
-		while(++y < blazko->rays[q].draw_end)
-		{
-			float luminess = (perpendicular_dist / (float)TILE_SIZE) * 0.1f;
-			int from_top = (y + (blazko->rays[q].wall_height / 2) - (WIN_HEIGHT / 2));
-			offset.y = from_top * ((float)TEXTURE_HEIGHT / blazko->rays[q].wall_height);
-			uint32_t color_from_tex = blazko->textures[texture_index][(TEXTURE_WIDTH * offset.y) + offset.x];
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = make_darkness(color_from_tex, luminess, blazko->rays[q].hit_is_vert, blazko->sound.is_m);			//(blazko->rays[q].hit_is_vert ? 0xFFFFFFFF : 0xFFBBCCDD);
-		}
-		y -= 1;
-		while(++y < WIN_HEIGHT)
-			blazko->color_buffer[(WIN_WIDTH * y) + q] = ( blazko->sound.is_m ? rand() & 0x88660022 : 0xFF220011);
+		if (blazko->rays[q].draw_start > 0)
+			draw_ceiling(blazko, &(blazko->rays[q]), &y, q);
+		draw_walls(blazko, &(blazko->rays[q]), &y, q);
+		if (y < WIN_HEIGHT)
+			draw_floor(blazko, &(blazko->rays[q]), &y, q);
 	}
 }
 
