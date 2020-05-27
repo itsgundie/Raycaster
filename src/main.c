@@ -5,14 +5,14 @@ void	make_a_move(t_wolf3d *blazko, float delta_time)
 	float move_step;
 	t_v2	new_pos;
 
-	printf( "player angle before move is %f\n",blazko->player.rotation_angle);
+	printf( "player angle before move is %f\n",blazko->player.rot_angle);
 	printf( "player before move x - %f and y - %f\n", blazko->player.pos.x, blazko->player.pos.y);
-	blazko->player.rotation_angle += (((blazko->player.turn_direction)
+	blazko->player.rot_angle += (((blazko->player.turn_direction)
 			* (blazko->player.rotate_speed)));
-	blazko->player.rotation_angle = normalize_angle(blazko->player.rotation_angle);
+	blazko->player.rot_angle = normalize_angle(blazko->player.rot_angle);
 	move_step = blazko->player.walk_direction * blazko->player.move_speed;
-	new_pos.x = (blazko->player.pos.x + cos(blazko->player.rotation_angle) * move_step);
-	new_pos.y = (blazko->player.pos.y + sin(blazko->player.rotation_angle) * move_step);
+	new_pos.x = (blazko->player.pos.x + cos(blazko->player.rot_angle) * move_step);
+	new_pos.y = (blazko->player.pos.y + sin(blazko->player.rot_angle) * move_step);
 	printf("this is a move_step - %f\n", move_step);
 	printf("this is a new_pos.x - %f\n", new_pos.x);
 	printf("this is a new_pos.y - %f\n", new_pos.y);
@@ -21,7 +21,7 @@ void	make_a_move(t_wolf3d *blazko, float delta_time)
 		blazko->player.pos.x = new_pos.x;
 		blazko->player.pos.y = new_pos.y;
 	}
-	printf( "player angle after move is %f\n",blazko->player.rotation_angle);
+	printf( "player angle after move is %f\n",blazko->player.rot_angle);
 	printf( "player after move x - %f and y - %f\n", blazko->player.pos.x, blazko->player.pos.y);
 }
 

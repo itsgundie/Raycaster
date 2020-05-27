@@ -162,7 +162,7 @@ void	raycast(t_wolf3d *blazko)
 	int q;
 
 	q = -1;
-	float ray_angle = blazko->player.rotation_angle - (blazko->player.fov / 2);
+	float ray_angle = blazko->player.rot_angle - (blazko->player.fov / 2);
 	while (++q < WIN_WIDTH)
 	{
 		blazko->rays[q].angle = normalize_angle(ray_angle);

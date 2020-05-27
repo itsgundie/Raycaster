@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   preparation.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amargy <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 16:34:23 by amargy            #+#    #+#             */
-/*   Updated: 2020/05/16 13:12:34 by amargy           ###   ########.fr       */
+/*   Updated: 2020/05/28 00:08:58 by cspare           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void			setup(t_wolf3d *blazko)
 	blazko->player.height = 1;
 	blazko->player.turn_direction = 0;
 	blazko->player.walk_direction = 0;
-	blazko->player.rotation_angle = TWO_PI;
+	blazko->player.rot_angle = TWO_PI;
 	blazko->player.fov = (FOV * (PI / 180));
 	blazko->player.move_speed = MOVE_SPEED;
 	blazko->player.rotate_speed = ROTATION_SPEED * (PI / 180);
