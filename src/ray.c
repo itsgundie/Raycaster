@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/wolf3d.h"
 
 void	sacrifice_to_norme(t_raycast *tmp)

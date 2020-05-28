@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/wolf3d.h"
 
 void	make_a_move(t_wolf3d *blazko, float delta_time)

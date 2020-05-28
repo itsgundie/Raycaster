@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/wolf3d.h"
 
 float	normalize_angle(float angle)
