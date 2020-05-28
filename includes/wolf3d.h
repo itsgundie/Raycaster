@@ -162,19 +162,19 @@ typedef struct			s_sound
 
 typedef	struct			s_wolf3d
 {
-	SDL_Window*			window;
-	SDL_Renderer*		render;
-	SDL_Texture*		color_tex;
-	SDL_Surface*		surfs_for_texes[NUM_OF_TEXTURES];
+	SDL_Window			*window;
+	SDL_Renderer		*render;
+	SDL_Texture			*color_tex;
+	SDL_Surface			*surfs_for_texes[NUM_OF_TEXTURES];
 	t_ray				rays[WIN_WIDTH];
 	t_sound				sound;
 	t_2dmap				map;
 	t_counters			count;
 	t_pars_vars			params_vars;
 	t_player			player;
-	uint32_t*			wall_texture;
-	uint32_t*			color_buffer;
-	uint32_t*			textures[NUM_OF_TEXTURES];
+	uint32_t			*wall_texture;
+	uint32_t			*color_buffer;
+	uint32_t			*textures[NUM_OF_TEXTURES];
 	int					frame_time;
 }						t_wolf3d;
 
