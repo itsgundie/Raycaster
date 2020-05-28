@@ -222,5 +222,6 @@ void		get_distance(t_wolf3d *blazko, t_ray *vert_ray, t_ray *hor_ray);
 void		draw_ceiling(t_wolf3d *blazko, t_ray *this_ray, int *y, int x);
 void		draw_walls(t_wolf3d *blazko, t_ray *this_ray, int *y, int x);
 void		draw_floor(t_wolf3d *blazko, t_ray *this_ray, int *y, int x);
+void		sacrifice_to_norme(t_raycast *tmp);
 
 #endif
