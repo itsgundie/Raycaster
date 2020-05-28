@@ -76,7 +76,7 @@ $(OBJ_DIR):
 	#gcc -g -std=c99 ./src/*.c -I SDL/inc/ -L ./SDL/lib/ -lSDL2 -o raycaster
 
 run:
-	./wolf3d map
+	./wolf3d map4
 
 #clean:
 	#rm raycaster
