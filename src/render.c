@@ -6,7 +6,7 @@
 /*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/28 00:39:51 by cspare            #+#    #+#             */
-/*   Updated: 2020/05/28 01:19:56 by cspare           ###   ########.fr       */
+/*   Updated: 2020/05/29 23:20:04 by cspare           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,11 @@ void			draw_ceiling(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
 	uint32_t color_step;
 	uint32_t color;
 	uint32_t color_start;
-
+	if (this_ray->draw_start <= 0)
+	{
+		*y = this_ray->draw_start;
+		return ;
+	}
 	color_start = 0xFF440011;
 	color = color_start;
 	if (blazko->sound.is_m)
