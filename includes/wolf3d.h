@@ -207,7 +207,7 @@ void					make3d(t_wolf3d *blazko);
 void					clear_color_buf(uint32_t *color_buf, uint32_t color);
 void					render_color_buf(t_wolf3d *blazko);
 void					render(t_wolf3d *blazko);
-void					music_on();
+void					music_on(t_wolf3d *blazko);
 int						fck(t_wolf3d *blazko);
 uint32_t				make_darkness(uint32_t color, float intensity,
 						int is_vertical, int disco);
