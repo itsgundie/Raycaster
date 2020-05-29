@@ -60,6 +60,9 @@ void	put_values_in_map(t_wolf3d *blazko)
 
 void	create_map(t_wolf3d *blazko)
 {
+	if (blazko->params_vars.number_of_lines > 30
+	|| blazko->params_vars.line_width > 30)
+		ft_error("max map size - 30x30");
 	blazko->count.i = -1;
 	if (!(blazko->map.map = (int **)malloc(sizeof(int *)
 	* (blazko->params_vars.number_of_lines + 2))))
