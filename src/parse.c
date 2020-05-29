@@ -29,7 +29,7 @@ int		check_line(t_wolf3d *blazko)
 			blazko->params_vars.line_width++;
 			if (blazko->params_vars.minus_one_found > 1)
 				ft_error("Input error: need one -1 on map");
-			blazko->count.i += 2;
+			blazko->count.i++;
 		}
 		else if ((blazko->params_vars.line[blazko->count.i] >= '0'
 		&& blazko->params_vars.line[blazko->count.i] <= '1'))
