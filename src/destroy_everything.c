@@ -25,10 +25,14 @@ void	destroy(t_wolf3d *blazko)
 		blazko->surfs_for_texes[q] = NULL;
 		blazko->textures[q] = NULL;
 	}
+	Mix_FreeMusic(blazko->sound.badmusic);
+	Mix_Quit();
 	SDL_DestroyTexture(blazko->color_tex);
 	SDL_DestroyRenderer(blazko->render);
 	SDL_DestroyWindow(blazko->window);
+	IMG_Quit();
 	SDL_Quit();
+	
 }
 
 int		error_exit(char *str, t_wolf3d *blazko)
