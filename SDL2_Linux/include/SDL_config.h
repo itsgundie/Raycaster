@@ -1,7 +1,7 @@
 /* include/SDL_config.h.  Generated from SDL_config.h.in by configure.  */
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -150,6 +150,8 @@
 #define HAVE_COPYSIGNF 1
 #define HAVE_COS 1
 #define HAVE_COSF 1
+#define HAVE_EXP 1
+#define HAVE_EXPF 1
 #define HAVE_FABS 1
 #define HAVE_FABSF 1
 #define HAVE_FLOOR 1
@@ -188,6 +190,7 @@
 #define HAVE_SEM_TIMEDWAIT 1
 #define HAVE_GETAUXVAL 1
 #define HAVE_POLL 1
+#define HAVE__EXIT 1
 
 #else
 #define HAVE_STDARG_H 1
@@ -208,6 +211,9 @@
 /* #undef HAVE_DSOUND_H */
 /* #undef HAVE_DXGI_H */
 /* #undef HAVE_XINPUT_H */
+/* #undef HAVE_ENDPOINTVOLUME_H */
+/* #undef HAVE_MMDEVICEAPI_H */
+/* #undef HAVE_AUDIOCLIENT_H */
 /* #undef HAVE_XINPUT_GAMEPAD_EX */
 /* #undef HAVE_XINPUT_STATE_EX */
 
@@ -222,6 +228,7 @@
 /* #undef SDL_FILE_DISABLED */
 /* #undef SDL_JOYSTICK_DISABLED */
 /* #undef SDL_HAPTIC_DISABLED */
+/* #undef SDL_SENSOR_DISABLED */
 /* #undef SDL_LOADSO_DISABLED */
 /* #undef SDL_RENDER_DISABLED */
 /* #undef SDL_THREADS_DISABLED */
@@ -259,7 +266,7 @@
 /* #undef SDL_AUDIO_DRIVER_PULSEAUDIO_DYNAMIC */
 /* #undef SDL_AUDIO_DRIVER_QSA */
 #define SDL_AUDIO_DRIVER_SNDIO 1
-/* #undef SDL_AUDIO_DRIVER_SNDIO_DYNAMIC */
+#define SDL_AUDIO_DRIVER_SNDIO_DYNAMIC "libsndio.so.7.0"
 /* #undef SDL_AUDIO_DRIVER_SUNAUDIO */
 /* #undef SDL_AUDIO_DRIVER_WASAPI */
 /* #undef SDL_AUDIO_DRIVER_WINMM */
@@ -278,6 +285,7 @@
 /* #undef SDL_JOYSTICK_WINMM */
 /* #undef SDL_JOYSTICK_USBHID */
 /* #undef SDL_JOYSTICK_USBHID_MACHINE_JOYSTICK_H */
+/* #undef SDL_JOYSTICK_HIDAPI */
 /* #undef SDL_JOYSTICK_EMSCRIPTEN */
 /* #undef SDL_HAPTIC_DUMMY */
 /* #undef SDL_HAPTIC_ANDROID */
@@ -285,6 +293,10 @@
 /* #undef SDL_HAPTIC_IOKIT */
 /* #undef SDL_HAPTIC_DINPUT */
 /* #undef SDL_HAPTIC_XINPUT */
+
+/* Enable various sensor drivers */
+/* #undef SDL_SENSOR_ANDROID */
+#define SDL_SENSOR_DUMMY 1
 
 /* Enable various shared object loading systems */
 #define SDL_LOADSO_DLOPEN 1
@@ -317,9 +329,6 @@
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_EGL */
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_CURSOR */
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_XKBCOMMON */
-#define SDL_VIDEO_DRIVER_MIR 1
-#define SDL_VIDEO_DRIVER_MIR_DYNAMIC "libmirclient.so.9"
-#define SDL_VIDEO_DRIVER_MIR_DYNAMIC_XKBCOMMON "libxkbcommon.so.0"
 #define SDL_VIDEO_DRIVER_X11 1
 /* #undef SDL_VIDEO_DRIVER_RPI */
 /* #undef SDL_VIDEO_DRIVER_KMSDRM */
