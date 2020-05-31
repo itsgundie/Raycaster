@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   destroy_everything.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amargy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,6 +15,7 @@
 void	destroy(t_wolf3d *blazko)
 {
 	int q;
+	int *tmp;
 
 	q = NUM_OF_TEXTURES;
 	free(blazko->color_buffer);
@@ -25,6 +26,21 @@ void	destroy(t_wolf3d *blazko)
 		blazko->surfs_for_texes[q] = NULL;
 		blazko->textures[q] = NULL;
 	}
+	while (blazko->params_vars.params_list != NULL)
+	{
+		blazko->params_vars.tmp = blazko->params_vars.params_list->next;
+		free(blazko->params_vars.params_list->line);
+		free(blazko->params_vars.params_list);
+		blazko->params_vars.params_list = blazko->params_vars.tmp;
+	}
+	q = 0;
+	while (q < blazko->map.rows)
+	{
+		free(blazko->map.map[q]);
+		q++;
+	}
+	free(blazko->map.map);
+	free(blazko);
 	Mix_FreeMusic(blazko->sound.badmusic);
 	Mix_Quit();
 	SDL_DestroyTexture(blazko->color_tex);
@@ -32,7 +48,6 @@ void	destroy(t_wolf3d *blazko)
 	SDL_DestroyWindow(blazko->window);
 	IMG_Quit();
 	SDL_Quit();
-	
 }
 
 int		error_exit(char *str, t_wolf3d *blazko)

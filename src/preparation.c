@@ -83,8 +83,6 @@ t_wolf3d		*init(void)
 
 	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
 		ft_error("Malloc not OK \{~_~}/\n");
-	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
-		ft_error("Malloc not OK \{~_~}/\n");
 	blazko->window = NULL;
 	blazko->render = NULL;
 	blazko->wall_texture = NULL;

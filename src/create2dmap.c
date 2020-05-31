@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   create2dmap.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amargy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -71,6 +71,7 @@ void	create_map(t_wolf3d *blazko)
 		if (!(blazko->map.map[blazko->count.i] = malloc(sizeof(int) *
 		(blazko->params_vars.line_width + 2))))
 			ft_error("malloc fuckup");
+	blazko->map.map[blazko->count.i] = NULL;
 	blazko->count.i = 0;
 	blazko->params_vars.tmp = blazko->params_vars.params_list;
 	put_values_in_map(blazko);

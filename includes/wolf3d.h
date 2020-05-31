@@ -50,7 +50,7 @@
 # define RAYS_NUM		WIN_WIDTH
 
 # define FPS				60
-# define MOVE_SPEED 		7
+# define MOVE_SPEED 		5
 # define ROTATION_SPEED 	4
 
 # define TEXTURE_0 		"./textures/north.png"
