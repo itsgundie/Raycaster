@@ -1,6 +1,8 @@
 #    PROJECT    #
 NAME = wolf3d
 
+LEAKS = leaks.trace
+
 OS = $(shell uname)
 
 ifeq ($(OS), Linux)
@@ -138,12 +140,16 @@ $(LIBFT):
 $(NAME): $(OBJ_DIR) $(OBJS) $(LIBFT) $(HEADER)
 	$(CC) $(OBJS) $(WFLGS) -o $(NAME) $(INCL) $(LFLGS) $(CFLGS)
 
+leaks:
+	instruments -t "Leaks" -D $(LEAKS) wolf3d map
+
 clean:
 	rm -rf $(OBJ_DIR)
 	$(MAKE) -C $(LIB_DIR) clean
 
 fclean: clean
 	rm -rf $(NAME)
+	rm -rf $(LEAKS)
 	$(MAKE) -C $(LIB_DIR) fclean
 
 re: fclean all

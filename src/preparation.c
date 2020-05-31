@@ -6,7 +6,7 @@
 /*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 16:34:23 by amargy            #+#    #+#             */
-/*   Updated: 2020/05/28 00:08:58 by cspare           ###   ########.fr       */
+/*   Updated: 2020/06/01 02:17:08 by cspare           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int				init2(t_wolf3d *blazko)
 		error_exit("Error creating SDL window\n", blazko);
 		return (FALSE);
 	}
-	if (!(blazko->render = SDL_CreateRenderer(blazko->window, -1, 0)))
+	if (!(blazko->render = SDL_CreateRenderer(blazko->window, -1, SDL_RENDERER_PRESENTVSYNC)))
 	{
 		error_exit("Error creating SDL render\n", blazko);
 		return (FALSE);

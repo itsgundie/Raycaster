@@ -6,7 +6,7 @@
 /*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/28 01:20:40 by cspare            #+#    #+#             */
-/*   Updated: 2020/05/28 23:58:26 by cspare           ###   ########.fr       */
+/*   Updated: 2020/06/01 02:16:50 by cspare           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ int		main(int argc, char **argv)
 
 	if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
 		error_exit("usage: ./wolf3d map", blazko);
-	ticks_last_frame = SDL_GetTicks();
 	if (!(blazko = init()))
 		return (1);
 	if (file_parser(blazko, fd))
 		create_map(blazko);
 	setup(blazko);
+	ticks_last_frame = SDL_GetTicks();
 	music_on(blazko);
 	while (1)
 	{

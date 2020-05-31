@@ -6,7 +6,7 @@
 /*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 15:20:42 by amargy            #+#    #+#             */
-/*   Updated: 2020/06/01 00:40:39 by cspare           ###   ########.fr       */
+/*   Updated: 2020/06/01 01:15:28 by cspare           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void	destroy(t_wolf3d *blazko)
 	SDL_DestroyTexture(blazko->color_tex);
 	SDL_DestroyRenderer(blazko->render);
 	SDL_DestroyWindow(blazko->window);
+	ft_memset((void*)blazko, 0, sizeof(t_wolf3d));
 	free(blazko);
+	blazko = NULL;
 	IMG_Quit();
 	SDL_Quit();
 }
