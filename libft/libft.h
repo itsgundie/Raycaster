@@ -21,6 +21,15 @@
 # include "ft_printf.h"
 # define BUFF_SIZE_GNL 2
 
+typedef struct		s_fd
+{
+	int				open_flag;
+	size_t			bytes_read;
+	char			*buf;
+	size_t			buf_size;
+	int				ret_flag;
+}					t_fd;
+
 typedef struct		s_list
 {
 	void			*content;

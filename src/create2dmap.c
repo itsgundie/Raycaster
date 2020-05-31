@@ -62,15 +62,15 @@ void	create_map(t_wolf3d *blazko)
 {
 	if (blazko->params_vars.number_of_lines > 30
 	|| blazko->params_vars.line_width > 30)
-		ft_error("max map size - 30x30");
+		error_exit("max map size - 30x30", blazko);
 	blazko->count.i = -1;
 	if (!(blazko->map.map = (int **)malloc(sizeof(int *)
 	* (blazko->params_vars.number_of_lines + 2))))
-		ft_error("malloc fuckup");
+		error_exit("malloc fuckup", blazko);
 	while (++blazko->count.i < blazko->params_vars.number_of_lines + 2)
 		if (!(blazko->map.map[blazko->count.i] = malloc(sizeof(int) *
 		(blazko->params_vars.line_width + 2))))
-			ft_error("malloc fuckup");
+			error_exit("malloc fuckup", blazko);
 	blazko->map.map[blazko->count.i] = NULL;
 	blazko->count.i = 0;
 	blazko->params_vars.tmp = blazko->params_vars.params_list;

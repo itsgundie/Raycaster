@@ -39,6 +39,13 @@ void	destroy(t_wolf3d *blazko)
 		free(blazko->map.map[q]);
 		q++;
 	}
+	q = 0;
+	free(blazko->sound.s1);
+	free(blazko->sound.s2);
+	free(blazko->sound.s3);
+	free(blazko->sound.s4);
+	free(blazko->sound.s5);
+	free(blazko->sound.s6);
 	free(blazko->map.map);
 	free(blazko);
 	Mix_FreeMusic(blazko->sound.badmusic);
@@ -52,7 +59,18 @@ void	destroy(t_wolf3d *blazko)
 
 int		error_exit(char *str, t_wolf3d *blazko)
 {
-	printf("%s", str);
+	ft_printf("%s", str);
 	destroy(blazko);
 	exit(1);
 }
+
+
+// if (!(blazko->map.map = (int **)malloc(sizeof(int *)
+// 	* (blazko->params_vars.number_of_lines + 2))))
+// 	while (++blazko->count.i < blazko->params_vars.number_of_lines + 2)
+// 		if (!(blazko->map.map[blazko->count.i] = malloc(sizeof(int) *
+// 		(blazko->params_vars.line_width + 2))))
+// if (Mix_OpenAudio(41000, MIX_DEFAULT_FORMAT, 2, 512))
+// 		error_exit("very bad music", blazko);
+// 	Mix_AllocateChannels(23);
+// 	Mix_VolumeMusic(30);

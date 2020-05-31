@@ -60,18 +60,18 @@ int				init2(t_wolf3d *blazko)
 {
 	if ((SDL_Init(SDL_INIT_EVERYTHING)))
 	{
-		printf("Error Initializing SDL\n");
+		error_exit("Error Initializing SDL\n", blazko);
 		return (FALSE);
 	}
 	if (!(blazko->window = SDL_CreateWindow(WIN_TITLE, SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED, WIN_WIDTH, WIN_HEIGHT, 0)))
 	{
-		printf("Error creating SDL window\n");
+		error_exit("Error creating SDL window\n", blazko);
 		return (FALSE);
 	}
 	if (!(blazko->render = SDL_CreateRenderer(blazko->window, -1, 0)))
 	{
-		printf("Error creating SDL render\n");
+		error_exit("Error creating SDL render\n", blazko);
 		return (FALSE);
 	}
 	return (TRUE);
@@ -82,7 +82,7 @@ t_wolf3d		*init(void)
 	t_wolf3d	*blazko;
 
 	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
-		ft_error("Malloc not OK \{~_~}/\n");
+		error_exit("Malloc not OK \{~_~}/\n", blazko);
 	blazko->window = NULL;
 	blazko->render = NULL;
 	blazko->wall_texture = NULL;
@@ -92,7 +92,7 @@ t_wolf3d		*init(void)
 	blazko->sound.is_m = 0;
 	if (!(blazko->params_vars.params_list = (t_pars_list *)
 	malloc(sizeof(t_pars_list))))
-		printf("Malloc failed\n");
+		error_exit("Malloc failed\n", blazko);
 	blazko->params_vars.tmp = blazko->params_vars.params_list;
 	blazko->params_vars.params_list->line = NULL;
 	if (!(init2(blazko)))

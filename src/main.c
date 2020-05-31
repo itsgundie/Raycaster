@@ -70,7 +70,7 @@ int		main(int argc, char **argv)
 	long long	ticks_last_frame;
 
 	if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
-		ft_error("usage: ./wolf3d map");
+		error_exit("usage: ./wolf3d map", blazko);
 	ticks_last_frame = SDL_GetTicks();
 	if (!(blazko = init()))
 		return (1);

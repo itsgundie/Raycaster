@@ -3,79 +3,107 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amargy <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: cspare <cspare@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/28 14:38:56 by amargy            #+#    #+#             */
-/*   Updated: 2020/02/28 14:39:47 by amargy           ###   ########.fr       */
+/*   Created: 2020/03/08 23:33:33 by cspare            #+#    #+#             */
+/*   Updated: 2020/03/08 23:34:02 by cspare           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	linebody_tail(char **fd_depot, char **line)
+static char		*ft_prep_line(t_fd *file, void *newline)
 {
-	int		i;
-	char	*bag;
+	int		offset;
+	char	*ret;
 
-	i = 0;
-	while ((*fd_depot)[i] != '\n' && (*fd_depot)[i] != '\0')
-		i++;
-	if ((*fd_depot)[i] == '\n')
-	{
-		*line = ft_strsub(*fd_depot, 0, i);
-		bag = ft_strdup(&((*fd_depot)[i + 1]));
-		free(*fd_depot);
-		*fd_depot = bag;
-		if ((*fd_depot)[0] == '\0')
-			ft_strdel(&(*fd_depot));
-	}
-	else
-	{
-		*line = ft_strdup(*fd_depot);
-		ft_strdel(&(*fd_depot));
-	}
-	return (1);
+	if (!file || !newline)
+		return (NULL);
+	offset = (char *)newline - file->buf;
+	if (!(ret = ft_strsub(file->buf, 0, offset)))
+		return (NULL);
+	ft_memmove(file->buf, file->buf + offset + 1, file->buf_size - offset);
+	file->bytes_read = file->bytes_read - offset - 1;
+	ft_bzero(file->buf + file->bytes_read, file->buf_size - file->bytes_read);
+	file->ret_flag = 1;
+	return (ret);
 }
 
-static int	return_value(char **fd_depot, char **line, int readvalue, int fd)
+static char		*ft_last_line(t_fd *file)
 {
-	if (readvalue < 0)
+	char	*ret;
+
+	if (!file)
+		return (NULL);
+	file->open_flag = 0;
+	if (file->buf && ft_strlen(file->buf))
 	{
-		return (-1);
-		close(fd);
+		if (!(ret = ft_strsub(file->buf, 0, file->bytes_read)))
+			return (NULL);
+		ft_strdel(&(file->buf));
+		file->ret_flag = 1;
+		return (ret);
 	}
-	else if (readvalue == 0 && fd_depot[fd] == NULL)
-	{
-		return (0);
-		close(fd);
-	}
-	else
-		return (linebody_tail(&fd_depot[fd], line));
+	return (ft_strnew(1));
 }
 
-int			get_next_line(const int fd, char **line)
+static t_fd		*ft_realloc(t_fd *file)
 {
-	int			readvalue;
-	static char	*fd_depot[10000];
-	char		buff[BUFF_SIZE_GNL + 1];
-	char		*bag;
+	char	*tmp;
 
-	ft_bzero(buff, BUFF_SIZE_GNL + 1);
-	if (fd < 0 || line == NULL || fd > 10000 || read(fd, buff, 0) < 0)
-		return (-1);
-	while ((readvalue = read(fd, buff, BUFF_SIZE_GNL)) > 0)
+	if (!file || !(tmp = ft_strnew(file->buf_size * 2)))
+		return (NULL);
+	ft_memcpy(tmp, file->buf, file->bytes_read);
+	ft_strdel(&(file->buf));
+	file->buf = tmp;
+	file->buf_size *= 2;
+	return (file);
+}
+
+static char		*ft_getline(t_fd *arr, const int fd)
+{
+	int		read_ret;
+	void	*newline;
+	t_fd	*file;
+
+	newline = NULL;
+	file = arr + fd;
+	if (file->bytes_read && file->buf)
+		newline = ft_memchr(file->buf, '\n', file->bytes_read);
+	while (!newline)
 	{
-		buff[readvalue] = '\0';
-		if (fd_depot[fd] == NULL)
-			fd_depot[fd] = ft_strdup(buff);
-		else
+		if (file->bytes_read + BUFF_SIZE_GNL > file->buf_size)
 		{
-			bag = ft_strjoin(fd_depot[fd], buff);
-			free(fd_depot[fd]);
-			fd_depot[fd] = bag;
+			if (!(ft_realloc(file)))
+				return (NULL);
 		}
-		if (ft_strchr(fd_depot[fd], '\n'))
-			break ;
+		read_ret = read(fd, file->buf + file->bytes_read, BUFF_SIZE_GNL);
+		if (read_ret == 0 || read_ret == -1)
+		{
+			file->ret_flag = read_ret;
+			return (read_ret == 0 ? ft_last_line(file) : NULL);
+		}
+		file->bytes_read += read_ret;
+		newline = ft_memchr(file->buf, '\n', file->bytes_read);
 	}
-	return (return_value(fd_depot, line, readvalue, fd));
+	return (ft_prep_line(file, newline));
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	static	t_fd	array[10000];
+
+	if (fd < 0 || fd >= 10000 || !line)
+		return (-1);
+	if (array[fd].open_flag == 0)
+	{
+		array[fd].open_flag = 1;
+		array[fd].bytes_read = 0;
+		if (!(array[fd].buf = ft_strnew(BUFF_SIZE_GNL + 1)))
+			return (-1);
+		array[fd].buf_size = BUFF_SIZE_GNL;
+	}
+	if (!(*line = ft_getline(array, fd)))
+		return (-1);
+	return (array[fd].ret_flag);
 }

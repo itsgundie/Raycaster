@@ -14,9 +14,9 @@ LIB_INC_DIR = libft/includes/
 SDL_INC_DIR = SDL2_Linux/include/
 
 #    FLAGS    #
-WFLGS = -Wall -Wextra -Werror
+WFLGS = -g -Wall -Wextra -Werror
 CFLGS_DBG =
-LFLGS = -lm -L $(LIB_DIR) -lft -L SDL_Linux/lib/ -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+LFLGS = -g -lm -L $(LIB_DIR) -lft -L SDL_Linux/lib/ -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 CC = gcc
 
 #    LIBFT    #
@@ -92,11 +92,11 @@ SDL_INC = -I SDL/inc/ -I $(SDL_MAIN_INC) -I $(SDL_IMAGE_INC) -I $(SDL_MIXER_INC)
 SDL_F_DIR = ./SDL/framework
 
 #    FLAGS    #
-CFLGS =  -Wl -rpath $(SDL_F_DIR) -F $(SDL_F_DIR) -framework SDL2 -framework SDL2_mixer -framework SDL2_image  -framework SDL2_ttf
-WFLGS = -Wall -Wextra -Werror
+CFLGS =  -g -Wl -rpath $(SDL_F_DIR) -F $(SDL_F_DIR) -framework SDL2 -framework SDL2_mixer -framework SDL2_image  -framework SDL2_ttf
+WFLGS = -Wall -Wextra -Werror -g
 CFLGS_DBG = -g
-LFLGS = -lm -L$(LIB_DIR) -lft
-CC = clang
+LFLGS = -g -lm -L$(LIB_DIR) -lft
+CC = clang -g
 
 #    LIBFT    #
 LIBFT = $(LIB_DIR)/libft.a
