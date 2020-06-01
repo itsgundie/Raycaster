@@ -69,7 +69,8 @@ int				init2(t_wolf3d *blazko)
 		error_exit("Error creating SDL window\n", blazko);
 		return (FALSE);
 	}
-	if (!(blazko->render = SDL_CreateRenderer(blazko->window, -1, SDL_RENDERER_PRESENTVSYNC)))
+	if (!(blazko->render = SDL_CreateRenderer(blazko->window,
+	-1, SDL_RENDERER_PRESENTVSYNC)))
 	{
 		error_exit("Error creating SDL render\n", blazko);
 		return (FALSE);

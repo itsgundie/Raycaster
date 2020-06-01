@@ -12,6 +12,30 @@
 
 #include "../includes/wolf3d.h"
 
+void	more_destruction(t_wolf3d *blazko, int q)
+{
+	q = 0;
+	free(blazko->color_buffer);
+	blazko->color_buffer = NULL;
+	Mix_FreeChunk(blazko->sound.s1);
+	Mix_FreeChunk(blazko->sound.s2);
+	Mix_FreeChunk(blazko->sound.s3);
+	Mix_FreeChunk(blazko->sound.s4);
+	Mix_FreeChunk(blazko->sound.s5);
+	Mix_FreeChunk(blazko->sound.s6);
+	free(blazko->map.map);
+	Mix_FreeMusic(blazko->sound.badmusic);
+	Mix_Quit();
+	SDL_DestroyTexture(blazko->color_tex);
+	SDL_DestroyRenderer(blazko->render);
+	SDL_DestroyWindow(blazko->window);
+	ft_memset((void*)blazko, 0, sizeof(t_wolf3d));
+	free(blazko);
+	blazko = NULL;
+	IMG_Quit();
+	SDL_Quit();
+}
+
 void	destroy(t_wolf3d *blazko)
 {
 	int q;
@@ -36,26 +60,7 @@ void	destroy(t_wolf3d *blazko)
 		free(blazko->map.map[q]);
 		q++;
 	}
-	q = 0;
-	free(blazko->color_buffer);
-	blazko->color_buffer = NULL;
-	Mix_FreeChunk(blazko->sound.s1);
-	Mix_FreeChunk(blazko->sound.s2);
-	Mix_FreeChunk(blazko->sound.s3);
-	Mix_FreeChunk(blazko->sound.s4);
-	Mix_FreeChunk(blazko->sound.s5);
-	Mix_FreeChunk(blazko->sound.s6);
-	free(blazko->map.map);
-	Mix_FreeMusic(blazko->sound.badmusic);
-	Mix_Quit();
-	SDL_DestroyTexture(blazko->color_tex);
-	SDL_DestroyRenderer(blazko->render);
-	SDL_DestroyWindow(blazko->window);
-	ft_memset((void*)blazko, 0, sizeof(t_wolf3d));
-	free(blazko);
-	blazko = NULL;
-	IMG_Quit();
-	SDL_Quit();
+	more_destruction(blazko, q);
 }
 
 int		error_exit(char *str, t_wolf3d *blazko)
@@ -64,14 +69,3 @@ int		error_exit(char *str, t_wolf3d *blazko)
 	destroy(blazko);
 	exit(1);
 }
-
-
-// if (!(blazko->map.map = (int **)malloc(sizeof(int *)
-// 	* (blazko->params_vars.number_of_lines + 2))))
-// 	while (++blazko->count.i < blazko->params_vars.number_of_lines + 2)
-// 		if (!(blazko->map.map[blazko->count.i] = malloc(sizeof(int) *
-// 		(blazko->params_vars.line_width + 2))))
-// if (Mix_OpenAudio(41000, MIX_DEFAULT_FORMAT, 2, 512))
-// 		error_exit("very bad music", blazko);
-// 	Mix_AllocateChannels(23);
-// 	Mix_VolumeMusic(30);

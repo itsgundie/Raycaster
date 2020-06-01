@@ -46,6 +46,7 @@ void			draw_ceiling(t_wolf3d *blazko, t_ray *this_ray, int *y, int x)
 	uint32_t color_step;
 	uint32_t color;
 	uint32_t color_start;
+
 	if (this_ray->draw_start <= 0)
 	{
 		*y = this_ray->draw_start;
