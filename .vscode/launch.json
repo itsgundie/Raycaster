@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/wolf3d",
-            "args": ["map"],
+            "args": ["maps"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

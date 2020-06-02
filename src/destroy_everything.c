@@ -12,26 +12,48 @@
 
 #include "../includes/wolf3d.h"
 
+void	not_my_tempo(t_wolf3d *blazko)
+{
+	if (blazko->sound.s1 != NULL)
+		Mix_FreeChunk(blazko->sound.s1);
+	if (blazko->sound.s2 != NULL)
+		Mix_FreeChunk(blazko->sound.s2);
+	if (blazko->sound.s3 != NULL)
+		Mix_FreeChunk(blazko->sound.s3);
+	if (blazko->sound.s4 != NULL)
+		Mix_FreeChunk(blazko->sound.s4);
+	if (blazko->sound.s5 != NULL)
+		Mix_FreeChunk(blazko->sound.s5);
+	if (blazko->sound.s6 != NULL)
+		Mix_FreeChunk(blazko->sound.s6);
+	if (blazko->sound.badmusic != NULL)
+		Mix_FreeMusic(blazko->sound.badmusic);
+}
+
 void	more_destruction(t_wolf3d *blazko, int q)
 {
 	q = 0;
-	free(blazko->color_buffer);
-	blazko->color_buffer = NULL;
-	Mix_FreeChunk(blazko->sound.s1);
-	Mix_FreeChunk(blazko->sound.s2);
-	Mix_FreeChunk(blazko->sound.s3);
-	Mix_FreeChunk(blazko->sound.s4);
-	Mix_FreeChunk(blazko->sound.s5);
-	Mix_FreeChunk(blazko->sound.s6);
-	free(blazko->map.map);
-	Mix_FreeMusic(blazko->sound.badmusic);
+	if (blazko != NULL && blazko->color_buffer != NULL)
+	{
+		free(blazko->color_buffer);
+		blazko->color_buffer = NULL;
+	}
+	not_my_tempo(blazko);
+	if (blazko->map.map != NULL)
+		free(blazko->map.map);
+	if (blazko->color_tex != NULL)
+		SDL_DestroyTexture(blazko->color_tex);
+	if (blazko->render != NULL)
+		SDL_DestroyRenderer(blazko->render);
+	if (blazko->window != NULL)
+		SDL_DestroyWindow(blazko->window);
+	if (blazko != NULL)
+	{
+		ft_memset((void*)blazko, 0, sizeof(t_wolf3d));
+		free(blazko);
+		blazko = NULL;
+	}
 	Mix_Quit();
-	SDL_DestroyTexture(blazko->color_tex);
-	SDL_DestroyRenderer(blazko->render);
-	SDL_DestroyWindow(blazko->window);
-	ft_memset((void*)blazko, 0, sizeof(t_wolf3d));
-	free(blazko);
-	blazko = NULL;
 	IMG_Quit();
 	SDL_Quit();
 }
