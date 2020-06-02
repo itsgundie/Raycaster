@@ -6,7 +6,7 @@
 /*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 15:20:42 by amargy            #+#    #+#             */
-/*   Updated: 2020/06/01 01:15:28 by cspare           ###   ########.fr       */
+/*   Updated: 2020/06/02 23:22:04 by cspare           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,13 @@ void	destroy(t_wolf3d *blazko)
 	}
 	while (blazko->params_vars.params_list != NULL)
 	{
-		blazko->params_vars.tmp = blazko->params_vars.params_list->next;
-		free(blazko->params_vars.params_list->line);
+		if (blazko->params_vars.params_list->next != NULL)
+			blazko->params_vars.tmp = blazko->params_vars.params_list->next;
+		if (blazko->params_vars.params_list->line != NULL)
+			free(blazko->params_vars.params_list->line);
 		free(blazko->params_vars.params_list);
-		blazko->params_vars.params_list = blazko->params_vars.tmp;
+		if (blazko->params_vars.tmp != NULL)
+			blazko->params_vars.params_list = blazko->params_vars.tmp;
 	}
 	q = 0;
 	while (q < blazko->map.rows)
