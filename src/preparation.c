@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preparation.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cspare <cspare@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: amargy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/14 16:34:23 by amargy            #+#    #+#             */
-/*   Updated: 2020/06/02 23:21:13 by cspare           ###   ########.fr       */
+/*   Created: 2020/05/10 19:05:27 by amargy            #+#    #+#             */
+/*   Updated: 2020/05/14 19:06:46 by amargy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,9 @@ t_wolf3d		*init(void)
 {
 	t_wolf3d	*blazko;
 
-	blazko = NULL;
 	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
 		error_exit("Malloc not OK \{~_~}/\n", blazko);
-	blazko->window = NULL;
-	blazko->render = NULL;
-	blazko->wall_texture = NULL;
-	blazko->color_buffer = NULL;
-	blazko->color_tex = NULL;
-	blazko->sound.badmusic = NULL;
-	blazko->sound.is_m = 0;
-	blazko->params_vars.params_list = NULL;
-	blazko->params_vars.tmp = NULL;
+	ft_memset(blazko, 0, sizeof(blazko));
 	if (!(blazko->params_vars.params_list = (t_pars_list *)
 	malloc(sizeof(t_pars_list))))
 		error_exit("Malloc failed\n", blazko);
