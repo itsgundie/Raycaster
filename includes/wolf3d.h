@@ -241,5 +241,6 @@ void					draw_floor(t_wolf3d *blazko, t_ray *this_ray,
 void					sacrifice_to_norme(t_raycast *tmp);
 void					more_destruction(t_wolf3d *blazko, int q);
 void					not_my_tempo(t_wolf3d *blazko);
+int						smokers_atoi(char *str);
 
 #endif

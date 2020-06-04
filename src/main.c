@@ -70,7 +70,7 @@ int		main(int argc, char **argv)
 	long long	ticks_last_frame;
 
 	if (argc != 2 || (fd = open(argv[1], O_RDONLY)) < 0)
-		error_exit("usage: ./wolf3d map", blazko);
+		error_exit("usage: ./wolf3d map\n", blazko);
 	if (!(blazko = init()))
 		return (1);
 	if (file_parser(blazko, fd))

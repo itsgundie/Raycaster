@@ -59,6 +59,8 @@ void	destroy(t_wolf3d *blazko)
 	int q;
 
 	q = -1;
+	if (blazko == NULL)
+		exit(1);
 	while (++q < NUM_OF_TEXTURES)
 	{
 		if (blazko->surfs_for_texes[q])

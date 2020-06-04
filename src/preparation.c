@@ -32,7 +32,7 @@ void			texture_manager(t_wolf3d *blazko)
 	while (blazko->surfs_for_texes[q])
 		q++;
 	if (q < NUM_OF_TEXTURES)
-		error_exit("Malloc Not OK, particularly loading textures", blazko);
+		error_exit("Malloc Not OK, particularly loading textures\n", blazko);
 	q = -1;
 	while (++q < NUM_OF_TEXTURES)
 		blazko->textures[q] = (uint32_t*)(blazko->surfs_for_texes[q]->pixels);
@@ -82,6 +82,7 @@ t_wolf3d		*init(void)
 {
 	t_wolf3d	*blazko;
 
+	blazko = NULL;
 	if (!(blazko = (t_wolf3d*)malloc(sizeof(t_wolf3d))))
 		error_exit("Malloc not OK \{~_~}/\n", blazko);
 	ft_memset(blazko, 0, sizeof(blazko));
