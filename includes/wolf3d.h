@@ -46,7 +46,7 @@
 # define WIN_HEIGHT 	720
 # define WIN_TITLE		"IDEAS_FROM_THE_DEEP"
 
-# define FOV				180
+# define FOV				66
 
 # define RAYS_NUM		WIN_WIDTH
 
