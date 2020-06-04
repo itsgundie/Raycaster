@@ -24,17 +24,12 @@ void	slayer_position(t_wolf3d *blazko)
 
 int		smokers_atoi(char *str)
 {
-	int	i;
 	int	result;
 
-	i = -1;
-	while (++i <= 0)
-	{
-		if (str[i] == '-')
-			result = -1;
-		else
-			result = str[i] - '0';
-	}
+	if (str[0] == '-')
+		result = -1;
+	else
+		result = str[0] - '0';
 	return (result);
 }
 
@@ -93,4 +88,21 @@ void	create_map(t_wolf3d *blazko)
 	blazko->params_vars.tmp = blazko->params_vars.params_list;
 	put_values_in_map(blazko);
 	blazko->count.i = 0;
+	blazko->map.columns = blazko->params_vars.line_width + 2;
+	blazko->map.rows = blazko->params_vars.number_of_lines + 2;
+	
+
+	int i = 0;
+	int i2 = 0;
+	while (i < blazko->map.rows)
+	{
+		while (i2 < blazko->map.columns)
+		{
+			ft_printf("%d ", blazko->map.map[i][i2]);
+			i2++;
+		}
+		i2 = 0;
+		ft_printf("\n");
+		i++;
+	}
 }

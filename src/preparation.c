@@ -52,8 +52,6 @@ void			setup(t_wolf3d *blazko)
 	blazko->player.move_speed = MOVE_SPEED;
 	blazko->player.rotate_speed = ROTATION_SPEED * (PI / 180);
 	blazko->frame_time = 1000 / FPS;
-	blazko->map.columns = blazko->params_vars.line_width + 2;
-	blazko->map.rows = blazko->params_vars.number_of_lines + 2;
 }
 
 int				init2(t_wolf3d *blazko)

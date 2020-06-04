@@ -76,5 +76,14 @@ int		file_parser(t_wolf3d *blazko, int fd)
 	}
 	if (blazko->params_vars.minus_one_found == 0)
 		error_exit("Input error: need one -1 on map\n", blazko);
+
+	
+
+	   blazko->params_vars.tmp = blazko->params_vars.params_list;
+	while (blazko->params_vars.tmp != NULL)
+    {
+	    printf("%s\n", blazko->params_vars.tmp->line);
+        blazko->params_vars.tmp = blazko->params_vars.tmp->next;
+    }
 	return (1);
 }
