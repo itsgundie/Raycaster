@@ -46,12 +46,12 @@
 # define WIN_HEIGHT 	720
 # define WIN_TITLE		"IDEAS_FROM_THE_DEEP"
 
-# define FOV				66
+# define FOV				180
 
 # define RAYS_NUM		WIN_WIDTH
 
 # define FPS				60
-# define MOVE_SPEED 		5
+# define MOVE_SPEED 		6
 # define ROTATION_SPEED 	4
 
 # define TEXTURE_0 		"./textures/north.png"
